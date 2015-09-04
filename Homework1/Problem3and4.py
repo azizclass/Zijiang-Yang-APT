@@ -16,26 +16,18 @@ class Student:
         return self.name + ': ' + str(self.age) + ' years old, gpa is ' + str(self.gpa)
 
     def __lt__(self, other):
-        if self.gpa < other.gpa:
-            return True
-        elif self.gpa > other.gpa:
-            return False
-        elif self.name < other.name:
-            return True
-        elif self.name > other.name:
-            return False
-        elif self.age < other.age:
-            return True
-        elif self.age > other.age:
-            return False
+        if self.gpa != other.gpa:
+            return self.gpa < other.gpa
+        elif self.name != other.name:
+            return self.name < other.name
         else:
-            return False
+            return self.age < other.age
 
     def __eq__(self, other):
         return self.name == other.name and self.gpa == other.gpa and self.age == other.age
 
     def __hash__(self):
-        return (self.name + str(self.gpa) + str(self.age)).__hash__()
+        return (self.name + ' ' + str(self.gpa) + ' ' + str(self.age)).__hash__()
 
     __repr__ = __str__
 
