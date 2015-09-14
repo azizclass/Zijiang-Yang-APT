@@ -1,2 +1,5 @@
 #Ignore all pyc files
 **/*.pyc
+
+#Ignore jetbrain meta info
+**/.idea
