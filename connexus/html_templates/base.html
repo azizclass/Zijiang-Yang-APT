@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+	<header><h2>Connexus.us</h2></header>
+	<nav>
+    	<table>
+    	    <tr>
+    			 <td><a href="{{ management_addr }}">Manage</a></td>
+				 <td><a href="{{ create_stream_addr }}">Create</a></td>
+				 <td><a href="{{ view_all_streams_addr }}">View</a></td>
+				 <td><a href="{{ search_stream_addr }}">Search</a></td>
+				 <td><a href="{{ trending_streams_addr }}">Trending</a></td>
+				 <td><a href=" ">Social</a></td>
+    	    </tr>
+    	</table>
+	</nav>
+	<article>
+	     {% block content %}{% endblock %}
+	</article>
+	<footer style="text-align: center; font-size: 10px">
+	    <p>Powered by Zijiang Yang @ The University of Texas at Austin, 2015 Fall</P>
+		<p>Copyright reserved</p>
+	</footer>
+</body>
+</html>
+{% endautoescape %}
