@@ -4,11 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
+	<link rel="stylesheet" href="StyleSheets\base_style.css">
 </head>
 <body>
-    <header><h2>Connexus.us</h2></header>
+    <header style="font-family: sans-serif;">
+        <h1>Connexus.us</h1>
+    </header>
     <nav>
-        <table>
+        <table id="navigation">
             <tr>
                 <td><a href="{{ management_addr }}">Manage</a></td>
                 <td><a href="{{ create_stream_addr }}">Create</a></td>
@@ -19,7 +22,7 @@
             </tr>
         </table>
     </nav>
-    <article>
+    <article style="min-height: 500px">
         {% block content %}{% endblock %}
     </article>
     <footer style="text-align: center; font-size: 10px">
