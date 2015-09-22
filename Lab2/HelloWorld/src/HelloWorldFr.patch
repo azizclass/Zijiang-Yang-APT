@@ -1,0 +1,8 @@
+2c2
+< public class HelloWorld {
+---
+> public class HelloWorldFr {
+4c4
+< 		System.out.println("Hello World!");
+---
+> 		System.out.println("Bonjour, monde!");
