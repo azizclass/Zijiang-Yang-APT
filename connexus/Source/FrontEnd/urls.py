@@ -1,4 +1,7 @@
-#Definition of urls of different pages
+import os
+import jinja2
+
+# Definition of urls of different pages
 URL_MANAGEMENT_PAGE = "/manage"
 URL_LOGIN_PAGE = "/login"
 URL_CREATE_STREAM_PAGE = "/create_stream"
@@ -8,6 +11,8 @@ URL_SEARCH_STREAM_PAGE = "/search_stream"
 URL_TRENDING_STREAMS_PAGE = "/trending_streams"
 URL_ERROR_PAGE = "/error"
 
+
+# Return an URL dictionary that can be used for jinja template rendering
 def getUrlDir():
     dic = {
         'management_addr': URL_MANAGEMENT_PAGE,
@@ -20,3 +25,16 @@ def getUrlDir():
         'error_addr': URL_ERROR_PAGE
     }
     return dic
+
+
+# Get a template from a template name
+def getTemplate(name):
+    path = os.path.dirname(__file__)
+    path = os.path.dirname(path)
+    path = os.path.dirname(path)
+    path = path + '\html_templates'
+    JINJA_ENVIRONMENT = jinja2.Environment(
+        loader=jinja2.FileSystemLoader(path),
+        extensions=['jinja2.ext.autoescape'],
+        autoescape=True)
+    return JINJA_ENVIRONMENT.get_template(name)

@@ -1,6 +1,12 @@
+from google.appengine.api import users
+
 import webapp2
+import urls
+
+template_name = 'error.html'
+
 
 class ErrorPage(webapp2.RequestHandler):
     def get(self):
-        self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
-        self.response.write('Error!')
+        user = users.get_current_user()
+        self.response.write(urls.getTemplate(template_name).render(urls.getUrlDir()))

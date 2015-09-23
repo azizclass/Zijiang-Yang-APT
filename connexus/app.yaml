@@ -5,8 +5,13 @@ api_version: 1
 threadsafe: yes
 
 handlers:
+- url: /assets
+  static_dir: assets
+
 - url: .*
   script: Source.main.app
+  login: required
+
 
 libraries:
 - name: webapp2
