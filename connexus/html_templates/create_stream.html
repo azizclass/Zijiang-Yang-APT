@@ -6,7 +6,15 @@
 
 {% block content %}
    <form method="post">
-   		 <input type="file" enctype="multipart/form-data" name="img"/>
-		 <input type="submit" name="submit" value="Submit"/>
+   		 <input name="name" spellcheck="true" required></textarea>
+		 <p>Name your stream <br></p>
+		 <textarea name="email" rows="5" cols="40" spellcheck="false"></textarea>
+		 <textarea name="extra_message" rows="5" cols="40" spellcheck="true"></textarea>
+		 <p>Add subscribers <br></p>
+		 <textarea name="tag" spellcheck="true" rows="3" cols="50" spellcheck="true"></textarea>
+		 <p>Tag your stream <br></p>
+		 <input name="cover_image_url" type="text" spellcheck="false">
+		 <p>URL to cover image <br>(Cen be empty)</p>
+		 <input name="submit" type="submit" value="Submit">
    </form>
 {% endblock %}

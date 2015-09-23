@@ -12,4 +12,5 @@ class CreateStreamPage(webapp2.RequestHandler):
         self.response.write(urls.getTemplate(template_name).render(urls.getUrlDir()))
 
     def post(self):
-        self.response.write(self.request.get("upload_filed"))
+        self.response.write(self.request.get("name"))
+

@@ -5,5 +5,8 @@
 {% endblock %}
 
 {% block content %}
-    <p><h1>This is my content!</h1></p>
+   <form method="post">
+   		<input type="file" enctype="multipart/form-data" name="img"/>
+		<input type="submit" name="submit" value="Submit"/>
+   </form>
 {% endblock %}
