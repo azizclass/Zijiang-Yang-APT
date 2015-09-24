@@ -21,5 +21,6 @@ app = webapp2.WSGIApplication([
     (urls.URL_VIEW_ALL_STREAMS_PAGE+"(?:/(?:\?.*)?)?", view_all_streams.ViewAllStreamsPage),
     (urls.URL_SEARCH_STREAM_PAGE+"(?:/(?:\?.*)?)?", search_streams.SearchStreamsPage),
     (urls.URL_TRENDING_STREAMS_PAGE+"(?:/(?:\?.*)?)?", trending_streams.TrendingStreamsPage),
+    (urls.URL_VIEW_STREAM_PAGE + urls.URL_UPLOAD_HANDLER+"(?:/(?:\?.*)?)?", view_stream.UploadHandler),
     ('/', MainPage)
 ], debug=True)

@@ -18,9 +18,9 @@
 			{% for stream in streams %}
 			    <tr>
 				    <td id="name"><a href="{{view_stream_addr+"/?"+({"id":stream.key.id()}|urlencode)}}">{{stream.name}}</a></td>
-					<td id="last_new">{{stream.last_newpic_time|str if stream.last_newpic_time!=None else "N/A"}}</td>
+					<td id="last_new">{{stream.last_newpic_time.date()|str if stream.last_newpic_time!=None else "N/A"}}</td>
 					<td id="no_of_pic">{{stream.pic_num}}</td>
-					<td id="delete"><input type="checkbox" name="{{"input_"+stream.key.id()|str}}"></td>
+					<td id="delete"><input type="checkbox" name="checkbox" value="{{stream.key.id()|str}}"></td>
 				</tr>		    
 			{% endfor %}
    	    </table>

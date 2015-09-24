@@ -8,18 +8,19 @@ from google.appengine.ext.webapp import blobstore_handlers
 
 # An image class, which stores the photo
 class Image(ndb.Model):
-    name = ndb.StringProperty(required=True, indexed=False)
-    description = ndb.StringProperty(indexed=False)
+    name = ndb.StringProperty(required=True)
+    comments = ndb.StringProperty(indexed=False)
     image = ndb.BlobKeyProperty(required=True, indexed=False)
+    time = ndb.DateTimeProperty('t', auto_now_add=True)
 
 
 # A stream class
 class Stream(ndb.Model):
-    user = ndb.StringProperty(required=True)
+    user = ndb.StringProperty(required=True, indexed=False)
     name = ndb.StringProperty(required=True)
-    create_time = ndb.DateTimeProperty('t', auto_now_add=True, indexed=False)
+    create_time = ndb.DateTimeProperty('t', auto_now_add=True)
     last_newpic_time = ndb.DateTimeProperty('n');
-    pic_num = ndb.IntegerProperty(indexed=False, default=0)
+    pic_num = ndb.IntegerProperty(default=0)
     tag = ndb.StringProperty(indexed=False)
     subscriber_emails = ndb.StringProperty('e', repeated=True, indexed=False)
     coverImageUrl = ndb.StringProperty(indexed=False)
