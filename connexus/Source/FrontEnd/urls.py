@@ -10,7 +10,6 @@ URL_VIEW_ALL_STREAMS_PAGE = "/view_all_streams"
 URL_SEARCH_STREAM_PAGE = "/search_stream"
 URL_TRENDING_STREAMS_PAGE = "/trending_streams"
 URL_ERROR_PAGE = "/error"
-URL_UPLOAD_IMG = "/upload"
 
 
 # Return an URL dictionary that can be used for jinja template rendering
