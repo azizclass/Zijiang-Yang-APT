@@ -1,5 +1,6 @@
 import os
 import jinja2
+import urllib
 
 # Definition of urls of different pages
 URL_MANAGEMENT_PAGE = "/manage"
@@ -37,4 +38,7 @@ def getTemplate(name):
         loader=jinja2.FileSystemLoader(path),
         extensions=['jinja2.ext.autoescape'],
         autoescape=True)
+    JINJA_ENVIRONMENT.filters['urlencode'] = urllib.urlencode
+    JINJA_ENVIRONMENT.filters['str'] = str
+    JINJA_ENVIRONMENT.filters['len'] = len
     return JINJA_ENVIRONMENT.get_template(name)

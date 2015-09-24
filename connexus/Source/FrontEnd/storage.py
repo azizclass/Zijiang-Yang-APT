@@ -22,7 +22,9 @@ class Stream(ndb.Model):
     pic_num = ndb.IntegerProperty(indexed=False, default=0)
     tag = ndb.StringProperty(indexed=False)
     subscriber_emails = ndb.StringProperty('e', repeated=True, indexed=False)
-    images = ndb.StructuredProperty(Image, repeated=True, indexed=False)
     coverImageUrl = ndb.StringProperty(indexed=False)
 
 
+# Return a key for strongly consistent query
+def getStreamKey(name):
+    return ndb.Key("Stream_Ancestor", name);
