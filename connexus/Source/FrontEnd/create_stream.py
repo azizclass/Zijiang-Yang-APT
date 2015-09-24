@@ -4,7 +4,6 @@ import webapp2
 import re
 import urls
 from storage import Stream
-import urllib
 
 template_name = 'create_stream.html'
 

@@ -5,5 +5,24 @@
 {% endblock %}
 
 {% block content %}
-    <p><h1>This is my content!</h1></p>
+    <p>Streams I own<br></p>
+	<form method="post">
+   	    <table id="stream_manage">
+   	        <tr>
+   		        <td id="name">Name</td>
+   			    <td id="last_new">Last New Picture</td>
+   			    <td id="no_of_pic">Number of Pictures</td>
+   			    <td id="delete">Delete</td>
+            </tr>
+			{% for stream in streams %}
+			    <tr>
+				    <td id="name"><a href="{{view_stream_addr+urllib.urlencode({'name':stream.name})}}">{{stream.name}}</a></td>
+					<td id="last_new">{{str(stream.last_newpic_time) if str(stream.last_newpic_time)!=None else "N/A"}}</td>
+					<td id="no_of_pic">{{stream.pic_num}}</td>
+					<td id="delete"><input type="checkbox" name="{{"input_"+stream.name}}"></td>
+				</tr>		    
+			{% endfor %}
+   	    </table>
+		<input type="submit" name="submit" value="Submit">
+	</form>
 {% endblock %}
