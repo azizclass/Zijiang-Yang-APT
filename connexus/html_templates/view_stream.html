@@ -8,14 +8,16 @@
    <table>  
        <tr>
 	   {% for img_url in images %}
-	       <td><img src="{{img_url}}" style="width:200px" height="200px"></td>
+	       <td><img src="{{img_url}}" height="200px" width="200px"></td>
 	   {% endfor %} 
 	   </tr>
    </table>
+   {% if upload_url != None %}
    <form action="{{upload_url}}" method="post" enctype="multipart/form-data">
    		<input type="file" name="img"/>
 		<input type="text" name="name" spellcheck="true">
 		<input type="text" name="comments" spellcheck="true">
 		<input type="submit" name="submit" value="Submit"/>
    </form>
+   {% endif %}
 {% endblock %}

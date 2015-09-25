@@ -5,5 +5,15 @@
 {% endblock %}
 
 {% block content %}
-    <p><h1>This is my content!</h1></p>
+   {% if streams.fetch()|len >0 %}
+       {% for stream in streams %}
+    		<a href="{{view_stream_addr+'/?'+({'id':stream.key.id()}|urlencode)}}">
+    		    <img src="{{stream.coverImageUrl}}" width="200px" height="200px">
+    		</a>
+       {% endfor %}
+   {% else %}
+       <div>
+		Click <a href="{{create_stream_addr}}">here</a> to create your first stream and start your trip in Connexus!
+	   </div>
+   {% endif %}
 {% endblock %}

@@ -1,10 +1,11 @@
+from google.appengine.api import users
+
 import os
 import jinja2
 import urllib
 
 # Definition of urls of different pages
 URL_MANAGEMENT_PAGE = "/manage"
-URL_LOGIN_PAGE = "/login"
 URL_CREATE_STREAM_PAGE = "/create_stream"
 URL_VIEW_STREAM_PAGE = "/view_stream"
 URL_VIEW_ALL_STREAMS_PAGE = "/view_all_streams"
@@ -18,13 +19,13 @@ URL_UPLOAD_HANDLER = "/upload"
 def getUrlDir():
     dic = {
         'management_addr': URL_MANAGEMENT_PAGE,
-        'login_addr': URL_LOGIN_PAGE,
         'create_stream_addr': URL_CREATE_STREAM_PAGE,
         'view_stream_addr': URL_VIEW_STREAM_PAGE,
         'view_all_streams_addr': URL_VIEW_ALL_STREAMS_PAGE,
         'search_stream_addr': URL_SEARCH_STREAM_PAGE,
         'trending_streams_addr': URL_TRENDING_STREAMS_PAGE,
-        'error_addr': URL_ERROR_PAGE
+        'error_addr': URL_ERROR_PAGE,
+        'log_out_addr': users.create_logout_url(URL_MANAGEMENT_PAGE)
     }
     return dic
 

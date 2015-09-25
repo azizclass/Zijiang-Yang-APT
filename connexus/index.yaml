@@ -16,6 +16,13 @@ indexes:
   - name: t
   - name: name
 
+- kind: Image
+  ancestor: yes
+  properties:
+  - name: t
+    direction: desc
+  - name: name
+
 - kind: Stream
   ancestor: yes
   properties:
@@ -34,3 +41,38 @@ indexes:
   - name: pic_num
   - name: name
   - name: t
+
+- kind: Stream
+  ancestor: yes
+  properties:
+  - name: n
+    direction: desc
+  - name: pic_num
+    direction: desc
+  - name: name
+  - name: t
+    direction: desc
+
+- kind: Stream
+  ancestor: yes
+  properties:
+  - name: n
+    direction: desc
+  - name: pic_num
+    direction: desc
+  - name: name
+    direction: desc
+  - name: t
+    direction: desc
+
+- kind: Stream
+  ancestor: yes
+  properties:
+  - name: user
+  - name: n
+    direction: desc
+  - name: pic_num
+    direction: desc
+  - name: name
+  - name: t
+    direction: desc

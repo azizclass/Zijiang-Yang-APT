@@ -5,5 +5,8 @@
 {% endblock %}
 
 {% block content %}
-    <p><h1>This is my content!</h1></p>
+    <form method="post">
+		  <input name="search_key" type="text" required/>
+		  <input name="submit" type="submit" value="Submit">
+	</form>
 {% endblock %}
