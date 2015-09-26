@@ -12,7 +12,7 @@
 	   {% endfor %} 
 	   </tr>
    </table>
-   {% if upload_url != None %}
+   {% if upload_url %}
    <form action="{{upload_url}}" method="post" enctype="multipart/form-data">
    		<input type="file" name="img"/>
 		<input type="text" name="name" spellcheck="true">

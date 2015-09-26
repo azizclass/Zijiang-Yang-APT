@@ -6,7 +6,46 @@
 
 {% block content %}
     <form method="post">
-		  <input name="search_key" type="text" required/>
+		  <input name="search_key" type="text" value="{{key_word if key_word else ''}}" required/>
 		  <input name="submit" type="submit" value="Submit">
 	</form>
+	{% if key_word %}
+	   	{% set total_num = streams|len %}
+    	{% if total_num > 0 %}
+    	   <p>{{total_num}} results for <b>{{key_word}}</b></p>
+    	   <p>Click on image to view stream</p>
+    	   {% for i in range(offset, [offset+num_results_per_page, total_num]|min) %}
+    	   	  <a href="{{view_stream_addr+'/?'+({'id':streams[i].key.id()}|urlencode)}}">
+        		  <img src="{{streams[i].coverImageUrl}}" width="200px" height="200px">
+        	  </a>
+    	   {% endfor %}
+		   <table>
+		   	   <tr>
+			   {% set last_page = (((total_num-1)/num_results_per_page)|int)+1 %}
+			   {% set this_page = ((offset/num_results_per_page)|int)+1 %}
+			   {% set start = this_page-((num_pages_displayed/2)|int) %}
+			   {% set start = start if start>0 else 1 %}
+			   {% set start = start if last_page-start+1>=num_pages_displayed else last_page-num_pages_displayed+1 %}
+			   {% set start = start if start>0 else 1 %}
+			   {% set end = this_page+num_pages_displayed-(this_page-start+1) %}
+			   {% set end = end if end<=last_page else last_page %}
+			   {% if start > 1 %}
+			   	   <td>...</td>
+			   {% endif %}
+			   {% for i in range(start, end+1) %}
+			   	   {% set params = {'key_word':key_word.encode('utf-8'), 'offset':(i-1)*num_results_per_page} %}
+			   	   <td><a href="{{search_stream_addr+'/?'+params|urlencode}}">{{i}}</a></td>
+			   {% endfor %}
+			   {% if end < last_page %}
+			   	   <td>...</td>
+			   {% endif %}
+			   </tr>
+		   </table>
+    	{% else %}
+    	   	<p>No result mathchs <b>{{key_word}}</b></p>
+    	{% endif %}
+	{% else %}
+	   <p>Enter your key words to search for interesting streams!</p>
+	{% endif %}
+	
 {% endblock %}

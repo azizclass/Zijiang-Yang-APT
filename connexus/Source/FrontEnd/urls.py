@@ -43,4 +43,6 @@ def getTemplate(name):
     JINJA_ENVIRONMENT.filters['urlencode'] = urllib.urlencode
     JINJA_ENVIRONMENT.filters['str'] = str
     JINJA_ENVIRONMENT.filters['len'] = len
+    JINJA_ENVIRONMENT.filters['int'] = int
+    JINJA_ENVIRONMENT.filters['min'] = min
     return JINJA_ENVIRONMENT.get_template(name)

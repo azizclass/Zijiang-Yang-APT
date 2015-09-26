@@ -3,7 +3,7 @@ from google.appengine.ext.blobstore import blobstore
 from storage import Stream
 from storage import Image
 from storage import getStreamKey
-from search import removeFromSearchIndex
+from search import removeStreamFromSearchIndex
 
 import webapp2
 import urls
@@ -25,11 +25,10 @@ class ManagementPage(webapp2.RequestHandler):
         for sid in self.request.get_all("checkbox"):
             stream = Stream.get_by_id(int(sid), getStreamKey())
             if stream:
+                removeStreamFromSearchIndex(stream)
                 for img in Image.query(ancestor=stream.key):
                     blobstore.delete(img.image)
-                    removeFromSearchIndex(img)
                     img.key.delete()
-                removeFromSearchIndex(stream)
                 stream.key.delete()
         self.redirect(urls.URL_MANAGEMENT_PAGE)
 
