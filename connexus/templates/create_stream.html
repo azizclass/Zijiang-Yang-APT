@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Connexus-create stream
+{% endblock %}
+
+{% block content %}
+<div style="padding-top:10px">
+   <form method="post" id="create_stream">
+   		 <div style="width: 50%; float: left;">
+       		 <input name="name" spellcheck="true" required placeholder="Name" size="30"></textarea>
+    		 <br><p style="font-size: 20px">Name your stream</p>
+    		 <br><textarea name="email" rows="5" cols="40" spellcheck="false" placeholder="Invite your friends by email"></textarea>
+    		 <br><br><textarea name="extra_message" rows="5" cols="40" spellcheck="true" placeholder="Optional message for invite"></textarea>
+    		 <br><p style="font-size: 20px">Add subscribers</p>
+			 <br><input name="submit" type="submit" value="Create Stream">
+		 </div>
+		 <div style="width: 50%; float:left; padding-top: 30px">
+    		 <textarea name="tag" spellcheck="true" rows="5" cols="50" spellcheck="true" placeholder="Tags for your stream"></textarea>
+    		 <br><p style="font-size: 20px">Tag your stream</p>
+    		 <br><input name="cover_image_url" type="text" spellcheck="false" placeholder="Url of cover image" size="50">
+    		 <br><p style="font-size: 20px">URL to cover image <br>(Cen be empty)</p>
+		 </div>
+   </form>
+</div>
+{% endblock %}

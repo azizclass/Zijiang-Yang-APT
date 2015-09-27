@@ -12,8 +12,9 @@
     		</a>
        {% endfor %}
    {% else %}
-       <div>
-		Click <a href="{{create_stream_addr}}">here</a> to create your first stream and start your trip in Connexus!
+       <div style="padding-left: 20px; line-height:50px">
+	       <p>Oops! You do not have any streams!<br>
+		      Click <a href="{{create_stream_addr}}">here</a> to create your first stream and start your trip in Connexus!</p>
 	   </div>
    {% endif %}
 {% endblock %}

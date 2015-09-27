@@ -1,6 +1,8 @@
 from google.appengine.api import users
-from storage import Stream
-from storage import getStreamKey
+
+
+from Source.Services.storage import Stream
+from Source.Services.storage import getStreamKey
 
 import webapp2
 import urls
@@ -15,6 +17,5 @@ class ViewAllStreamsPage(webapp2.RequestHandler):
                                -Stream.pic_num, Stream.name, -Stream.create_time)
         template_dict = urls.getUrlDir()
         template_dict["streams"] = streams
-        s = [x.coverImageUrl for x in streams]
         self.response.write(urls.getTemplate(template_name).render(template_dict))
 

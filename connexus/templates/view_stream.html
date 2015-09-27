@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Connexus-view stream
+{% endblock %}
+
+{% block content %}
+   <table>  
+       <tr>
+	   {% for img_url in images %}
+	       <td><img src="{{img_url}}" height="200px" width="200px"></td>
+	   {% endfor %} 
+	   </tr>
+   </table>
+   {% if upload_url %}
+   <form action="{{upload_url}}" method="post" enctype="multipart/form-data">
+   		<input type="file" name="img" required/>
+		<input type="text" name="name" spellcheck="true" placeholder="Name" required/>
+		<input type="text" name="comments" spellcheck="true" placeholder="Comments"/>
+		<input type="submit" name="upload_file" value="Upload file"/>
+   </form>
+   {% else %}
+   <form method="post">
+   		 <input type="submit" name="subscribe" value={{"Subscribe" if not subscribed else "Unsubscribe"}} />
+		 <input type="hidden" name="id" value="{{id}}" />
+   </form>
+   {% endif %}
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Connexus-trending streams
+{% endblock %}
+
+{% block content %}
+    {% if trendingStreams|len > 0 %}
+    <p>Top {{trendingStreams|len}} Trending Streams</p>
+	{% for stream, views in trendingStreams %}
+        <a href="{{view_stream_addr+'/?'+({'id':stream.key.id()|str}|urlencode)}}">
+    	    <img src="{{stream.coverImageUrl}}" width="200px" height="200px">
+        </a>
+		<p>{{views}} views<br>in past hour</p>
+    {% endfor %}
+	{% else %}
+	    <p>There is no trending stream data now!</p>
+	{% endif %}
+	<form method="post">
+		  <input type="radio" name="update_frequency" value="no_reports" {{'checked' if email_setting=='no_reports' else ''}} />
+		  No reports<br/>
+		  <input type="radio" name="update_frequency" value="every_5_minutes" {{'checked' if email_setting=='every_5_minutes' else ''}}>
+		  Every 5 minutes<br/>
+		  <input type="radio" name="update_frequency" value="every_1_hour" {{'checked' if email_setting=='every_1_hour' else ''}}>
+		  Every 1 hour<br/>
+		  <input type="radio" name="update_frequency" value="every_day" {{'checked' if email_setting=='every_day' else ''}}>
+		  Every day<br/>
+		  <input type="submit" name="update_rate" value="Update rate">
+	</form>
+{% endblock %}

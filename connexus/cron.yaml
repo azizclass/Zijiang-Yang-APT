@@ -1,0 +1,5 @@
+cron:
+
+- description: summarize the trending stream job
+  url: /tasks/trending_stream
+  schedule: every 5 minutes

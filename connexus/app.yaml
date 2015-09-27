@@ -8,8 +8,12 @@ handlers:
 - url: /assets
   static_dir: assets
 
+- url: /tasks/trending_stream
+  script: Source.Services.summarize_trending_stream.app
+  login: admin
+
 - url: .*
-  script: Source.main.app
+  script: main.app
   login: required
 
 

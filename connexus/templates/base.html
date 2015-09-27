@@ -5,9 +5,10 @@
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
 	<link rel="stylesheet" href="..\assets\StyleSheets\base_style.css">
+	<link rel="stylesheet" href="..\assets\StyleSheets\manage_stream.css" />
 </head>
-<body>
-    <header>
+<body style="padding-left:50px; background-color: #C8EBFF">
+    <header style="padding-left: 20px">
         <h1>Connexus.us</h1>
     </header>
     <nav>
@@ -23,10 +24,14 @@
             </tr>
         </table>
     </nav>
-    <article style="min-height: 500px">
-        {% block content %}{% endblock %}
+    <article style="min-height: 400px; width: 960px; padding-top: 10px;">
+	    <div style="border-top: thin solid #767676;">
+			<div style="padding-top: 10px">
+		        {% block content %}{% endblock %}
+			</div>
+	    </div>
     </article>
-    <footer style="text-align: center; font-size: 10px">
+    <footer style="text-align: center; font-size: 10px; padding-top: 20px">
         <p>Powered by Zijiang Yang @ The University of Texas at Austin, 2015 Fall</p>
         <p>Copyright reserved</p>
     </footer>

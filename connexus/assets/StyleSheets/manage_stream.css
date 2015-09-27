@@ -1,0 +1,34 @@
+#stream_manage #cover_img{
+    width: 50px;
+    height: 50px;
+}
+
+#stream_manage #cover{
+    width: 100px;
+    text-align: center;
+}
+
+#stream_manage #name{
+    width: 200px;
+    text-align: left;
+}
+
+#stream_manage #last_new{
+    width: 150px;
+    text-align: left;
+}
+
+#stream_manage #no_of_pic{
+    width: 100px;
+    text-align: center;
+}
+
+#stream_manage #views{
+    width: 100px;
+    text-align: center;
+}
+
+#stream_manage #delete{
+    width: 100px;
+    text-align:center;
+}

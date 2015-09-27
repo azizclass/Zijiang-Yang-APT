@@ -21,6 +21,12 @@ class Stream(ndb.Model):
     viewCount = ndb.IntegerProperty(default=0)
 
 
+# An email setting class
+class UserEmailSetting(ndb.Model):
+    user = ndb.StringProperty(required=True, indexed=False)
+    name = ndb.StringProperty(required=True, indexed=False)
+    email_update_rate = ndb.StringProperty(default='no_reports')
+
 # Return a key for strongly consistent query
 def getStreamKey():
     return ndb.Key("Stream_Ancestor", "Ancestor");

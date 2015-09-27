@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Connexus-manage
+{% endblock %}
+
+{% block content %}
+<div>
+    <p style="font-size: 20px; padding-left: 30px">Streams I own<br></p>
+	{% if streams.fetch()|len > 0 %}
+	<form method="post">
+   	    <table id="stream_manage">
+   	        <tr>
+				<td id="cover">Cover</td>
+   		        <td id="name">Name</td>
+   			    <td id="last_new">Last New Picture</td>
+   			    <td id="no_of_pic">Number of Pictures</td>
+   			    <td id="delete">Delete</td>
+            </tr>
+			{% for stream in streams %}
+			    <tr>
+					<td id="cover"><a href="{{view_stream_addr+"/?"+({"id":stream.key.id()}|urlencode)}}"><img id="cover_img" src="{{stream.coverImageUrl}}"/></a></td>
+				    <td id="name"><a href="{{view_stream_addr+"/?"+({"id":stream.key.id()}|urlencode)}}">{{stream.name}}</a></td>
+					<td id="last_new">{{stream.last_newpic_time.date()|str if stream.last_newpic_time!=None else "N/A"}}</td>
+					<td id="no_of_pic">{{stream.pic_num}}</td>
+					<td id="delete"><input type="checkbox" name="del_checkbox" value="{{stream.key.id()|str}}"/></td>
+				</tr>		    
+			{% endfor %}
+   	    </table>
+		<div style="padding-top:20px; padding-left:30px"><input type="submit" name="delete" value="Delete Checked"/></div>
+	</form>
+	{% else %}
+	<div style="padding-left:20px; line-height:50px">
+		<p>Oops! You do not have any streams!<br>
+		Click <a href="{{create_stream_addr}}">here</a> to create your first stream and start your trip in Connexus!</p>
+	</div>
+	{% endif %}
+</div>
+<div style="padding-top: 30px"><div style="border-top: thin solid #767676;">
+	<p style="font-size: 20px; padding-left: 30px">Streams I subscribe to<br></p>
+	{% if subscribed.fetch()|len > 0 %}
+	<form method="post">
+   	    <table id="stream_manage">
+   	        <tr>
+				<td id="cover">Cover</td>
+   		        <td id="name">Name</td>
+   			    <td id="last_new">Last New Picture</td>
+   			    <td id="no_of_pic">Number of Pictures</td>
+				<td id="views">Views</td>
+   			    <td id="delete">Unsubscribe</td>
+            </tr>
+			{% for subscribe in subscribed %}
+			    <tr>
+					<td id="cover"><a href="{{view_stream_addr+"/?"+({"id":subscribe.key.id()}|urlencode)}}"><img id="cover_img" src="{{subscribe.coverImageUrl}}"/></td></a>
+				    <td id="name"><a href="{{view_stream_addr+"/?"+({"id":subscribe.key.id()}|urlencode)}}">{{subscribe.name}}</a></td>
+					<td id="last_new">{{subscribe.last_newpic_time.date()|str if subscribe.last_newpic_time!=None else "N/A"}}</td>
+					<td id="no_of_pic">{{subscribe.pic_num}}</td>
+					<td id="views">{{subscribe.viewCount}}</td>
+					<td id="delete"><input type="checkbox" name="unsub_checkbox" value="{{subscribe.key.id()|str}}"/></td>
+				</tr>		    
+			{% endfor %}
+   	    </table>
+		<div style="padding-top:20px; padding-left: 30px"><input type="submit" name="unsubscribe" value="Unsubscribe Checked Streams"></div>
+	</form>
+	{% else %}
+	<div style="padding-left: 20px; line-height:50px">
+		<p>Oops! You have not subscribed any streams!<br>
+		   Click <a href="{{trending_streams_addr}}">here</a> to find most trending streams, or click <a href="{{search_stream_addr}}">here</a> to search for streams that most atrract you.</p>
+	</div>
+	{% endif %}
+</div></div>
+{% endblock %}

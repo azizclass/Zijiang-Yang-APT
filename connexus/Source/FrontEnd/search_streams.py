@@ -1,8 +1,9 @@
 from google.appengine.api import users
-from search import search_streams
 
-import webapp2
+from Source.Services.search import search_streams
+
 import urls
+import webapp2
 import urllib
 
 template_name = 'search_streams.html'
@@ -30,4 +31,4 @@ class SearchStreamsPage(webapp2.RequestHandler):
     def post(self):
         search_key = self.request.get('search_key').encode('utf-8')
         params = {'key_word': search_key}
-        self.redirect(urls.URL_SEARCH_STREAM_PAGE + '/?' + urllib.urlencode(params))
+        self.redirect(urls.URL_SEARCH_STREAM_PAGE + '/?' + urllib.urlencode(params), permanent=True)

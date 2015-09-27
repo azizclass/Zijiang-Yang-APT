@@ -5,9 +5,10 @@
 {% endblock %}
 
 {% block content %}
+<div style="padding-top:10px">
     <form method="post">
-		  <input name="search_key" type="text" value="{{key_word if key_word else ''}}" required/>
-		  <input name="submit" type="submit" value="Submit">
+		  <input name="search_key" type="text" value="{{key_word if key_word else ''}}" size="30" spellcheck="True" placeholder="Please input key word here" required/>
+		  <br><div style="padding-top:10px"><input name="submit" type="submit" value="Search"></div>
 	</form>
 	{% if key_word %}
 	   	{% set total_num = streams|len %}
@@ -45,7 +46,7 @@
     	   	<p>No result mathchs <b>{{key_word}}</b></p>
     	{% endif %}
 	{% else %}
-	   <p>Enter your key words to search for interesting streams!</p>
+	   <p style="padding-top:20px">Enter your key words to search for interesting streams!</p>
 	{% endif %}
-	
+</div>
 {% endblock %}

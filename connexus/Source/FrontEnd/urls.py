@@ -1,6 +1,5 @@
 from google.appengine.api import users
 
-import os
 import jinja2
 import urllib
 
@@ -32,12 +31,8 @@ def getUrlDir():
 
 # Get a template from a template name
 def getTemplate(name):
-    path = os.path.dirname(__file__)
-    path = os.path.dirname(path)
-    path = os.path.dirname(path)
-    path = path + '\html_templates'
     JINJA_ENVIRONMENT = jinja2.Environment(
-        loader=jinja2.FileSystemLoader(path),
+        loader=jinja2.FileSystemLoader('templates'),
         extensions=['jinja2.ext.autoescape'],
         autoescape=True)
     JINJA_ENVIRONMENT.filters['urlencode'] = urllib.urlencode

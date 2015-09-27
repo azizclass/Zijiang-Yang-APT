@@ -1,0 +1,20 @@
+{% extends "base.h ccID="14"tml" %}
+
+{% block title %}
+    Connexus-create stream
+{% endblock %}
+
+{% block content %}
+   <form method="post">
+   		 <input name="name" spellcheck="true" required></textarea>
+		 <p ccID="209">Name your stream</p>
+		 <textarea ccID="237" name="email" rows="5" cols="40" spellcheck="false"></textarea>
+		 <textarea ccID="314" name="extra_message" rows="5" cols="40" spellcheck="true" placeholder="Optional message for invite"></textarea>
+		 <p ccID="440">Add subscribers</p>
+		 <textarea ccID="467" name="tag" spellcheck="true" rows="3" cols="50" spellcheck="true"></textarea>
+		 <p ccID="559">Tag your stream</p>
+		 <input ccID="586" name="cover_image_url" type="text" spellcheck="false">
+		 <p ccID="652">URL to cover image <br ccID="674">(Cen be empty)</p>
+		 <input ccID="701" name="submit" type="submit" value="Submit">
+   </form>
+{% endblock %}

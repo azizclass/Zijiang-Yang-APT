@@ -1,12 +1,21 @@
-from google.appengine.api import users
-
 import webapp2
 import urls
+import urllib
+
 
 template_name = 'error.html'
 
 
 class ErrorPage(webapp2.RequestHandler):
     def get(self):
-        user = users.get_current_user()
-        self.response.write(urls.getTemplate(template_name).render(urls.getUrlDir()))
+        error = self.request.get('error')
+        if not error:
+            error = "This page is not available!"
+        template_dict = urls.getUrlDir()
+        template_dict['error'] = error
+        self.response.write(urls.getTemplate(template_name).render(template_dict))
+
+
+# Jump to the error page to print error message
+def jumpToErrorPage(handler, error=None):
+    handler.redirect(urls.URL_ERROR_PAGE + '/?' + urllib.urlencode({'error': error}))
