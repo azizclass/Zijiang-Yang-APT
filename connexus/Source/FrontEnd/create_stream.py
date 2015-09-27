@@ -31,8 +31,7 @@ class CreateStreamPage(webapp2.RequestHandler):
         if len(Stream.query( Stream.name==name, ancestor=getStreamKey()).fetch()) > 0:
             jumpToErrorPage(self, 'Stream is not created! Name "'+name+'" already exists. Please use another name.')
             return
-        stream = Stream(parent=getStreamKey(), user=user.email(), name=name, tag=tag,
-                        subscribers=emails)
+        stream = Stream(parent=getStreamKey(), user=user.email(), name=name, tag=tag)
         if cover_image_url:
             stream.coverImageUrl = cover_image_url
         stream.put()
