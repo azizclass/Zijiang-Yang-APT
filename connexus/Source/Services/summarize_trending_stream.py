@@ -100,7 +100,7 @@ class Trending_Stream_Handler(webapp2.RequestHandler):
             else:
                 logging.error("Fatal error with trending stream data. Data in queue but does not in stat.")
             queue.popleft()
-        trending = [(x.key.id(),stat[x.key.id()] if x.key.id() in stat else 0) for x in Stream.query(ancestor=getStreamKey()).order(Stream.viewCount)]
+        trending = [(x.key.id(),stat[x.key.id()] if x.key.id() in stat else 0) for x in Stream.query(ancestor=getStreamKey()).order(-Stream.viewCount)]
         trending.sort(key=lambda x: -x[1])
         updateQueue(queue)
         updateStat(stat)

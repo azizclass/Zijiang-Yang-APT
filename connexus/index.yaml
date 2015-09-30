@@ -98,3 +98,9 @@ indexes:
   ancestor: yes
   properties:
   - name: viewCount
+
+- kind: Stream
+  ancestor: yes
+  properties:
+  - name: viewCount
+    direction: desc
