@@ -28,7 +28,7 @@ class CreateStreamPage(webapp2.RequestHandler):
             if len(re.findall(r'^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$', email)) != 1: # take from http://www.regular-expressions.info/
                 jumpToErrorPage(self, 'Stream is not created! "'+email+'" is not a valid email!')
                 return
-        if len(Stream.query( Stream.name==name, ancestor=getStreamKey()).fetch()) > 0:
+        if len(Stream.query( Stream.user==user.email(), Stream.name==name, ancestor=getStreamKey()).fetch()) > 0:
             jumpToErrorPage(self, 'Stream is not created! Name "'+name+'" already exists. Please use another name.')
             return
         stream = Stream(parent=getStreamKey(), user=user.email(), name=name, tag=tag)

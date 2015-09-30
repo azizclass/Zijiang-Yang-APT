@@ -18,4 +18,6 @@ class ErrorPage(webapp2.RequestHandler):
 
 # Jump to the error page to print error message
 def jumpToErrorPage(handler, error=None):
+    if error:
+        error = error.encode('utf-8')
     handler.redirect(urls.URL_ERROR_PAGE + '/?' + urllib.urlencode({'error': error}))

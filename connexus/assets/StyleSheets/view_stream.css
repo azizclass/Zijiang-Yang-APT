@@ -1,0 +1,16 @@
+#stream_info_table td{
+   height: 30px;
+}
+
+#stream_info_table #c1{
+   width: 200px;
+}
+
+#stream_info_table #c2{
+   width: 400px;
+   text-align: center;
+}
+
+#change_page{
+   text-decoration: none;
+}

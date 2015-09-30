@@ -5,48 +5,67 @@
 {% endblock %}
 
 {% block content %}
-<div style="padding-top:10px">
+<p class="title" style="margin-left: 30px">Search Streams<br></p>
+<div style="margin-top:10px">
     <form method="post">
 		  <input name="search_key" type="text" value="{{key_word if key_word else ''}}" size="30" spellcheck="True" placeholder="Please input key word here" required/>
-		  <br><div style="padding-top:10px"><input name="submit" type="submit" value="Search"></div>
+		  <br><input class="button" name="submit" type="submit" value="Search" style="margin-top:10px" />
 	</form>
 	{% if key_word %}
 	   	{% set total_num = streams|len %}
     	{% if total_num > 0 %}
-    	   <p>{{total_num}} results for <b>{{key_word}}</b></p>
-    	   <p>Click on image to view stream</p>
-    	   {% for i in range(offset, [offset+num_results_per_page, total_num]|min) %}
-    	   	  <a href="{{view_stream_addr+'/?'+({'id':streams[i].key.id()}|urlencode)}}">
-        		  <img src="{{streams[i].coverImageUrl}}" width="200px" height="200px">
-        	  </a>
-    	   {% endfor %}
+		   {% set last_page = (((total_num-1)/num_results_per_page)|int)+1 %}
+		   {% set this_page = ((offset/num_results_per_page)|int)+1 %}
+    	   <p class="words">{{total_num}} results for <b>{{key_word}}</b>, showing page {{this_page}}/{{last_page}}<br>Click on image to view stream</p>
 		   <table>
+		   <tr>
+    	   {% for i in range(offset, [offset+num_results_per_page, total_num]|min) %}
+		   	  <td valign="middle" align="center" style="padding:20px">
+		   	  <div class="stream">
+    	   	  	  <a href="{{view_stream_addr+'/?'+({'id':streams[i].key.id()}|urlencode)}}">
+					 <img src="{{streams[i].coverImageUrl}}" />
+					 <p id="stream_name">{{streams[i].name}}</p>		 
+        	  	  </a>
+				  <p class="words" id="extra_words">{{streams[i].user}}
+				     <br>Total {{streams[i].viewCount}} views</p>
+			  </div>
+			  </td>
+    	   {% endfor %}
+		   </tr>
+		   </table>
+		   <table style="text-align:center;" id="search_page_table">
 		   	   <tr>
-			   {% set last_page = (((total_num-1)/num_results_per_page)|int)+1 %}
-			   {% set this_page = ((offset/num_results_per_page)|int)+1 %}
 			   {% set start = this_page-((num_pages_displayed/2)|int) %}
 			   {% set start = start if start>0 else 1 %}
 			   {% set start = start if last_page-start+1>=num_pages_displayed else last_page-num_pages_displayed+1 %}
 			   {% set start = start if start>0 else 1 %}
 			   {% set end = this_page+num_pages_displayed-(this_page-start+1) %}
 			   {% set end = end if end<=last_page else last_page %}
+			   {% if this_page > 1 %}
+			   	  {% set params = {'key_word':key_word.encode('utf-8'), 'offset':start-num_results_per_page} %}
+			   	  <td class="words"><a href="{{search_stream_addr+'/?'+params|urlencode}}">prev<a/></td>
+			   {% endif %}
 			   {% if start > 1 %}
-			   	   <td>...</td>
+			   	   <td class="words">...</td>
 			   {% endif %}
 			   {% for i in range(start, end+1) %}
 			   	   {% set params = {'key_word':key_word.encode('utf-8'), 'offset':(i-1)*num_results_per_page} %}
-			   	   <td><a href="{{search_stream_addr+'/?'+params|urlencode}}">{{i}}</a></td>
+			   	   <td class="words"><a href="{{search_stream_addr+'/?'+params|urlencode}}">{{i}}</a></td>
 			   {% endfor %}
 			   {% if end < last_page %}
 			   	   <td>...</td>
 			   {% endif %}
+			   {% if this_page < last_page %}
+			   	  {% set params = {'key_word':key_word.encode('utf-8'), 'offset': offset+num_results_per_page} %}
+			   	  <td class="words"><a href="{{search_stream_addr+'/?'+params|urlencode}}">next<a/></td>
+			   {% endif %}
 			   </tr>
 		   </table>
     	{% else %}
-    	   	<p>No result mathchs <b>{{key_word}}</b></p>
+    	   	<p class="words">No result mathchs <b>{{key_word}}</b></p>
     	{% endif %}
 	{% else %}
-	   <p style="padding-top:20px">Enter your key words to search for interesting streams!</p>
+	   <p class="words">Enter your key words to search for interesting streams!</p>
 	{% endif %}
 </div>
 {% endblock %}

@@ -1,6 +1,10 @@
+stream_manage td{
+   height: 60px;
+}
+
 #stream_manage #cover_img{
-    width: 50px;
-    height: 50px;
+    max-height: 60px;
+    max-width: 60px;
 }
 
 #stream_manage #cover{
@@ -15,20 +19,37 @@
 
 #stream_manage #last_new{
     width: 150px;
-    text-align: left;
+    text-align: center;
 }
 
 #stream_manage #no_of_pic{
-    width: 100px;
+    width: 150px;
     text-align: center;
 }
 
 #stream_manage #views{
-    width: 100px;
+    width: 150px;
     text-align: center;
 }
 
 #stream_manage #delete{
-    width: 100px;
+    width: 150px;
     text-align:center;
+}
+
+#stream_manage td{
+    line-height: 20px;
+}
+
+#manage_title{
+    margin-left: 30px;
+}
+
+#manage_words{
+    margin-left: 20px;
+}
+
+#manage_button{
+    margin-top:20px;
+    margin-left:30px;
 }

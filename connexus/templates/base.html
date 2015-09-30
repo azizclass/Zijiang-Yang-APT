@@ -4,14 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
-	<link rel="stylesheet" href="..\assets\StyleSheets\base_style.css">
+	<link rel="stylesheet" href="..\assets\StyleSheets\base_style.css" />
 	<link rel="stylesheet" href="..\assets\StyleSheets\manage_stream.css" />
+	<link rel="stylesheet" href="..\assets\StyleSheets\view_stream.css" />
+	<link rel="stylesheet" href="..\assets\StyleSheets\search_stream.css" />
 </head>
 <body style="padding-left:50px; background-color: #C8EBFF">
-    <header style="padding-left: 20px">
-        <h1>Connexus.us</h1>
+    <header style="margin-left: 20px">
+        <h1 style="font-family: Arial Black; color: #0070A8">Connexus.us</h1>
     </header>
-    <nav>
+    <nav style="width: 960px">
         <table id="navigation">
             <tr>
                 <td><a href="{{ management_addr }}">Manage</a></td>
@@ -24,14 +26,10 @@
             </tr>
         </table>
     </nav>
-    <article style="min-height: 400px; width: 960px; padding-top: 10px;">
-	    <div style="border-top: thin solid #767676;">
-			<div style="padding-top: 10px">
-		        {% block content %}{% endblock %}
-			</div>
-	    </div>
+    <article style="min-height: 400px; width: 1028px; margin-top: 10px; border-top: thin solid #767676; padding-top:10px; overflow:auto;">
+		{% block content %}{% endblock %}
     </article>
-    <footer style="text-align: center; font-size: 10px; padding-top: 20px">
+    <footer style="text-align: center; font-size: 10px; margin-top: 50px">
         <p>Powered by Zijiang Yang @ The University of Texas at Austin, 2015 Fall</p>
         <p>Copyright reserved</p>
     </footer>

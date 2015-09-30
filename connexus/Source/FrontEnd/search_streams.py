@@ -7,7 +7,7 @@ import webapp2
 import urllib
 
 template_name = 'search_streams.html'
-num_results_per_page = 5
+num_results_per_page = 4
 num_pages_displayed = 7
 
 class SearchStreamsPage(webapp2.RequestHandler):

@@ -5,24 +5,78 @@
 {% endblock %}
 
 {% block content %}
-   <table>  
-       <tr>
-	   {% for img_url in images %}
-	       <td><img src="{{img_url}}" height="200px" width="200px"></td>
-	   {% endfor %} 
-	   </tr>
-   </table>
+<h2 class="title" style="margin-left: 30px; font-size: 30px">{{stream.name}}</h2>
+<div style="overflow: auto;">
+    <img style="max-width:200px; max-height:200px; float:left;" src="{{stream.coverImageUrl}}" />
+	<table id="stream_info_table" class="words" style="float: left; margin-left: 150px">
+	    <tr>
+			<td id="c1"><b>Owner:</b></td>
+			<td id="c2">{{stream.user}}</td>
+		</tr>
+		<tr>
+			<td id="c1"><b>Number of Pictures:</b></td>
+			<td id="c2">{{stream.pic_num}}</td>
+		</tr>
+		<tr>
+			<td id="c1"><b>Number of Subscribers:</b></td>
+			<td id="c2">{{stream.subscribers|len}}</td>
+		</tr>
+		<tr>
+			<td id="c1"><b>Views:</b></td>
+			<td id="c2">{{stream.viewCount}}</td>
+		</tr>
+		<tr style="height: 80px;">
+			<td id="c1" valign="top"><b>Tags:</b></td>
+			<td id="c2" valign="top" style="word-wrap:break-word; max-width:80px">{{stream.tag if stream.tag and stream.tag|len > 0 else "N/A"}}</td>
+		</tr>
+	</table>
+</div>
+<div style="border-top: thin solid #767676; margin-top:10px; padding-top:10px; padding-bottom:10px">
+  {% if images|len > 0 %} 
+  	  <table>
+	  	  <tr>
+    	  {% for i in range(offset, offset+3 if (offset+3)<=(images|len) else images|len) %}
+    	      <td style="padding:20px" align="center" valign="middle"><img src="{{images[i]}}" style="max-height:300px; max-width:300px"></td>
+		  {% endfor %}
+		  </tr>
+	  </table>
+	  <div style="overflow:auto; padding:10px">
+	  	   {% if offset-3 >= 0 %}
+	  	   	  <a class="button" id="change_page" href="{{view_stream_addr+'/?'+({'id':id, 'offset':offset-3}|urlencode)}}" style="float:left;">Previous Pictures</a>
+	  	   {% endif %}
+		   {% if offset+3 < (images|len) %}
+		   	  <a class="button" id="change_page" href="{{view_stream_addr+'/?'+({'id':id, 'offset':offset+3}|urlencode)}}" style="float:right;">More Pictures</a>
+  	  	   {% endif %}
+	  </div>
+  {% else %}
+  	 <div class="words" style="margin-left: 20px; margin-top: 50px">
+     {% if upload_url %}
+     	  <p>Oops! This stream does not have any pictures!<br>
+  	  	   Try to add some pictures to enrich your stream!</p> 
+     {% else %}
+     	  <p>Oops! This stream does not have any pictures!<br>
+  	  	   Click <a href="{{trending_streams_addr}}">here</a> to find other trending streams, or click <a href="{{search_stream_addr}}">here</a> to search for other interesting streams!</p>
+     {% endif %}
+	 </div>
+  {% endif %}
+</div>
+<div style="margin:20px">
    {% if upload_url %}
    <form action="{{upload_url}}" method="post" enctype="multipart/form-data">
-   		<input type="file" name="img" required/>
-		<input type="text" name="name" spellcheck="true" placeholder="Name" required/>
-		<input type="text" name="comments" spellcheck="true" placeholder="Comments"/>
-		<input type="submit" name="upload_file" value="Upload file"/>
+   		<fieldset style="display:inline; padding:20px">
+       		<input type="file" name="img" accept=".jpg,.png,.gif" required/>	
+       		<input type="text" name="name" spellcheck="true" placeholder="Name" maxlength="50" required/>
+    		<br><textarea name="comments" spellcheck="true" placeholder="Comments" rows="5" cols="60" style="margin-top: 30px"></textarea>		
+    		<br><input class="button" type="submit" name="upload_file" value="Upload file" style="margin-top:20px" />
+			<span class="title" style="margin-left:80px">Add an Image</span>
+   		</fieldset>
    </form>
    {% else %}
    <form method="post">
-   		 <input type="submit" name="subscribe" value={{"Subscribe" if not subscribed else "Unsubscribe"}} />
+   		 <input class="button" type="submit" name="subscribe" value={{"Subscribe" if not subscribed else "Unsubscribe"}} />
 		 <input type="hidden" name="id" value="{{id}}" />
+		 <input type="hidden" name="offset" value="{{offset}}" />
    </form>
    {% endif %}
+</div>
 {% endblock %}

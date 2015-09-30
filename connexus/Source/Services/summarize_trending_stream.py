@@ -18,6 +18,7 @@ def getQueue():
     if not (queue is None):
         return queue
     queue = deque()
+    memcache.delete('ViewingStat')  # If queue is lost, stat must be cleared too.
     updateQueue(queue)
     return queue
 
@@ -39,6 +40,7 @@ def getStat():
     if not (stat is None):
         return stat
     stat = dict()
+    memcache.delete('ViewingQueue')  # If stat is lost, then queue should be cleared too.
     updateStat(stat)
     return stat
 

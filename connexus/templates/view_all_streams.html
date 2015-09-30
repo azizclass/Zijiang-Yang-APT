@@ -5,16 +5,31 @@
 {% endblock %}
 
 {% block content %}
+<p class="title" style="margin-left: 30px">View All Streams<br></p>
    {% if streams.fetch()|len >0 %}
+   <table>
+   	   {% set i = 0 %}
        {% for stream in streams %}
-    		<a href="{{view_stream_addr+'/?'+({'id':stream.key.id()}|urlencode)}}">
-    		    <img src="{{stream.coverImageUrl}}" width="200px" height="200px">
-    		</a>
+	   	  	{% if i == 0 %}
+			   <tr>
+			{% endif %}
+			<td valign="middle" align="center" style="padding:20px">
+        		<div class="stream">
+                	 <a href="{{view_stream_addr+'/?'+({'id':stream.key.id()|str}|urlencode)}}">
+                	 	<img src="{{stream.coverImageUrl}}" class="stream_cover">
+    					<p id="stream_name">{{stream.name}}</p>
+               		 </a>
+    			</div>
+			</td>
+    	   {% set i = i+1 %}
+    	   {% if i == 4 %}
+    	   	  {% set i = 0 %}
+			  </tr>
+    	   {% endif %}
        {% endfor %}
+   </table>
    {% else %}
-       <div style="padding-left: 20px; line-height:50px">
-	       <p>Oops! You do not have any streams!<br>
-		      Click <a href="{{create_stream_addr}}">here</a> to create your first stream and start your trip in Connexus!</p>
-	   </div>
+	   <p class="words" style="margin-left: 20px;">Oops! You do not have any streams!<br>
+		  Click <a href="{{create_stream_addr}}">here</a> to create your first stream and start your trip in Connexus!</p>
    {% endif %}
 {% endblock %}

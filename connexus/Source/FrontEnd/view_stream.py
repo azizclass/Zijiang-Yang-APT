@@ -36,10 +36,17 @@ class ViewStreamPage(webapp2.RequestHandler):
             self.error(404)
             jumpToErrorPage(self, 'Unable to find the stream! The stream may be deleted!')
             return
+        offset = self.request.get('offset')
+        if not offset:
+            offset = 0
+        else:
+            offset = int(offset)
         images = Image.query(ancestor=stream.key).order(-Image.time, Image.name)
         template_dict = urls.getUrlDir()
         template_dict['images'] = [get_serving_url(x.image) for x in images]
         template_dict['id'] = streamId
+        template_dict['stream'] = stream
+        template_dict['offset'] = offset
         if stream.user == user.email():
             upload_url = blobstore.create_upload_url(urls.URL_VIEW_STREAM_PAGE + urls.URL_UPLOAD_HANDLER +
                                                      '/?'+urllib.urlencode({'id':streamId}))
@@ -69,11 +76,10 @@ class ViewStreamPage(webapp2.RequestHandler):
         if self.request.get('subscribe'):
             if self.request.get('subscribe') == 'Subscribe':
                 stream.subscribers.append(user.email())
-                stream.put()
             else:
                 stream.subscribers.remove(user.email())
-                stream.put()
-        self.redirect(urls.URL_VIEW_STREAM_PAGE+'/?'+urllib.urlencode({'id':streamId}))
+            stream.put()
+        self.redirect(urls.URL_VIEW_STREAM_PAGE+'/?'+urllib.urlencode({'id': streamId, 'offset': self.request.get('offset')}))
 
 
 class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
