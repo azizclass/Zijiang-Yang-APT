@@ -19,6 +19,7 @@ import logging
 
 
 template_name = 'view_stream.html'
+images_per_page = 3
 
 
 class ViewStreamPage(webapp2.RequestHandler):
@@ -47,6 +48,7 @@ class ViewStreamPage(webapp2.RequestHandler):
         template_dict['id'] = streamId
         template_dict['stream'] = stream
         template_dict['offset'] = offset
+        template_dict['images_per_page'] = images_per_page
         if stream.user == user.email():
             upload_url = blobstore.create_upload_url(urls.URL_VIEW_STREAM_PAGE + urls.URL_UPLOAD_HANDLER +
                                                      '/?'+urllib.urlencode({'id':streamId}))
