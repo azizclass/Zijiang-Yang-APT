@@ -17,6 +17,7 @@ nav table td {
     border: 1px solid #ccc;
     background-color: #FFEDA4;
     font-family: "Arial";
+    border-radius: 10px;
 }
 
 nav table a{
