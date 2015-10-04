@@ -4,12 +4,14 @@
     Connexus-search streams
 {% endblock %}
 
+{% block css %}search_stream.css{% endblock %}
+
 {% block content %}
-<p class="title" style="margin-left: 30px">Search Streams<br></p>
-<div style="margin-top:10px">
+<p class="title" id="search_title">Search Streams<br></p>
+<div id="search_container">
     <form method="post">
 		  <input name="search_key" type="text" value="{{key_word if key_word else ''}}" size="30" spellcheck="True" placeholder="Please input key word here" required/>
-		  <br><input class="button" name="submit" type="submit" value="Search" style="margin-top:10px" />
+		  <br><input class="button" id="search_button" name="submit" type="submit" value="Search" />
 	</form>
 	{% if key_word %}
 	   	{% set total_num = streams|len %}
@@ -20,20 +22,20 @@
 		   <table>
 		   <tr>
     	   {% for i in range(offset, [offset+num_results_per_page, total_num]|min) %}
-		   	  <td valign="middle" align="center" style="padding:20px">
+		   	  <td valign="middle" align="center" class="search_table_element">
 		   	  <div class="stream">
     	   	  	  <a href="{{view_stream_addr+'/?'+({'id':streams[i].key.id()}|urlencode)}}">
 					 <img src="{{streams[i].coverImageUrl}}" />
-					 <p id="stream_name">{{streams[i].name}}</p>		 
+					 <p class="stream_name">{{streams[i].name}}</p>		 
         	  	  </a>
-				  <p class="words" id="extra_words">{{streams[i].user}}
+				  <p class="words extra_words">{{streams[i].user}}
 				     <br>Total {{streams[i].viewCount}} views</p>
 			  </div>
 			  </td>
     	   {% endfor %}
 		   </tr>
 		   </table>
-		   <table style="text-align:center;" id="search_page_table">
+		   <table id="search_page_table">
 		   	   <tr>
 			   {% set start = this_page-((num_pages_displayed/2)|int) %}
 			   {% set start = start if start>0 else 1 %}

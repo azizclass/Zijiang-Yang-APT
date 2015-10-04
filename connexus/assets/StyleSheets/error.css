@@ -1,0 +1,14 @@
+#error_container{
+    margin-top:100px; 
+    margin-left:100px;
+}
+
+#error_icon { 
+    max-height:80px; 
+    max-width:80px;
+}
+
+#error_message{
+    color: red;
+    display: inline;
+}

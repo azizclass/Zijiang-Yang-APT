@@ -1,3 +1,23 @@
+#search_title{
+    margin-left: 30px;
+}
+
+#search_container{
+    margin-top: 10px;
+}
+
+#search_button{
+    margin-top: 10px;
+}
+
+.search_table_element{
+    padding:20px;
+}
+
+#search_page_table{
+    text-align:center;
+}
+
 #search_page_table td{
- min-width: 20px;
+    min-width: 20px;
 }

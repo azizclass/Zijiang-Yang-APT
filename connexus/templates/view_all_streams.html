@@ -4,20 +4,22 @@
     Connexus-view all streams
 {% endblock %}
 
+{% block css %}view_all_streams.css{% endblock %}
+
 {% block content %}
-<p class="title" style="margin-left: 30px">View All Streams<br></p>
+<p class="title" id="view_all_streams_titile">View All Streams<br></p>
    {% if streams.fetch()|len >0 %}
-   <table>
+   <table id="view_all_streams_table">
    	   {% set i = 0 %}
        {% for stream in streams %}
 	   	  	{% if i == 0 %}
 			   <tr>
 			{% endif %}
-			<td valign="middle" align="center" style="padding:20px">
+			<td valign="middle" align="center">
         		<div class="stream">
                 	 <a href="{{view_stream_addr+'/?'+({'id':stream.key.id()|str}|urlencode)}}">
-                	 	<img src="{{stream.coverImageUrl}}" class="stream_cover">
-    					<p id="stream_name">{{stream.name}}</p>
+                	 	<img class="stream_cover" src="{{stream.coverImageUrl}}">
+    					<p class="stream_name">{{stream.name}}</p>
                		 </a>
     			</div>
 			</td>
@@ -29,7 +31,7 @@
        {% endfor %}
    </table>
    {% else %}
-	   <p class="words" style="margin-left: 20px;">Oops! You do not have any streams!<br>
+	   <p class="words" id="view_all_streams_words">Oops! You do not have any streams!<br>
 		  Click <a href="{{create_stream_addr}}">here</a> to create your first stream and start your trip in Connexus!</p>
    {% endif %}
 {% endblock %}

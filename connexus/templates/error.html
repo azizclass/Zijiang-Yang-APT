@@ -4,9 +4,11 @@
     Connexus-error
 {% endblock %}
 
+{% block css %}error.css{% endblock %}
+
 {% block content %}
-<div style="margin-top:100px; margin-left:100px;">
-   <img src="..\assets\error.jpg" style="max-height:80px; max-width:80px" />
-   <p class="title" style="color: red;display:inline;">{{error}}</p>
+<div id="error_container">
+   <img id="error_icon" src="..\assets\error.jpg" />
+   <p class="title" id="error_message">{{error}}</p>
 </div>
 {% endblock %}

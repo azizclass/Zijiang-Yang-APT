@@ -4,19 +4,21 @@
     Connexus-create stream
 {% endblock %}
 
+{% block css %}create_stream.css{% endblock %}
+
 {% block content %}
-<p class="title" style="margin-left: 30px">Create Your Stream<br></p>
-<form method="post" id="create_stream" style="margin-top:10px">
-    <fieldset style="padding: 30px">
-    	<div style="width: 50%; float: left;">
-       	<input name="name" spellcheck="true" required placeholder="Name" size="30" maxlength="50" />
-    	<br><p class="title">Name your stream</p>
-    	<br><textarea name="email" rows="5" cols="40" spellcheck="false" placeholder="Invite your friends by email"></textarea>
-    	<br><br><textarea name="extra_message" rows="5" cols="40" spellcheck="true" placeholder="Optional message for invite"></textarea>
-    	<br><p class="title">Add subscribers</p>
-		<input class="button" name="submit" type="submit" value="Create Stream" />
+<p class="title" id="create_title">Create Your Stream<br></p>
+<form method="post">
+    <fieldset>
+    	<div id="left">
+           	<input name="name" spellcheck="true" required placeholder="Name" size="30" maxlength="50" />
+        	<br><p class="title">Name your stream</p>
+        	<br><textarea name="email" rows="5" cols="40" spellcheck="false" placeholder="Invite your friends by email"></textarea>
+        	<br><br><textarea name="extra_message" rows="5" cols="40" spellcheck="true" placeholder="Optional message for invite"></textarea>
+        	<br><p class="title">Add subscribers</p>
+    		<input class="button" name="submit" type="submit" value="Create Stream" />
 		</div>
-    		<div style="margin-top: 30px">
+    	<div id="right">
         	<textarea name="tag" spellcheck="true" rows="5" cols="50" spellcheck="true" placeholder="Tags for your stream"></textarea>
         	<br><p class="title">Tag your stream</p>
         	<br><input name="cover_image_url" type="text" spellcheck="false" placeholder="URL of cover image" size="50" />

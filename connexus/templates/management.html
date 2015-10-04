@@ -4,65 +4,67 @@
     Connexus-manage
 {% endblock %}
 
+{% block css %}manage_stream.css{% endblock %}
+
 {% block content %}
 <div>
-    <p class="title" id="manage_title">Streams I own<br></p>
+    <p class="title manage_title">Streams I own<br></p>
 	{% if streams.fetch()|len > 0 %}
 	<form method="post">
-   	    <table id="stream_manage">
+   	    <table class="stream_manage">
    	        <tr>
-				<td id="cover" class="words">Cover</td>
-   		        <td id="name" class="words">Name</td>
-   			    <td id="last_new" class="words">Last New Picture</td>
-   			    <td id="no_of_pic" class="words">Number of Pictures</td>
-   			    <td id="delete" class="words">Delete</td>
+				<td class="words cover">Cover</td>
+   		        <td class="words name">Name</td>
+   			    <td class="words last_new">Last New Picture</td>
+   			    <td class="words no_of_pic">Number of Pictures</td>
+   			    <td class="words delete">Delete</td>
             </tr>
 			{% for stream in streams %}
 			    <tr>
-					<td id="cover"><a href="{{view_stream_addr+"/?"+({"id":stream.key.id()}|urlencode)}}"><img id="cover_img" src="{{stream.coverImageUrl}}"/></a></td>
-				    <td id="name" class="words"><a href="{{view_stream_addr+"/?"+({"id":stream.key.id()}|urlencode)}}"><p style="max-width:200px; word-wrap:break-word;">{{stream.name}}</p></a></td>
-					<td id="last_new" class="words">{{stream.last_newpic_time.date()|str if stream.last_newpic_time!=None else "N/A"}}</td>
-					<td id="no_of_pic" class="words">{{stream.pic_num}}</td>
-					<td id="delete"><input type="checkbox" name="del_checkbox" value="{{stream.key.id()|str}}"/></td>
+					<td class="cover"><a href="{{view_stream_addr+"/?"+({"id":stream.key.id()}|urlencode)}}"><img class="cover_img" src="{{stream.coverImageUrl}}"/></a></td>
+				    <td class="words name"><a href="{{view_stream_addr+"/?"+({"id":stream.key.id()}|urlencode)}}"><p class="name_words">{{stream.name}}</p></a></td>
+					<td class="words last_new">{{stream.last_newpic_time.date()|str if stream.last_newpic_time!=None else "N/A"}}</td>
+					<td class="words no_of_pic">{{stream.pic_num}}</td>
+					<td class="delete"><input type="checkbox" name="del_checkbox" value="{{stream.key.id()|str}}"/></td>
 				</tr>		    
 			{% endfor %}
    	    </table>
-		<input type="submit" name="delete" value="Delete Checked" class="button" id="manage_button"/>
+		<input class="button manage_button" type="submit" name="delete" value="Delete Checked" />
 	</form>
 	{% else %}
-	<p class="words" id="manage_words">Oops! You do not have any streams!<br>
+	<p class="words manage_words">Oops! You do not have any streams!<br>
 		Click <a href="{{create_stream_addr}}">here</a> to create your first stream and start your trip in Connexus!
 	</p>
 	{% endif %}
 </div>
-<div style="margin-top: 30px; border-top: thin solid #767676;">
-	<p class="title" id="manage_title">Streams I subscribe to<br></p>
+<div id="subscribe_container">
+	<p class="title manage_title">Streams I subscribe to<br></p>
 	{% if subscribed.fetch()|len > 0 %}
 	<form method="post">
-   	    <table id="stream_manage">
+   	    <table class="stream_manage">
    	        <tr>
-				<td id="cover" class="words">Cover</td>
-   		        <td id="name" class="words">Name</td>
-   			    <td id="last_new" class="words">Last New Picture</td>
-   			    <td id="no_of_pic" class="words">Number of Pictures</td>
-				<td id="views" class="words">Views</td>
-   			    <td id="delete" class="words">Unsubscribe</td>
+				<td class="words cover">Cover</td>
+   		        <td class="words name">Name</td>
+   			    <td class="words last_new">Last New Picture</td>
+   			    <td class="words no_of_pic">Number of Pictures</td>
+				<td class="words views">Views</td>
+   			    <td class="words delete">Unsubscribe</td>
             </tr>
 			{% for subscribe in subscribed %}
 			    <tr>
-					<td id="cover"><a href="{{view_stream_addr+"/?"+({"id":subscribe.key.id()}|urlencode)}}"><img id="cover_img" src="{{subscribe.coverImageUrl}}"/></td></a>
-				    <td id="name" class="words"><a href="{{view_stream_addr+"/?"+({"id":subscribe.key.id()}|urlencode)}}"><p style="max-width:200px; word-wrap:break-word;">{{subscribe.name}}</p></a></td>
-					<td id="last_new" class="words">{{subscribe.last_newpic_time.date()|str if subscribe.last_newpic_time!=None else "N/A"}}</td>
-					<td id="no_of_pic" class="words">{{subscribe.pic_num}}</td>
-					<td id="views" class="words">{{subscribe.viewCount}}</td>
-					<td id="delete"><input type="checkbox" name="unsub_checkbox" value="{{subscribe.key.id()|str}}"/></td>
+					<td class="cover"><a href="{{view_stream_addr+"/?"+({"id":subscribe.key.id()}|urlencode)}}"><img class="cover_img" src="{{subscribe.coverImageUrl}}"/></td></a>
+				    <td class="words name"><a href="{{view_stream_addr+"/?"+({"id":subscribe.key.id()}|urlencode)}}"><p class="name_words">{{subscribe.name}}</p></a></td>
+					<td class="words last_new">{{subscribe.last_newpic_time.date()|str if subscribe.last_newpic_time!=None else "N/A"}}</td>
+					<td class="words no_of_pic">{{subscribe.pic_num}}</td>
+					<td class="words views">{{subscribe.viewCount}}</td>
+					<td class="delete"><input type="checkbox" name="unsub_checkbox" value="{{subscribe.key.id()|str}}"/></td>
 				</tr>		    
 			{% endfor %}
    	    </table>
-		<input type="submit" name="unsubscribe" value="Unsubscribe Checked Streams" class="button" id="manage_button" />
+		<input class="button manage_button" type="submit" name="unsubscribe" value="Unsubscribe Checked Streams" />
 	</form>
 	{% else %}
-	<p class="words" id="manage_words">Oops! You have not subscribed any streams!<br>
+	<p class="words manage_words">Oops! You have not subscribed any streams!<br>
 	   Click <a href="{{trending_streams_addr}}">here</a> to find most trending streams, or click <a href="{{search_stream_addr}}">here</a> to search for streams that most atrract you.
 	</p>
 	{% endif %}

@@ -1,0 +1,26 @@
+.left{
+    width: 70%; 
+    float:left;
+}
+
+#trending_title{
+    margin-left: 30px;
+}
+
+#trending_table td{
+    padding: 20px;
+}
+
+.right{
+    float:left;
+    margin-left: 50px;
+    margin-top: 20px;
+}
+
+.radio{
+    margin-top: 10px;
+}
+
+.trending_button{
+    margin-top: 20px;
+}
