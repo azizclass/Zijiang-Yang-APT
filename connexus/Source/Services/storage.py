@@ -1,13 +1,5 @@
 from google.appengine.ext import ndb
 
-# An image class, which stores the photo
-class Image(ndb.Model):
-    name = ndb.StringProperty(required=True)
-    comments = ndb.StringProperty(indexed=False)
-    image = ndb.BlobKeyProperty(required=True, indexed=False)
-    time = ndb.DateTimeProperty('t', auto_now_add=True)
-
-
 # A stream class
 class Stream(ndb.Model):
     user = ndb.StringProperty(required=True)
@@ -17,8 +9,9 @@ class Stream(ndb.Model):
     pic_num = ndb.IntegerProperty(default=0)
     tag = ndb.StringProperty(indexed=False)
     subscribers = ndb.StringProperty('e', repeated=True)
-    coverImageUrl = ndb.StringProperty(indexed=False, default="/assets/default_cover.jpg")
+    coverImageUrl = ndb.StringProperty(indexed=False, default="/assets/images/default_cover.jpg")
     viewCount = ndb.IntegerProperty(default=0)
+    images = ndb.BlobKeyProperty(repeated=True, indexed=False)
 
 
 # An email setting class

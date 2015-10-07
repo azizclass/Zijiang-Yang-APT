@@ -15,7 +15,8 @@
 
 .stream_manage .name_words{
     max-width:200px;
-    word-wrap:break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .stream_manage .last_new{

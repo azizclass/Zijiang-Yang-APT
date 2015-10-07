@@ -4,7 +4,12 @@
     Connexus-trending streams
 {% endblock %}
 
-{% block css %}trending_streams.css{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/assets/StyleSheets/trending_streams.css" />
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
 
 {% block content %}
     <div class="left"> 
@@ -40,13 +45,13 @@
 	</div>
 	<div class="right">
     	<form method="post">
-    		  <input class="radio" type="radio" name="update_frequency" value="no_reports" {{'checked' if email_setting=='no_reports' else ''}}/>
+    		  <input type="radio" name="update_frequency" value="no_reports" {{'checked' if email_setting=='no_reports' else ''}}/>
     		  No reports<br/>
-    		  <input class="radio" type="radio" name="update_frequency" value="every_5_minutes" {{'checked' if email_setting=='every_5_minutes' else ''}}/>
+    		  <input type="radio" name="update_frequency" value="every_5_minutes" {{'checked' if email_setting=='every_5_minutes' else ''}}/>
     		  Every 5 minutes<br/>
-    		  <input class="radio" type="radio" name="update_frequency" value="every_1_hour" {{'checked' if email_setting=='every_1_hour' else ''}}"/>
+    		  <input type="radio" name="update_frequency" value="every_1_hour" {{'checked' if email_setting=='every_1_hour' else ''}}"/>
     		  Every 1 hour<br/>
-    		  <input class="radio" type="radio" name="update_frequency" value="every_day" {{'checked' if email_setting=='every_day' else ''}}/>
+    		  <input type="radio" name="update_frequency" value="every_day" {{'checked' if email_setting=='every_day' else ''}}/>
     		  Every day<br/>
     		  <input class="button trending_button" type="submit" name="update_rate" value="Update rate"/>
     	</form>

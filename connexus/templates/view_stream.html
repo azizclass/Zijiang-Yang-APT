@@ -1,17 +1,28 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Connexus-view stream
+Connexus-view stream
 {% endblock %}
 
-{% block css %}view_stream.css{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/assets/StyleSheets/view_stream.css" />
+<link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css" />
+{% endblock %}
+
+{% block scripts %}
+{% if is_owner %}
+<script src="/assets/javascripts/fileUploader/dropzone.js" defer></script>
+<script src="/assets/javascripts/fileUploader/Queue.js" defer></script>
+<script src="/assets/javascripts/fileUploader/main.js" defer></script>
+{% endif %}
+{% endblock %}
 
 {% block content %}
 <h2 class="title" id="view_stream_title">{{stream.name}}</h2>
 <div id="stream_info_container">
-    <img id="stream_info_cover" src="{{stream.coverImageUrl}}" />
+	<img id="stream_info_cover" src="{{stream.coverImageUrl}}" />
 	<table id="stream_info_table" class="words">
-	    <tr>
+		<tr>
 			<td class="c1"><b>Owner:</b></td>
 			<td class="c2">{{stream.user}}</td>
 		</tr>
@@ -34,51 +45,47 @@
 	</table>
 </div>
 <div id="images_div">
-  {% if images|len > 0 %} 
-  	  <table>
-	  	  <tr>
-    	  {% for i in range(offset, offset+images_per_page if (offset+images_per_page)<=(images|len) else images|len) %}
-    	      <td class="image_container" align="center" valign="middle"><img class="image" src="{{images[i]}}"></td>
-		  {% endfor %}
-		  </tr>
-	  </table>
-	  <div id="button_div">
-	  	   {% if offset-images_per_page >= 0 %}
-	  	   	  <a class="button" id="prev_page" href="{{view_stream_addr+'/?'+({'id':id, 'offset':offset-images_per_page}|urlencode)}}">Previous Pictures</a>
-	  	   {% endif %}
-		   {% if offset+images_per_page < (images|len) %}
-		   	  <a class="button" id="next_page" href="{{view_stream_addr+'/?'+({'id':id, 'offset':offset+images_per_page}|urlencode)}}">More Pictures</a>
-  	  	   {% endif %}
-	  </div>
-  {% else %}
-  	 <div class="words" id="view_stream_words">
-     {% if upload_url %}
-     	  <p>Oops! This stream does not have any pictures!<br>
-  	  	   Try to add some pictures to enrich your stream!</p> 
-     {% else %}
-     	  <p>Oops! This stream does not have any pictures!<br>
-  	  	   Click <a href="{{trending_streams_addr}}">here</a> to find other trending streams, or click <a href="{{search_stream_addr}}">here</a> to search for other interesting streams!</p>
-     {% endif %}
-	 </div>
-  {% endif %}
+	{% if images|len > 0 %}
+	<table>
+		<tr>
+			{% for i in range(offset, offset+images_per_page if (offset+images_per_page)<=(images|len) else images|len) %}
+			<td class="image_container" align="center" valign="middle"><img class="image" src="{{images[i]}}"></td>
+			{% endfor %}
+		</tr>
+	</table>
+	<div id="button_div">
+		{% if offset-images_per_page >= 0 %}
+		<a class="button" id="prev_page" href="{{view_stream_addr+'/?'+({'id':id, 'offset':offset-images_per_page}|urlencode)}}">Previous Pictures</a>
+		{% endif %}
+		{% if offset+images_per_page < (images|len) %}
+		<a class="button" id="next_page" href="{{view_stream_addr+'/?'+({'id':id, 'offset':offset+images_per_page}|urlencode)}}">More Pictures</a>
+		{% endif %}
+	</div>
+	{% else %}
+	<div class="words" id="view_stream_words">
+		{% if is_owner %}
+		<p>Oops! This stream does not have any pictures!<br>
+			Try to add some pictures to enrich your stream!</p>
+		{% else %}
+		<p>Oops! This stream does not have any pictures!<br>
+			Click <a href="{{trending_streams_addr}}">here</a> to find other trending streams, or click <a href="{{search_stream_addr}}">here</a> to search for other interesting streams!</p>
+		{% endif %}
+	</div>
+	{% endif %}
 </div>
 <div id="upload_div">
-   {% if upload_url %}
-   <form action="{{upload_url}}" method="post" enctype="multipart/form-data">
-   		<fieldset id="upload_fieldset">
-       		<input type="file" name="img" accept=".jpg,.png,.gif" required/>	
-       		<input type="text" name="name" spellcheck="true" placeholder="Name" maxlength="50" required/>
-    		<br><textarea id="comments" name="comments" spellcheck="true" placeholder="Comments" rows="5" cols="60"></textarea>		
-    		<br><input class="button" id="upload_but" type="submit" name="upload_file" value="Upload file"/>
-			<span class="title" id="upload_words">Add an Image</span>
-   		</fieldset>
-   </form>
-   {% else %}
-   <form method="post">
-   		 <input class="button" type="submit" name="subscribe" value={{"Subscribe" if not subscribed else "Unsubscribe"}} />
-		 <input type="hidden" name="id" value="{{id}}" />
-		 <input type="hidden" name="offset" value="{{offset}}" />
-   </form>
-   {% endif %}
+	{% if is_owner %}
+	<p class="title" id="upload_words">Add Images</p>
+	<button class="button" id="bt_choose_files">Select Images</button>
+	<button class="button" id="bt_upload_all">Upload All</button>
+	<button class="button" id="bt_cancel_all">Cancel All</button>
+	<table id="preview_table"></table>
+	{% else %}
+	<form method="post">
+		<input class="button" type="submit" name="subscribe" value={{"Subscribe" if not subscribed else "Unsubscribe"}} />
+		<input type="hidden" name="id" value="{{id}}" />
+		<input type="hidden" name="offset" value="{{offset}}" />
+	</form>
+	{% endif %}
 </div>
 {% endblock %}

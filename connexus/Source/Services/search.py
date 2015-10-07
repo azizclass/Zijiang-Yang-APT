@@ -2,7 +2,6 @@ from google.appengine.api import search
 from google.appengine.api import memcache
 
 from storage import Stream
-from storage import Image
 from storage import getStreamKey
 
 import re
@@ -22,25 +21,8 @@ def addStreamToSearchIndex(stream):
         search.TextField(name='tag', value=formatSearchContent(stream.tag)),
         search.TextField(name='user', value="".join(re.findall(r'(.+)@', stream.user)))
     ]
-    for img in Image.query(ancestor=stream.key):
-        fields.append(search.TextField(name='image_name'+str(img.key.id()), value=formatSearchContent(img.name)))
-        fields.append(search.TextField(name='image_comment'+str(img.key.id()), value=formatSearchContent(img.comments)))
     index = getIndex()
     index.put(search.Document(doc_id=str(stream.key.id()), fields=fields))
-    updateIndex(index)
-
-
-# Add an image to search index for searching service
-def addImageToSearchIndex(image):
-    doc_id = str(image.key.parent().id())
-    fields = [];
-    index = getIndex()
-    doc = index.get(doc_id)
-    if doc:
-        fields = doc.fields
-    fields.append(search.TextField(name='image_name'+str(image.key.id()), value=formatSearchContent(image.name)))
-    fields.append(search.TextField(name='image_comment'+str(image.key.id()), value=formatSearchContent(image.comments)))
-    index.put(search.Document(doc_id=doc_id, fields=fields))
     updateIndex(index)
 
 
@@ -49,22 +31,6 @@ def removeStreamFromSearchIndex(stream):
     index = getIndex()
     index.delete(str(stream.key.id()))
     updateIndex(index)
-
-
-# Remove image from search index
-def removeImageFromSearchIndex(image):
-    doc_id = str(image.key.parent().id())
-    index = getIndex()
-    doc = index.get(doc_id)
-    if doc:
-        oldFields = doc.fields
-        fields = []
-        for field in oldFields:
-            if field.name == 'image_name'+str(image.key.id()):
-                continue
-            fields.add(field)
-        index.put(search.Document(doc_id=doc_id, fields=fields))
-        updateIndex(index)
 
 
 # Escape reserved characters and words by query language
@@ -107,9 +73,6 @@ def getIndex():
             search.TextField(name='tag', value=formatSearchContent(stream.tag)),
             search.TextField(name='user', value="".join(re.findall(r'(.+)@', stream.user)))
         ]
-        for img in Image.query(ancestor=stream.key):
-            fields.append(search.TextField(name='image_name'+str(img.key.id()), value=formatSearchContent(img.name)))
-            fields.append(search.TextField(name='image_comment'+str(img.key.id()), value=formatSearchContent(img.comments)))
         index.put(search.Document(doc_id=str(stream.key.id()), fields=fields))
         updateIndex(index)
     return index

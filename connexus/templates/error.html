@@ -4,11 +4,16 @@
     Connexus-error
 {% endblock %}
 
-{% block css %}error.css{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="/assets/StyleSheets/error.css" />
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
 
 {% block content %}
 <div id="error_container">
-   <img id="error_icon" src="..\assets\error.jpg" />
+   <img id="error_icon" src="/assets/images/error.jpg" />
    <p class="title" id="error_message">{{error}}</p>
 </div>
 {% endblock %}

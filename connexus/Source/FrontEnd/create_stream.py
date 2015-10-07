@@ -20,7 +20,7 @@ class CreateStreamPage(webapp2.RequestHandler):
     def post(self):
         user = users.get_current_user()
         name = self.request.get("name")
-        emails = re.findall(r'[^(?: |\n|,)].+',self.request.get("email"))
+        emails = re.findall(r'[^(?: |\n|,)].+', self.request.get("email"))
         extra_message = self.request.get("extra_message")
         tag = self.request.get("tag")
         cover_image_url = self.request.get("cover_image_url")

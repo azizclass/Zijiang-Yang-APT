@@ -21,6 +21,12 @@ indexes:
   properties:
   - name: t
     direction: desc
+
+- kind: Image
+  ancestor: yes
+  properties:
+  - name: t
+    direction: desc
   - name: name
 
 - kind: Stream

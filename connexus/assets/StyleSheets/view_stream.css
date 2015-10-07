@@ -81,20 +81,68 @@
     margin:20px;
 }
 
-#upload_fieldset{
-    display:inline; 
-    padding:20px;
-}
-
-#comments{
-    margin-top: 30px;
-}
-
-#upload_but{
-    margin-top:20px;
-}
 
 #upload_words{
     margin-left:80px;
+}
+
+.progree_td{
+    width: 200px;
+    text-align: left;
+    padding-left: 15px;
+}
+
+.progress_bar_container{
+    display: inline-block;
+    width: 170px;
+    height: 15px;
+    background-color: #cccccc;
+    border-radius: 5px;
+}
+
+.progress_bar{
+    border-radius: 5px;
+    height: 100%;
+    width: 0px;
+}
+
+.preview_image_td{
+    width: 100px;
+    height: 100px;
+}
+
+.preview_image{
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 20px;
+}
+
+.file_info_td{
+    width: 250px;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
+    font-family: Arial;
+}
+
+.file_info{
+    display: inline-block;
+    width: 210px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bt_td{
+    width: 100px;
+    text-align: center;
+}
+
+.file_preview{
+    height: 100px;
+}
+
+.uploading_sign{
+    max-width: 30px;
+    max-height: 30px;
 }
 

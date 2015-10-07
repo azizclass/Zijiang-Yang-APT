@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
-	<link rel="stylesheet" href="..\assets\StyleSheets\base_style.css" />
-	<link rel="stylesheet" href="..\assets\StyleSheets\{% block css %}{% endblock %}" />
+	<link rel="stylesheet" href="/assets/StyleSheets/base_style.css" />
+    {% block css %}{% endblock %}
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" defer></script>
+	{% block scripts %}{% endblock %}
 </head>
 <body>
     <header>
