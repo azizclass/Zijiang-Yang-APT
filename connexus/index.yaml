@@ -13,6 +13,12 @@ indexes:
 - kind: Image
   ancestor: yes
   properties:
+  - name: create_time
+    direction: desc
+
+- kind: Image
+  ancestor: yes
+  properties:
   - name: t
   - name: name
 

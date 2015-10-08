@@ -11,7 +11,10 @@ class Stream(ndb.Model):
     subscribers = ndb.StringProperty('e', repeated=True)
     coverImageUrl = ndb.StringProperty(indexed=False, default="/assets/images/default_cover.jpg")
     viewCount = ndb.IntegerProperty(default=0)
-    images = ndb.BlobKeyProperty(repeated=True, indexed=False)
+
+class Image(ndb.Model):
+    img = ndb.BlobKeyProperty(required=True, indexed=False)
+    create_time = ndb.DateTimeProperty(auto_now_add=True)
 
 
 # An email setting class

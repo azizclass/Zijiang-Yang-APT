@@ -48,11 +48,9 @@ $(function() {
                     },
                     success: function (text, status, request) {
                         dropzone.options.url = text;
-
                     },
                     error: function () {
                         console.log("There is an error!");
-                        dropzone.options.url = 'Unable to get URL from server!';
                     },
 
                     complete: function(request, status){
@@ -65,6 +63,7 @@ $(function() {
                 file.waitingForUpload = true;
                 this.uploadQueue.enqueue(file);
                 file.previewElement.querySelector('.upload_bt').setAttribute(['hidden'], [true]);
+                file.previewElement.querySelector('.remove_bt').setAttribute(['hidden'], [true]);
                 file.previewElement.querySelector('.uploading_sign').removeAttribute(['hidden']);
                 if(!this.busy){
                     this.busy = true;
@@ -91,7 +90,6 @@ $(function() {
 
             this.on('complete', function (file) {
                 file.previewElement.querySelector('.uploading_sign').setAttribute(['hidden'], [true]);
-                file.previewElement.querySelector('.remove_bt').setAttribute(['hidden'], [true]);
                 file.waitingForUpload = false;
                 if (!this.uploadQueue.isEmpty()) {
                     this.startUpload(this.uploadQueue.dequeue());
@@ -115,6 +113,7 @@ $(function() {
             file.waitingForUpload = false;
             file.previewElement.querySelector('.uploading_sign').setAttribute(['hidden'], [true]);
             file.previewElement.querySelector('.upload_bt').removeAttribute(['hidden']);
+            file.previewElement.querySelector('.remove_bt').removeAttribute(['hidden']);
         }
     });
 });

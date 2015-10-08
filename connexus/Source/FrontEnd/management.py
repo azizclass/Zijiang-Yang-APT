@@ -2,6 +2,7 @@ from google.appengine.api import users
 from google.appengine.ext.blobstore import blobstore
 
 from Source.Services.storage import Stream
+from Source.Services.storage import Image
 from Source.Services.storage import getStreamKey
 from Source.Services.search import removeStreamFromSearchIndex
 
@@ -30,9 +31,9 @@ class ManagementPage(webapp2.RequestHandler):
                 stream = Stream.get_by_id(int(sid), getStreamKey())
                 if stream:
                     removeStreamFromSearchIndex(stream)
-                    if stream.images:
-                        for img in stream.images:
-                            blobstore.delete(img)
+                    for image in Image.query(ancestor=stream.key):
+                        blobstore.delete(image.img)
+                        image.key.delete()
                     stream.key.delete()
         if self.request.get('unsubscribe'):
             for sid in self.request.get_all("unsub_checkbox"):
