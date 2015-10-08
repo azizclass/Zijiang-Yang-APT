@@ -6,7 +6,8 @@ Connexus-view stream
 
 {% block css %}
 <link rel="stylesheet" href="/assets/StyleSheets/view_stream.css" />
-<link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/assets/Tools/font-awesome/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/assets/Tools/lightGallery/css/lightgallery.min.css" />
 {% endblock %}
 
 {% block scripts %}
@@ -15,6 +16,12 @@ Connexus-view stream
 <script src="/assets/javascripts/fileUploader/Queue.js" defer></script>
 <script src="/assets/javascripts/fileUploader/main.js" defer></script>
 {% endif %}
+<script src="/assets/Tools/lightGallery/js/lightgallery.min.js" defer></script>
+<script src="/assets/Tools/lightGallery/js/jquery.mousewheel.min.js" defer></script>
+<script src="/assets/Tools/lightGallery/js/lg-thumbnail.min.js" defer></script>
+<script src="/assets/Tools/lightGallery/js/lg-fullscreen.js" defer></script>
+<script src="/assets/Tools/lightGallery/js/lg-zoom.js" defer></script>
+<script src="/assets/javascripts/view_stream.js" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -46,10 +53,10 @@ Connexus-view stream
 </div>
 <div id="images_div">
 	{% if images|len > 0 %}
-	<table>
+	<table id="light_gallery">
 		<tr>
 			{% for i in range(offset, offset+images_per_page if (offset+images_per_page)<=(images|len) else images|len) %}
-			<td class="image_container" align="center" valign="middle"><img class="image" src="{{images[i]}}"></td>
+			<td class="image_container" align="center" valign="middle"><a class="gallery_item" href="{{images[i]}}"><img class="image" src="{{images[i]}}"></a></td>
 			{% endfor %}
 		</tr>
 	</table>
