@@ -81,6 +81,20 @@ $(function() {
 
             this.on('success', function(file){
                 file.previewElement.querySelector('.bt_upload_td').appendChild(Dropzone.createElement(check));
+                $.ajax({
+                    type: "GET",
+                    url: window.location.href,
+                    dataType: 'text',
+                    data: {
+                      newest_pic: true
+                    },
+                    success: function(text, status, request){
+                        updatePicture(text);
+                    },
+                    error: function(){
+                        console.log("Unable to get the newest photo!");
+                    }
+                });
             });
 
             this.on('error', function(file, errorMessage){

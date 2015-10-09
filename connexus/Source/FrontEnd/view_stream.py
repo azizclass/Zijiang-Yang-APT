@@ -36,6 +36,9 @@ class ViewStreamPage(webapp2.RequestHandler):
             self.error(400)
             jumpToErrorPage(self, 'Unable to find the stream! The stream may be deleted!')
             return
+        if self.request.get('newest_pic'):
+            self.response.write(get_serving_url(Image.query(ancestor=stream.key).order(-Image.create_time).get().img))
+            return
         template_dict = urls.getUrlDir()
         template_dict['images'] = [get_serving_url(x.img) for x in Image.query(ancestor=stream.key).order(-Image.create_time)]
         template_dict['id'] = streamId
