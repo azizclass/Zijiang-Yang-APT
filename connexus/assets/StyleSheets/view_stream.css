@@ -47,14 +47,16 @@
     padding-bottom:10px;
 }
 
-.image_container{
+.image_container td{
     padding:20px;
-    width:300px;
+    width:33%;
+    height: 340px;
 }
 
 .image{
-    max-height:300px;
-    max-width:300px;
+    border-radius: 10px;
+    max-height:100%;
+    max-width:100%;
 }
 
 #button_div{
@@ -62,12 +64,7 @@
     padding:10px
 }
 
-#prev_page{
-    text-decoration: none;
-    float:left;
-}
-
-#next_page{
+#geo_view{
     text-decoration: none;
     float:right;
 }
@@ -144,5 +141,17 @@
 .uploading_sign{
     max-width: 30px;
     max-height: 30px;
+}
+
+.slider{
+    border: thin solid #767676;
+    border-radius: 30px;
+    margin: 30px;
+    background-color: #f6faff;
+}
+
+.slider li {
+    list-style: none;
+    height: 400px;
 }
 

@@ -21,6 +21,9 @@ Connexus-view stream
 <script src="/assets/Tools/lightGallery/js/lg-thumbnail.min.js" defer></script>
 <script src="/assets/Tools/lightGallery/js/lg-fullscreen.js" defer></script>
 <script src="/assets/Tools/lightGallery/js/lg-zoom.js" defer></script>
+<script src="/assets/javascripts/jquery.event.move.js" defer></script>
+<script src="/assets/javascripts/jquery.event.swipe.js" defer></script>
+<script src="/assets/javascripts/unslider.js" defer></script>
 <script src="/assets/javascripts/view_stream.js" defer></script>
 {% endblock %}
 
@@ -53,21 +56,20 @@ Connexus-view stream
 </div>
 <div id="images_div">
 	{% if images|len > 0 %}
-	<table id="light_gallery">
-		<tr>
-			{% for i in range(offset, offset+images_per_page if (offset+images_per_page)<=(images|len) else images|len) %}
-			<td class="image_container" align="center" valign="middle"><a class="gallery_item" href="{{images[i]}}"><img class="image" src="{{images[i]}}"></a></td>
+	<div class="slider light_gallery">
+		<ul>
+			{% for i in range(images|len) %}
+			{% if i%images_per_page == 0 %}
+			<li><table class="image_container"><tr>
+			{% endif %}
+				<td align="center" valign="middle"><a class="gallery_item" href="{{images[i]}}"><img class="image" src="{{images[i]}}"></a></td>
+			{% if (i+1)%images_per_page == 0 or i==images|len-1%}
+			</tr></table></li>
+			{% endif %}
 			{% endfor %}
-		</tr>
-	</table>
-	<div id="button_div">
-		{% if offset-images_per_page >= 0 %}
-		<a class="button" id="prev_page" href="{{view_stream_addr+'/?'+({'id':id, 'offset':offset-images_per_page}|urlencode)}}">Previous Pictures</a>
-		{% endif %}
-		{% if offset+images_per_page < (images|len) %}
-		<a class="button" id="next_page" href="{{view_stream_addr+'/?'+({'id':id, 'offset':offset+images_per_page}|urlencode)}}">More Pictures</a>
-		{% endif %}
+		</ul>
 	</div>
+	<a class="button" id="geo_view" href=" ">Geo view</a>
 	{% else %}
 	<div class="words" id="view_stream_words">
 		{% if is_owner %}
@@ -91,7 +93,6 @@ Connexus-view stream
 	<form method="post">
 		<input class="button" type="submit" name="subscribe" value={{"Subscribe" if not subscribed else "Unsubscribe"}} />
 		<input type="hidden" name="id" value="{{id}}" />
-		<input type="hidden" name="offset" value="{{offset}}" />
 	</form>
 	{% endif %}
 </div>

@@ -36,16 +36,10 @@ class ViewStreamPage(webapp2.RequestHandler):
             self.error(400)
             jumpToErrorPage(self, 'Unable to find the stream! The stream may be deleted!')
             return
-        offset = self.request.get('offset')
-        if not offset:
-            offset = 0
-        else:
-            offset = int(offset)
         template_dict = urls.getUrlDir()
         template_dict['images'] = [get_serving_url(x.img) for x in Image.query(ancestor=stream.key).order(-Image.create_time)]
         template_dict['id'] = streamId
         template_dict['stream'] = stream
-        template_dict['offset'] = offset
         template_dict['images_per_page'] = images_per_page
         if stream.user == user.email():
             template_dict['is_owner'] = True
