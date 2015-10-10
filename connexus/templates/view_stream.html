@@ -25,11 +25,17 @@ Connexus-view stream
 <script src="/assets/javascripts/jquery.event.swipe.js" defer></script>
 <script src="/assets/javascripts/unslider.js" defer></script>
 <script src="/assets/javascripts/ICanHaz.js" defer></script>
+<script src="http://maps.google.com/maps/api/js?sensor=true" type="text/javascript"></script>
+<script src="/assets/javascripts/jquery.ui.map.full.min.js" defer></script>
+<script src="/assets/javascripts/markerclusterer.min.js" defer></script>
+<script src="/assets/javascripts/oms.min.js" defer></script>
+<script src="/assets/javascripts/jquery.popupoverlay.js" defer></script>
+<script src="/assets/Tools/jquery-ui/jquery-ui.min.js" defer></script>
 <script src="/assets/javascripts/view_stream.js" defer></script>
 {% raw %}
 <script type="text/html" id="image_template">
 	<li>
-		<a class="gallery_item" href="{{url}}"><img src="{{url}}"></a>
+		<table><tr><td align="center" valign="middle"><a class="gallery_item" href="{{url}}"><img src="{{url}}"></a></td></tr></table>
 	</li>
 </script>
 <script type="text/html" id="slider_template">
@@ -98,7 +104,7 @@ Connexus-view stream
 		</div>
 		{% endif %}
 	</div>
-	<a class="button" id="geo_view" href=" ">Geo view</a>
+	<div id="button_div"><button class="button" id="geo_view_button">Geo view</button></div>
 </div>
 <div id="upload_div">
 	{% if is_owner %}
@@ -113,5 +119,8 @@ Connexus-view stream
 		<input type="hidden" name="id" value="{{id}}" />
 	</form>
 	{% endif %}
+</div>
+<div id="geo_view">
+	<div id="map"></div>
 </div>
 {% endblock %}

@@ -40,7 +40,7 @@ $(function() {
             this.startUpload = function (file) {
                 var dropzone = this;
                 $.ajax({
-                    type: 'POST',
+                    type: 'GET',
                     url: window.location.href,
                     dataType: 'text',
                     data: {

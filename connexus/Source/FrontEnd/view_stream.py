@@ -11,7 +11,9 @@ from Source.Services.storage import getStreamKey
 from Source.Services.summarize_trending_stream import increaseViewNum
 from error import jumpToErrorPage
 from datetime import datetime
+from random import random
 
+import json
 import urls
 import webapp2
 import logging
@@ -38,6 +40,13 @@ class ViewStreamPage(webapp2.RequestHandler):
             return
         if self.request.get('newest_pic'):
             self.response.write(get_serving_url(Image.query(ancestor=stream.key).order(-Image.create_time).get().img))
+            return
+        if(self.request.get('geo_info')):
+            self.response.write(json.dumps([{'url': get_serving_url(img.img), 'latitude': img.latitude, 'longitude': img.longitude} for img in Image.query(ancestor=stream.key)]))
+            return
+        if self.request.get('upload'):
+            self.response.write(blobstore.create_upload_url(urls.URL_VIEW_STREAM_PAGE + urls.URL_UPLOAD_HANDLER +
+                                                          '/?'+urllib.urlencode({'id':streamId})))
             return
         template_dict = urls.getUrlDir()
         template_dict['images'] = [get_serving_url(x.img) for x in Image.query(ancestor=stream.key).order(-Image.create_time)]
@@ -73,9 +82,6 @@ class ViewStreamPage(webapp2.RequestHandler):
                 stream.subscribers.remove(user.email())
             stream.put()
             self.response.write('success')
-        elif self.request.get('upload'):
-            self.response.write(blobstore.create_upload_url(urls.URL_VIEW_STREAM_PAGE + urls.URL_UPLOAD_HANDLER +
-                                                     '/?'+urllib.urlencode({'id':streamId})))
 
 
 class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
@@ -99,7 +105,7 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
             self.error(400)
             blobstore.delete(upload.key())
             return
-        image = Image(parent=stream.key, img=upload.key())
+        image = Image(parent=stream.key, img=upload.key(), latitude=random()*170-85, longitude=random()*360-180)
         image.put()
         stream.pic_num = stream.pic_num + 1
         stream.last_newpic_time = datetime.now()

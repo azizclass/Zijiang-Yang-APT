@@ -15,6 +15,8 @@ class Stream(ndb.Model):
 class Image(ndb.Model):
     img = ndb.BlobKeyProperty(required=True, indexed=False)
     create_time = ndb.DateTimeProperty(auto_now_add=True)
+    latitude = ndb.FloatProperty(required=True)
+    longitude = ndb.FloatProperty(required=True)
 
 
 # An email setting class

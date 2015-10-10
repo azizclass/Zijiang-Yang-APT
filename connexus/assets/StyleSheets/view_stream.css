@@ -48,12 +48,11 @@
 }
 
 #button_div{
-    overflow:auto; 
+    overflow:auto;
     padding:10px
 }
 
-#geo_view{
-    text-decoration: none;
+#geo_view_button{
     float:right;
 }
 
@@ -200,3 +199,13 @@
     opacity: 1;
 }
 
+#map{
+    width: 1024px;
+    height: 512px;
+}
+
+.map_popout_img{
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 10px;
+}

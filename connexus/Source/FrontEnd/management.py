@@ -30,11 +30,16 @@ class ManagementPage(webapp2.RequestHandler):
             for sid in self.request.get_all("del_checkbox"):
                 stream = Stream.get_by_id(int(sid), getStreamKey())
                 if stream:
+                    delete_blobstores = []
                     removeStreamFromSearchIndex(stream)
                     for image in Image.query(ancestor=stream.key):
-                        blobstore.delete(image.img)
+                        delete_blobstores.append(image.img)
                         image.key.delete()
                     stream.key.delete()
+                    self.redirect(urls.URL_MANAGEMENT_PAGE, permanent=True)
+                    for blob in delete_blobstores:
+                        blobstore.delete(blob)
+                    return
         if self.request.get('unsubscribe'):
             for sid in self.request.get_all("unsub_checkbox"):
                 stream = Stream.get_by_id(int(sid), getStreamKey())
