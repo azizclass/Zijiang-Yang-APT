@@ -8,6 +8,7 @@ Connexus-view stream
 <link rel="stylesheet" href="/assets/StyleSheets/view_stream.css" />
 <link rel="stylesheet" href="/assets/Tools/font-awesome/css/font-awesome.min.css" />
 <link rel="stylesheet" href="/assets/Tools/lightGallery/css/lightgallery.min.css" />
+<link rel="stylesheet" href="/assets/Tools/jquery-ui/jquery-ui.min.css" />
 {% endblock %}
 
 {% block scripts %}
@@ -34,14 +35,14 @@ Connexus-view stream
 <script src="/assets/javascripts/view_stream.js" defer></script>
 {% raw %}
 <script type="text/html" id="image_template">
-	<li>
+	<li class="new_added_image" hidden>
 		<table><tr><td align="center" valign="middle"><a class="gallery_item" href="{{url}}"><img src="{{url}}"></a></td></tr></table>
 	</li>
 </script>
 <script type="text/html" id="slider_template">
 	<div class="slider light_gallery">
 		<ul>
-			<li>
+			<li class="new_added_image" hidden>
 				<table><tr><td align="center" valign="middle"><a class="gallery_item" href="{{url}}"><img src="{{url}}"></a></td></tr></table>
 			</li>
 		</ul>
@@ -122,5 +123,6 @@ Connexus-view stream
 </div>
 <div id="geo_view">
 	<div id="map"></div>
+	<div id="timeline"></div>
 </div>
 {% endblock %}

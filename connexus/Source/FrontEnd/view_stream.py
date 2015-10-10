@@ -11,6 +11,7 @@ from Source.Services.storage import getStreamKey
 from Source.Services.summarize_trending_stream import increaseViewNum
 from error import jumpToErrorPage
 from datetime import datetime
+from datetime import timedelta
 from random import random
 
 import json
@@ -42,7 +43,14 @@ class ViewStreamPage(webapp2.RequestHandler):
             self.response.write(get_serving_url(Image.query(ancestor=stream.key).order(-Image.create_time).get().img))
             return
         if(self.request.get('geo_info')):
-            self.response.write(json.dumps([{'url': get_serving_url(img.img), 'latitude': img.latitude, 'longitude': img.longitude} for img in Image.query(ancestor=stream.key)]))
+            timeline = self.request.get_all('timeline[]')
+            if (timeline is None) or len(timeline)<2:
+                self.error(400)
+                return
+            startDate = datetime.now() - timedelta(365-int(timeline[0]))
+            endDate = datetime.now() - timedelta(365-int(timeline[1]))
+            self.response.write(json.dumps([{'url': get_serving_url(img.img), 'latitude': img.latitude, 'longitude': img.longitude}
+                                            for img in Image.query(Image.create_time >= startDate, Image.create_time <= endDate, ancestor=stream.key)]))
             return
         if self.request.get('upload'):
             self.response.write(blobstore.create_upload_url(urls.URL_VIEW_STREAM_PAGE + urls.URL_UPLOAD_HANDLER +
@@ -108,6 +116,6 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
         image = Image(parent=stream.key, img=upload.key(), latitude=random()*170-85, longitude=random()*360-180)
         image.put()
         stream.pic_num = stream.pic_num + 1
-        stream.last_newpic_time = datetime.now()
+        stream.last_newpic_time = image.create_time;
         stream.put()
         self.response.write('success')
