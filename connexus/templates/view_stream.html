@@ -36,7 +36,7 @@ Connexus-view stream
 	<div class="slider light_gallery">
 		<ul>
 			<li>
-				<a class="gallery_item" href="{{url}}"><img src="{{url}}"></a>
+				<table><tr><td align="center" valign="middle"><a class="gallery_item" href="{{url}}"><img src="{{url}}"></a></td></tr></table>
 			</li>
 		</ul>
 	</div>
@@ -78,7 +78,7 @@ Connexus-view stream
 			<ul>
 				{% for i in range(images|len) %}
 				<li>
-					<a class="gallery_item" href="{{images[i]}}"><img src="{{images[i]}}"></a>
+					<table><tr><td align="center" valign="middle"><a class="gallery_item" href="{{images[i]}}"><img src="{{images[i]}}"></a></td></tr></table>
 				</li>
 				{% endfor %}
 			</ul>
