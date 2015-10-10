@@ -212,20 +212,19 @@
 			return _.stop().to(_.i - _.o.numPerSlider);
 		};
 
-		_.add = function(html_li){
-			$new_li = $(html_li);
-			_.ul.prepend($new_li);
+		_.add = function($html_li){
+			_.ul.prepend($html_li);
 			_.li = _.ul.find(_.o.item);
 			var len = _.li.length;
 			_.ul.css({'width': (len * 100)/ _.o.numPerSlider + '%'});
 			if(_.o.fluid) {
-				$new_li.css({'float': 'left', 'width': (100 / len) + '%'});
+				$html_li.css({'float': 'left', 'width': (100 / len) + '%'});
 			} else {
-				$new_li.css({'float': 'left', 'width': (_.max[0])/ _.o.numPerSlider + 'px'});
+				$html_li.css({'float': 'left', 'width': (_.max[0])/ _.o.numPerSlider + 'px'});
 			}
 			if((len-1)%_.o.numPerSlider == 0) {
 				$dot = $('<li class="' + (len - 1 === _.i ? 'dot active' : 'dot') + '">' + len + '</li>');
-				_.el.find('ol').append();
+				_.el.find('ol').append($dot);
 				$dot.click(function() {
 					var me = $(this);
 					me.hasClass('dot') ? _.stop().to(me.index()* _.o.numPerSlider) : me.hasClass('prev') ? _.prev() : _.next();

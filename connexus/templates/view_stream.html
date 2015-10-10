@@ -28,9 +28,18 @@ Connexus-view stream
 <script src="/assets/javascripts/view_stream.js" defer></script>
 {% raw %}
 <script type="text/html" id="image_template">
-	<li><table class="image_container"><tr>
-		<td align="center" valign="middle"><a class="gallery_item" href="{{url}}"><img class="image" src="{{url}}"></a></td>
-	</tr></table></li>
+	<li>
+		<a class="gallery_item" href="{{url}}"><img src="{{url}}"></a>
+	</li>
+</script>
+<script type="text/html" id="slider_template">
+	<div class="slider light_gallery">
+		<ul>
+			<li>
+				<a class="gallery_item" href="{{url}}"><img src="{{url}}"></a>
+			</li>
+		</ul>
+	</div>
 </script>
 {% endraw %}
 {% endblock %}
@@ -46,7 +55,7 @@ Connexus-view stream
 		</tr>
 		<tr>
 			<td class="c1"><b>Number of Pictures:</b></td>
-			<td class="c2">{{stream.pic_num}}</td>
+			<td class="c2" id="pic_num">{{stream.pic_num}}</td>
 		</tr>
 		<tr>
 			<td class="c1"><b>Number of Subscribers:</b></td>
@@ -63,8 +72,8 @@ Connexus-view stream
 	</table>
 </div>
 <div id="images_div">
-	{% if images|len > 0 %}
 	<div id="slider_container">
+		{% if images|len > 0 %}
 		<div class="slider light_gallery">
 			<ul>
 				{% for i in range(images|len) %}
@@ -74,19 +83,22 @@ Connexus-view stream
 				{% endfor %}
 			</ul>
 		</div>
-	</div>
-	<a class="button" id="geo_view" href=" ">Geo view</a>
-	{% else %}
-	<div class="words" id="view_stream_words">
-		{% if is_owner %}
-		<p>Oops! This stream does not have any pictures!<br>
-			Try to add some pictures to enrich your stream!</p>
 		{% else %}
-		<p>Oops! This stream does not have any pictures!<br>
-			Click <a href="{{trending_streams_addr}}">here</a> to find other trending streams, or click <a href="{{search_stream_addr}}">here</a> to search for other interesting streams!</p>
+		<div id="view_stream_words">
+			<p class="title">
+				{% if is_owner %}
+				Oops! This stream does not have any pictures!<br>
+				Try to add some pictures to enrich your stream!
+				{% else %}
+				Oops! This stream does not have any pictures!<br>
+				Click <a href="{{trending_streams_addr}}">here</a> to find other trending streams,<br>
+				or click <a href="{{search_stream_addr}}">here</a> to search for other interesting streams!
+				{% endif %}
+			</p>
+		</div>
 		{% endif %}
 	</div>
-	{% endif %}
+	<a class="button" id="geo_view" href=" ">Geo view</a>
 </div>
 <div id="upload_div">
 	{% if is_owner %}
