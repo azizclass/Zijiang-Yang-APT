@@ -8,7 +8,6 @@ Connexus-view stream
 <link rel="stylesheet" href="/assets/StyleSheets/view_stream.css" />
 <link rel="stylesheet" href="/assets/Tools/font-awesome/css/font-awesome.min.css" />
 <link rel="stylesheet" href="/assets/Tools/lightGallery/css/lightgallery.min.css" />
-<link rel="stylesheet" href="/assets/Tools/lightSlider/css/lightslider.min.css" />
 {% endblock %}
 
 {% block scripts %}
@@ -22,16 +21,18 @@ Connexus-view stream
 <script src="/assets/Tools/lightGallery/js/lg-thumbnail.min.js" defer></script>
 <script src="/assets/Tools/lightGallery/js/lg-fullscreen.js" defer></script>
 <script src="/assets/Tools/lightGallery/js/lg-zoom.js" defer></script>
-<script src="/assets/Tools/lightSlider/js/lightslider.min.js" defer></script>
+<script src="/assets/javascripts/jquery.event.move.js" defer></script>
+<script src="/assets/javascripts/jquery.event.swipe.js" defer></script>
+<script src="/assets/javascripts/unslider.js" defer></script>
 <script src="/assets/javascripts/ICanHaz.js" defer></script>
 <script src="/assets/javascripts/view_stream.js" defer></script>
-<script id="image_template" type="text/html">
-	{% raw %}
-	<li class="lslide" style="width: 300.667px; margin-right: 10px;">
-		<a class="gallery_item" href="{{url}}"><img src="{{url}}"></a>
-	</li>
-	{% endraw %}
+{% raw %}
+<script type="text/html" id="image_template">
+	<li><table class="image_container"><tr>
+		<td align="center" valign="middle"><a class="gallery_item" href="{{url}}"><img class="image" src="{{url}}"></a></td>
+	</tr></table></li>
 </script>
+{% endraw %}
 {% endblock %}
 
 {% block content %}
@@ -64,11 +65,15 @@ Connexus-view stream
 <div id="images_div">
 	{% if images|len > 0 %}
 	<div id="slider_container">
-		<ul class="slider light_gallery">
-			{% for i in range(images|len) %}
-			<li><a class="gallery_item" href="{{images[i]}}"><img src="{{images[i]}}"></a></li>
-			{% endfor %}
-		</ul>
+		<div class="slider light_gallery">
+			<ul>
+				{% for i in range(images|len) %}
+				<li>
+					<a class="gallery_item" href="{{images[i]}}"><img src="{{images[i]}}"></a>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
 	</div>
 	<a class="button" id="geo_view" href=" ">Geo view</a>
 	{% else %}

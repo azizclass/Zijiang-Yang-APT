@@ -1,13 +1,16 @@
+var slider;
+
 $(function(){
     $('.light_gallery').lightGallery({
         selector: '.gallery_item',
         mode: 'lg-fade'
     });
-    $('.slider').lightSlider();
+    slider = $('.slider').unslider({
+        dots: true,
+        numPerSlider: 3
+    });
 });
 
 function updatePicture(url){
-    $('.slider').prepend(ich.image_template({url: url}));
-    $('.light_gallery').data('lightGallery').destroy(true);
-    $('.light_gallery').lightGallery();
+    slider.data('unslider').add(ich.image_template({url: url}));
 }

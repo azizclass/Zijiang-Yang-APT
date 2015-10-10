@@ -28,7 +28,8 @@
 			items: '>ul',   // slides container selector
 			item: '>li',    // slidable items selector
 			easing: 'swing',// easing function to use for animation
-			autoplay: true  // enable autoplay on initialisation
+			autoplay: true,  // enable autoplay on initialisation
+			numPerSlider: 1
 		};
 
 		_.init = function(el, o) {
@@ -62,11 +63,11 @@
 			el.css({width: _.max[0], height: li.first().outerHeight(), overflow: 'hidden'});
 
 			//  Set the relative widths
-			ul.css({position: 'relative', left: 0, width: (len * 100) + '%'});
+			ul.css({position: 'relative', left: 0, width: (len * 100)/ o.numPerSlider + '%'});
 			if(o.fluid) {
 				li.css({'float': 'left', width: (100 / len) + '%'});
 			} else {
-				li.css({'float': 'left', width: (_.max[0]) + 'px'});
+				li.css({'float': 'left', width: (_.max[0])/ o.numPerSlider + 'px'});
 			}
 
 			//  Autoslide
@@ -138,8 +139,8 @@
 				}).on('moveend', function(e) {
 					var left = _.ul.data("left");
 					if (Math.abs(left) > 30){
-						var i = left > 0 ? _.i-1 : _.i+1;
-						if (i < 0 || i >= len) i = _.i;
+						var i = left > 0 ? _.i- _.o.numPerSlider : _.i+ _.o.numPerSlider;
+						if (i < 0 || i >= _.li.length) i = _.i;
 						_.to(i);
 					}else{
 						_.to(_.i);
@@ -170,7 +171,7 @@
 
 			//  Check if it's out of bounds
 			if (!target.length) index = 0;
-			if (index < 0) index = li.length - 1;
+			if (index < 0) index = li.length - o.numPerSlider + 1;
 			target = li.eq(index);
 
 			var speed = callback ? 5 : o.speed | 0,
@@ -179,9 +180,9 @@
 
 			if (!ul.queue('fx').length) {
 				//  Handle those pesky dots
-				el.find('.dot').eq(index).addClass('active').siblings().removeClass('active');
+				el.find('.dot').eq(Math.ceil(index/ o.numPerSlider)).addClass('active').siblings().removeClass('active');
 
-				el.animate(obj, speed, easing) && ul.animate($.extend({left: '-' + index + '00%'}, obj), speed, easing, function(data) {
+				el.animate(obj, speed, easing) && ul.animate($.extend({left: '-' + index*100/ o.numPerSlider + '%'}, obj), speed, easing, function(data) {
 					_.i = index;
 
 					$.isFunction(o.complete) && !callback && o.complete(el, target);
@@ -192,7 +193,7 @@
 		//  Autoplay functionality
 		_.play = function() {
 			_.t = setInterval(function() {
-				_.to(_.i + 1);
+				_.to(_.i + _.o.numPerSlider);
 			}, _.o.delay | 0);
 		};
 
@@ -204,19 +205,42 @@
 
 		//  Move to previous/next slide
 		_.next = function() {
-			return _.stop().to(_.i + 1);
+			return _.stop().to(_.i + _.o.numPerSlider);
 		};
 
 		_.prev = function() {
-			return _.stop().to(_.i - 1);
+			return _.stop().to(_.i - _.o.numPerSlider);
 		};
+
+		_.add = function(html_li){
+			$new_li = $(html_li);
+			_.ul.prepend($new_li);
+			_.li = _.ul.find(_.o.item);
+			var len = _.li.length;
+			_.ul.css({'width': (len * 100)/ _.o.numPerSlider + '%'});
+			if(_.o.fluid) {
+				$new_li.css({'float': 'left', 'width': (100 / len) + '%'});
+			} else {
+				$new_li.css({'float': 'left', 'width': (_.max[0])/ _.o.numPerSlider + 'px'});
+			}
+			if((len-1)%_.o.numPerSlider == 0) {
+				$dot = $('<li class="' + (len - 1 === _.i ? 'dot active' : 'dot') + '">' + len + '</li>');
+				_.el.find('ol').append();
+				$dot.click(function() {
+					var me = $(this);
+					me.hasClass('dot') ? _.stop().to(me.index()* _.o.numPerSlider) : me.hasClass('prev') ? _.prev() : _.next();
+				});
+			}
+			_.to(0);
+		}
 
 		//  Create dots and arrows
 		function nav(name, html) {
 			if (name == 'dot') {
 				html = '<ol class="dots">';
 					$.each(_.li, function(index) {
-						html += '<li class="' + (index === _.i ? name + ' active' : name) + '">' + ++index + '</li>';
+						if(index% _.o.numPerSlider == 0)
+							html += '<li class="' + (index === _.i ? name + ' active' : name) + '">' + ++index + '</li>';
 					});
 				html += '</ol>';
 			} else {
@@ -226,7 +250,7 @@
 
 			_.el.addClass('has-' + name + 's').append(html).find('.' + name).click(function() {
 				var me = $(this);
-				me.hasClass('dot') ? _.stop().to(me.index()) : me.hasClass('prev') ? _.prev() : _.next();
+				me.hasClass('dot') ? _.stop().to(me.index()* _.o.numPerSlider) : me.hasClass('prev') ? _.prev() : _.next();
 			});
 		};
 	};
