@@ -12,6 +12,10 @@ handlers:
   script: Source.Services.summarize_trending_stream.app
   login: admin
 
+- url: /tasks/delete
+  script: main.app
+  login: admin
+
 - url: .*
   script: main.app
   login: required

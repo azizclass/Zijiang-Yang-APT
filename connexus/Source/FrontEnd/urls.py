@@ -12,6 +12,7 @@ URL_SEARCH_STREAM_PAGE = "/search_stream"
 URL_TRENDING_STREAMS_PAGE = "/trending_streams"
 URL_ERROR_PAGE = "/error"
 URL_UPLOAD_HANDLER = "/upload"
+URL_DELETE_HANDLER = "/tasks/delete"
 
 
 # Return an URL dictionary that can be used for jinja template rendering

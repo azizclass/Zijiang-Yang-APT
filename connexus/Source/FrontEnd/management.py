@@ -1,5 +1,7 @@
 from google.appengine.api import users
 from google.appengine.ext.blobstore import blobstore
+from google.appengine.api import taskqueue
+from google.appengine.ext import ndb
 
 from Source.Services.storage import Stream
 from Source.Services.storage import Image
@@ -30,16 +32,11 @@ class ManagementPage(webapp2.RequestHandler):
             for sid in self.request.get_all("del_checkbox"):
                 stream = Stream.get_by_id(int(sid), getStreamKey())
                 if stream:
-                    delete_blobstores = []
                     removeStreamFromSearchIndex(stream)
-                    for image in Image.query(ancestor=stream.key):
-                        delete_blobstores.append(image.img)
-                        image.key.delete()
                     stream.key.delete()
-                    self.redirect(urls.URL_MANAGEMENT_PAGE, permanent=True)
-                    for blob in delete_blobstores:
-                        blobstore.delete(blob)
-                    return
+                    taskqueue.add(url=urls.URL_DELETE_HANDLER, params={'id': sid})
+            self.redirect(urls.URL_MANAGEMENT_PAGE, permanent=True)
+            return
         if self.request.get('unsubscribe'):
             for sid in self.request.get_all("unsub_checkbox"):
                 stream = Stream.get_by_id(int(sid), getStreamKey())
@@ -48,4 +45,11 @@ class ManagementPage(webapp2.RequestHandler):
                     stream.put()
         self.redirect(urls.URL_MANAGEMENT_PAGE, permanent=True)
 
+
+class deleteHandler(webapp2.RequestHandler):
+    def post(self):
+        key = ndb.Key('Stream_Ancestor', 'Ancestor', 'Stream', int(self.request.get('id')))
+        for image in Image.query(ancestor=key):
+            blobstore.delete(image.img)
+            image.key.delete()
 

@@ -94,6 +94,10 @@ function updatePicture(url){
             dots: true,
             numPerSlider: 3
         });
+        $('.light_gallery').lightGallery({
+            selector: '.gallery_item',
+            mode: 'lg-fade'
+        });
     }
     $('#pic_num').html(++pic_num+'');
     $('.light_gallery').data('lightGallery').destroy(true);
