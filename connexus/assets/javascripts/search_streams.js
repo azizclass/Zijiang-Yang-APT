@@ -1,7 +1,6 @@
 $(function(){
     var cache = {};
     $('#search').autocomplete({
-        minLength: 1,
         source: function( request, response ){
             var term = request.term;
             if ( term in cache ) {
