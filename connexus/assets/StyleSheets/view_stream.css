@@ -200,13 +200,54 @@
     opacity: 1;
 }
 
+#geo_view{
+    background-color: #999999;
+    border-radius: 10px;
+}
+
 #map{
     width: 1024px;
     height: 512px;
+    margin: 10px;
 }
 
 .map_popout_img{
     max-width: 100px;
     max-height: 100px;
     border-radius: 10px;
+}
+
+#timeline_container{
+    margin-top: 25px;
+    height: 25px;
+}
+
+#timeline{
+    margin-left: 50px;
+    margin-right: 50px;
+    height: 2px;
+}
+
+#timeline .ui-slider-range{
+    background: #798db3;
+}
+
+#timeline .ui-slider-handle{
+    width: 10px;
+    height: 10px;
+}
+
+#start{
+    position: relative;
+    bottom: 20px;
+}
+
+#end{
+    position: relative;
+    top: 3px;
+}
+
+.timeline_words{
+    position: absolute;
+    font-size: 12px;
 }

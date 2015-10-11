@@ -18,6 +18,7 @@ $(function(){
 
     $('#map').gmap({
         zoom: 2,
+        minZoom: 2,
         streetViewControl: false
     }).bind('init', function(evt, map) {
         map.oms = new OverlappingMarkerSpiderfier(map,{
@@ -37,12 +38,16 @@ $(function(){
         values: [335, 365],
         change: function( event, ui ) {
             refreshMarkers();
+        },
+        slide: function(event, ui){
+            refreshSliderWords();
         }
     });
 
     $('#geo_view_button').click(function(){
         $('#geo_view').popup('show');
         $('#map').gmap('refresh');
+        refreshSliderWords();
         refreshMarkers();
     });
 });
@@ -82,6 +87,30 @@ function refreshMarkers(){
         }
     });
 
+}
+
+function refreshSliderWords(){
+    var slider = $('#timeline').slider('instance');
+    var values = slider.values();
+    var width = $('#timeline').width();
+    $('#start .timeline_words').css('left', ((values[0]-slider.options.min)/(slider.options.max-slider.options.min)*width+30)+'px');
+    $('#end .timeline_words').css('left', ((values[1]-slider.options.min)/(slider.options.max-slider.options.min)*width+30)+'px');
+    var format = function(date){
+        var year = date.getFullYear();
+        var month = date.getMonth()+1;
+        var date = date.getDate();
+        if(date < 10)
+            date = '0'+date;
+        if(month < 10)
+            month = '0'+month;
+        return month+'/'+date+'/'+year;
+    };
+    var start = new Date();
+    start.setDate(start.getDate()-(slider.options.max-values[0]));
+    var end = new Date();
+    end.setDate(end.getDate()-(slider.options.max-values[1]));
+    $('#start .timeline_words').html(format(start));
+    $('#end .timeline_words').html(format(end));
 }
 
 function updatePicture(url){
