@@ -37,6 +37,7 @@ $(function(){
         max: 365,
         values: [335, 365],
         change: function( event, ui ) {
+            refreshSliderWords();
             refreshMarkers();
         },
         slide: function(event, ui){
@@ -49,6 +50,41 @@ $(function(){
         $('#map').gmap('refresh');
         refreshSliderWords();
         refreshMarkers();
+    });
+
+    toastr.options.preventDuplicates = true;
+    toastr.options.newestOnTop = false;
+
+    $('#subscribe').click(function(){
+        toastr.clear();
+        toastr.options.timeOut = 0;
+        if($('#subscribe').html() === 'Subscribe')
+            toastr.info('Subscribing...');
+        else
+            toastr.info('Unsubscribing...');
+        $.ajax({
+            type: 'POST',
+            url:  window.location.href,
+            dataType: 'text',
+            data: {
+                subscribe: true
+            },
+            success: function(data){
+                if(data === 'subscribed'){
+                    $('#subscribe').html('Unsubscribe');
+                }else{
+                    $('#subscribe').html('Subscribe');
+                }
+                toastr.clear();
+                toastr.options.timeOut = 1000;
+                toastr.success('Success!');
+            },
+            error: function(){
+                toastr.clear();
+                toastr.options.timeOut = 1000;
+                toastr.error('Fail!');
+            }
+        });
     });
 });
 
@@ -84,6 +120,11 @@ function refreshMarkers(){
                 });
             });
             $('#map').gmap('set', 'MarkerClusterer', new MarkerClusterer($('#map').gmap('get', 'map'), $('#map').gmap('get', 'markers'), {maxZoom: 15}));
+        },
+        error: function(){
+            toastr.clear();
+            toastr.options.timeOut = 1000;
+            toastr.error('Fails to load geographical information!');
         }
     });
 

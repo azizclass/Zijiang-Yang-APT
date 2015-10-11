@@ -84,12 +84,14 @@ class ViewStreamPage(webapp2.RequestHandler):
             self.error(400)
             return
         if self.request.get('subscribe'):
-            if self.request.get('subscribe') == 'true':
-                stream.subscribers.append(user.email())
-            else:
+            if user.email() in stream.subscribers:
                 stream.subscribers.remove(user.email())
+                self.response.write('unsubscribed')
+            else:
+                stream.subscribers.append(user.email())
+                self.response.write('subscribed')
             stream.put()
-            self.response.write('success')
+
 
 
 class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):

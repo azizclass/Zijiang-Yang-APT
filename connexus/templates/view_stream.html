@@ -9,6 +9,7 @@ Connexus-view stream
 <link rel="stylesheet" href="/assets/Tools/font-awesome/css/font-awesome.min.css" />
 <link rel="stylesheet" href="/assets/Tools/lightGallery/css/lightgallery.min.css" />
 <link rel="stylesheet" href="/assets/Tools/jquery-ui/jquery-ui.min.css" />
+<link rel="stylesheet" href="/assets/Tools/toastr/toastr.min.css" />
 {% endblock %}
 
 {% block scripts %}
@@ -32,6 +33,7 @@ Connexus-view stream
 <script src="/assets/javascripts/oms.min.js" defer></script>
 <script src="/assets/javascripts/jquery.popupoverlay.js" defer></script>
 <script src="/assets/Tools/jquery-ui/jquery-ui.min.js" defer></script>
+<script src="/assets/Tools/toastr/toastr.min.js" defer></script>
 <script src="/assets/javascripts/view_stream.js" defer></script>
 {% raw %}
 <script type="text/html" id="image_template">
@@ -115,10 +117,7 @@ Connexus-view stream
 	<button class="button" id="bt_cancel_all">Cancel All</button>
 	<table id="preview_table"></table>
 	{% else %}
-	<form method="post">
-		<input class="button" type="submit" name="subscribe" value={{"Subscribe" if not subscribed else "Unsubscribe"}} />
-		<input type="hidden" name="id" value="{{id}}" />
-	</form>
+		<button id="subscribe" class="button">{{"Subscribe" if not subscribed else "Unsubscribe"}}</button>
 	{% endif %}
 </div>
 <div id="geo_view">
