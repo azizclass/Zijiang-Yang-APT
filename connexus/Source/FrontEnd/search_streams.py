@@ -1,11 +1,10 @@
-from google.appengine.api import users
-
 from Source.Services.search import search_streams
 from Source.Services.search import search_suggestion
 
 import urls
 import webapp2
 import urllib
+import json
 
 template_name = 'search_streams.html'
 num_results_per_page = 4
@@ -13,7 +12,9 @@ num_pages_displayed = 7
 
 class SearchStreamsPage(webapp2.RequestHandler):
     def get(self):
-        user = users.get_current_user()
+        if(self.request.get('request_suggestion')):
+            self.response.write(json.dumps(search_suggestion(self.request.get('query_key'), 20)))
+            return
         template_dict = urls.getUrlDir()
         key_word = self.request.get('key_word')
         if key_word:

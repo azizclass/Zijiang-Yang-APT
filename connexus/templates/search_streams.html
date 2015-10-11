@@ -6,16 +6,19 @@
 
 {% block css %}
 <link rel="stylesheet" href="/assets/StyleSheets/search_stream.css" />
+<link rel="stylesheet" href="/assets/Tools/jquery-ui/jquery-ui.min.css" />
 {% endblock %}
 
 {% block scripts %}
+<script src="/assets/Tools/jquery-ui/jquery-ui.min.js" defer></script>
+<script src="/assets/javascripts/search_streams.js" defer></script>
 {% endblock %}
 
 {% block content %}
 <p class="title" id="search_title">Search Streams<br></p>
 <div id="search_container">
     <form method="post">
-		  <input name="search_key" type="text" value="{{key_word if key_word else ''}}" size="30" spellcheck="True" placeholder="Please input key word here" required/>
+		  <input id="search" name="search_key" type="text" value="{{key_word if key_word else ''}}" size="30" spellcheck="True" placeholder="Please input key word here" required/>
 		  <br><input class="button" id="search_button" name="submit" type="submit" value="Search" />
 	</form>
 	{% if key_word %}

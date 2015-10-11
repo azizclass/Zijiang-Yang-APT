@@ -59,16 +59,15 @@ def search_streams(query_words):
 def search_suggestion(query_words, max_num):
     query_words = formatSearchContent(query_words)
     suggestions = []
-    sugOfId = {}
     trie = getTrie()
     for word in query_words:
         suggestion = []
         for string in trie.searchSubstring(word):
             suggestion.append(string)
         suggestions.append(suggestion)
-    ret = set()
-    combineSuggestions(trie, '', set(), suggestions, 0, ret, max_num)
-    return ret
+    result = set()
+    combineSuggestions(trie, '', set(), suggestions, 0, result, max_num)
+    return sorted([i for i in result])
 
 
 # Get all combinations of suggestions
