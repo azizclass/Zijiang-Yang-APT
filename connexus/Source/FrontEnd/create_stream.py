@@ -1,7 +1,7 @@
 from google.appengine.api import users
 from Source.Services.storage import Stream
 from Source.Services.storage import getStreamKey
-from Source.Services.search import addStreamToSearchIndex
+from Source.Services.search import addStreamToSearchService
 from Source.Services.emails import sendSubscribeInvitationEmail
 from error import jumpToErrorPage
 
@@ -35,6 +35,6 @@ class CreateStreamPage(webapp2.RequestHandler):
         if cover_image_url:
             stream.coverImageUrl = cover_image_url
         stream.put()
-        addStreamToSearchIndex(stream)
+        addStreamToSearchService(stream)
         sendSubscribeInvitationEmail(emails, extra_message, stream)
         self.redirect(urls.URL_MANAGEMENT_PAGE, permanent=True)

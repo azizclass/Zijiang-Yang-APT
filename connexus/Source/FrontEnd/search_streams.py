@@ -1,6 +1,7 @@
 from google.appengine.api import users
 
 from Source.Services.search import search_streams
+from Source.Services.search import search_suggestion
 
 import urls
 import webapp2

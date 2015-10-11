@@ -6,7 +6,7 @@ from google.appengine.ext import ndb
 from Source.Services.storage import Stream
 from Source.Services.storage import Image
 from Source.Services.storage import getStreamKey
-from Source.Services.search import removeStreamFromSearchIndex
+from Source.Services.search import removeStreamFromSearchService
 
 import urls
 import webapp2
@@ -32,7 +32,7 @@ class ManagementPage(webapp2.RequestHandler):
             for sid in self.request.get_all("del_checkbox"):
                 stream = Stream.get_by_id(int(sid), getStreamKey())
                 if stream:
-                    removeStreamFromSearchIndex(stream)
+                    removeStreamFromSearchService(stream)
                     stream.key.delete()
                     taskqueue.add(url=urls.URL_DELETE_HANDLER, params={'id': sid})
             self.redirect(urls.URL_MANAGEMENT_PAGE, permanent=True)
