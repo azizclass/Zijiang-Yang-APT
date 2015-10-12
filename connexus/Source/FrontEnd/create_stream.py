@@ -15,7 +15,9 @@ template_name = 'create_stream.html'
 
 class CreateStreamPage(webapp2.RequestHandler):
     def get(self):
-        self.response.write(urls.getTemplate(template_name).render(urls.getUrlDir()))
+        template_dict = urls.getUrlDir()
+        template_dict['cur_page'] = 'create_stream'
+        self.response.write(urls.getTemplate(template_name).render(template_dict))
 
     def post(self):
         user = users.get_current_user()

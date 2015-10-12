@@ -30,6 +30,7 @@ class TrendingStreamsPage(webapp2.RequestHandler):
         if setting:
             email_setting = setting.email_update_rate
         template_dict = urls.getUrlDir()
+        template_dict['cur_page'] = 'trending_streams'
         template_dict['trendingStreams'] = trendingStreams
         template_dict['email_setting'] = email_setting
         self.response.write(urls.getTemplate(template_name).render(template_dict))

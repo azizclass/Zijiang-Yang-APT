@@ -66,10 +66,15 @@
     display: table-cell;
     vertical-align: middle;
     text-align: center;
+    font-size: 24px;
 }
 
 #upload_div{
     margin:20px;
+}
+
+#upload_div .button{
+    margin-left: 10px;
 }
 
 
@@ -83,18 +88,8 @@
     padding-left: 15px;
 }
 
-.progress_bar_container{
-    display: inline-block;
-    width: 170px;
-    height: 15px;
-    background-color: #cccccc;
-    border-radius: 5px;
-}
-
-.progress_bar{
-    border-radius: 5px;
-    height: 100%;
-    width: 0px;
+#preview_table{
+    margin-top: 30px;
 }
 
 .preview_image_td{
@@ -153,6 +148,10 @@
     height: 100%;
 }
 
+.slider ul{
+    top: -30px;
+}
+
 .slider li {
     list-style: none;
     width:300px;
@@ -176,7 +175,7 @@
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -20px;
+    bottom: 30px;
     text-align: center;
 }
 

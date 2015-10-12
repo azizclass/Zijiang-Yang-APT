@@ -22,6 +22,7 @@ class ManagementPage(webapp2.RequestHandler):
         subscribed = Stream.query(Stream.subscribers == user.email(), ancestor=getStreamKey()).order(-Stream.last_newpic_time,
                                -Stream.pic_num, Stream.name, -Stream.create_time)
         template_dict = urls.getUrlDir()
+        template_dict['cur_page'] = 'management'
         template_dict["streams"] = streams
         template_dict["subscribed"] = subscribed
         self.response.write(urls.getTemplate(template_name).render(template_dict))

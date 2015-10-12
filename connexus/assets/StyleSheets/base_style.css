@@ -1,8 +1,4 @@
 body{
-    background-color: #C8EBFF;
-}
-
-#content{
     padding-left:50px;
     width: 1028px;
 }
@@ -13,27 +9,11 @@ header{
     color: #0070A8;
 }
 
-nav table td {
-    width: 100px;
-    text-align: center;
-    font-size: 20px;
-    border: 1px solid #ccc;
-    background-color: #FFEDA4;
-    font-family: "Arial";
-    border-radius: 10px;
-}
-
-nav table a{
-    text-decoration: none;
-    color:#0070A8;
-}
 
 article{
     min-height: 400px; 
     width: 100%; 
-    margin-top: 10px; 
-    border-top: thin solid #767676; 
-    padding-top:10px; 
+    margin-top: 20px;
     overflow:auto;
 }
 
@@ -44,7 +24,7 @@ footer{
 }
 
 .title{
-  font-size: 20px;
+  font-size: 30px;
   font-family: "Comic Sans MS";
 }
 
@@ -52,14 +32,6 @@ footer{
   line-height: 30px;
   font-size: 15px;
   font-family: "Lucida Console";
-}
-
-.button{
-  font-family: "Lucida Console";
-  font-size: 15px; 
-  background-color:#BFC5FF;
-  color: black;
-  padding:5px 10px;
 }
 
 .stream{
@@ -93,3 +65,11 @@ footer{
   text-overflow: ellipsis;
 }
 
+.jumbotron{
+    padding: 20px 30px;
+    border-radius: 20px;
+}
+
+.jumbotron p{
+    line-height: 50px;
+}

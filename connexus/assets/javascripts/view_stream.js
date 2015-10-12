@@ -72,8 +72,12 @@ $(function(){
             success: function(data){
                 if(data === 'subscribed'){
                     $('#subscribe').html('Unsubscribe');
+                    $('#subscribe').removeClass('btn-primary');
+                    $('#subscribe').addClass('btn-danger');
                 }else{
                     $('#subscribe').html('Subscribe');
+                    $('#subscribe').removeClass('btn-danger');
+                    $('#subscribe').addClass('btn-primary');
                 }
                 toastr.clear();
                 toastr.options.timeOut = 1000;

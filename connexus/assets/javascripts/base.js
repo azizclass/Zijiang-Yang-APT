@@ -1,6 +1,6 @@
 $(function(){
     var cache = {};
-    $('#search').autocomplete({
+    $('#search input').autocomplete({
         source: function( request, response ){
             var term = request.term;
             if ( term in cache ) {
@@ -9,7 +9,7 @@ $(function(){
             }
             $.ajax({
                 type: 'GET',
-                url:  window.location.href,
+                url:  $('#search').attr('action'),
                 dataType: 'json',
                 data:{
                     request_suggestion: true,

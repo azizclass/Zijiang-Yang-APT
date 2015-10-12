@@ -5,36 +5,41 @@
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
 	<link rel="stylesheet" href="/assets/StyleSheets/base_style.css" />
+    <link rel="stylesheet" href="/assets/Tools/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/Tools/jquery-ui/jquery-ui.min.css" />
     {% block css %}{% endblock %}
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" defer></script>
+    <script src="/assets/Tools/bootstrap/js/bootstrap.min.js" defer></script>
+    <script src="/assets/Tools/jquery-ui/jquery-ui.min.js" defer></script>
+    <script src="/assets/javascripts/base.js" defer></script>
 	{% block scripts %}{% endblock %}
 </head>
 <body>
-    <div id="content">
-        <header>
-            <h1>Connexus.us</h1>
-        </header>
-        <nav>
-            <table>
-                <tr>
-                    <td><a href="{{ management_addr }}">Manage</a></td>
-                    <td><a href="{{ create_stream_addr }}">Create</a></td>
-                    <td><a href="{{ view_all_streams_addr }}">View</a></td>
-                    <td><a href="{{ search_stream_addr }}">Search</a></td>
-                    <td><a href="{{ trending_streams_addr }}">Trending</a></td>
-                    <td><a href=" ">Social</a></td>
-                    <td><a href="{{ log_out_addr }}">Log out</a>
-                </tr>
-            </table>
-        </nav>
-        <article>
-            {% block content %}{% endblock %}
-        </article>
-        <footer>
-            <p>Powered by Zijiang Yang @ The University of Texas at Austin, 2015 Fall</p>
-            <p>Copyright reserved</p>
-        </footer>
-    </div>
+    <header>
+        <h1>Connexus.us</h1>
+    </header>
+    <nav>
+        <ul class="nav nav-tabs">
+            <li class={{'active' if cur_page == 'management' else ''}}><a href="{{ management_addr }}">Manage</a></li>
+            <li class={{'active' if cur_page == 'create_stream' else ''}}><a href="{{ create_stream_addr }}">Create</a></li>
+            <li class={{'active' if cur_page == 'view_all_stream' else ''}}><a href="{{ view_all_streams_addr }}">View</a></li>
+            <li class={{'active' if cur_page == 'trending_streams' else ''}}><a href="{{ trending_streams_addr }}">Trending</a></li>
+            <li><a href="{{ log_out_addr }}">Log out</a></li>
+            <form id="search" class="navbar-form navbar-right" role="search" method="post" action="{{ search_stream_addr }}">
+                <div class="form-group">
+                    <input name="search_key" type="text" class="form-control" placeholder="Search Streams" spellcheck="True" required>
+                </div>
+                <button name="submit" type="submit" class="btn btn-default">Search</button>
+            </form>
+        </ul>
+    </nav>
+    <article>
+        {% block content %}{% endblock %}
+    </article>
+    <footer>
+        <p>Powered by Zijiang Yang @ The University of Texas at Austin, 2015 Fall</p>
+        <p>Copyright reserved</p>
+    </footer>
 </body>
 </html>
 {% endautoescape %}

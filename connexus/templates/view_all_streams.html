@@ -14,29 +14,24 @@
 {% block content %}
 <p class="title" id="view_all_streams_titile">View All Streams<br></p>
    {% if streams.fetch()|len >0 %}
-   <table id="view_all_streams_table">
-   	   {% set i = 0 %}
-       {% for stream in streams %}
-	   	  	{% if i == 0 %}
-			   <tr>
-			{% endif %}
-			<td valign="middle" align="center">
-        		<div class="stream">
-                	 <a href="{{view_stream_addr+'/?'+({'id':stream.key.id()|str}|urlencode)}}">
-                	 	<img class="stream_cover" src="{{stream.coverImageUrl}}">
-    					<p class="stream_name">{{stream.name}}</p>
-               		 </a>
-    			</div>
-			</td>
-    	   {% set i = i+1 %}
-    	   {% if i == 4 %}
-    	   	  {% set i = 0 %}
-			  </tr>
-    	   {% endif %}
-       {% endfor %}
-   </table>
+	<div class="container-fluid">
+		<div class="row">
+			{% for stream in streams %}
+			<div class="col-xs-6 col-md-3">
+				<div class="stream thumbnail">
+					<a href="{{view_stream_addr+'/?'+({'id':stream.key.id()|str}|urlencode)}}">
+						<img class="stream_cover" src="{{stream.coverImageUrl}}">
+						<p class="stream_name">{{stream.name}}</p>
+					</a>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
    {% else %}
-	   <p class="words" id="view_all_streams_words">Oops! You do not have any streams!<br>
-		  Click <a href="{{create_stream_addr}}">here</a> to create your first stream and start your trip in Connexus!</p>
+		<div class="jumbotron">
+			<p class="words">Oops! You do not have any streams!<br>
+				Click <a href="{{create_stream_addr}}">here</a> to create your first stream and start your trip in Connexus!</p>
+		</div>
    {% endif %}
 {% endblock %}

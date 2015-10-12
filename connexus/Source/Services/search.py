@@ -50,11 +50,12 @@ def search_streams(query_words):
     for word in query_words:
         sids_of_word = set()
         for string in trie.searchSubstring(word):
-            sids_of_word = sids_of_word.union(trie.get(string))
-            for sid in sids_of_word:
+            sids_of_string = trie.get(string)
+            for sid in sids_of_string:
                 if not(sid in relevence):
                     relevence[sid] = 0.0
                 relevence[sid] = relevence[sid] + float(len(word))/len(string)
+            sids_of_word = sids_of_word.union(sids_of_string)
         sids.append(sids_of_word)
     ret = [Stream.get_by_id(sid, getStreamKey()) for sid in reduce(lambda x, y: x.intersection(y), sids)]
     return sorted(ret, key=lambda x: -relevence[x.key.id()])

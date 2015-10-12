@@ -1,6 +1,11 @@
+.stream_manage > tbody > tr > td {
+     vertical-align: middle;
+}
+
 .stream_manage .cover_img{
-    max-height: 60px;
-    max-width: 60px;
+    max-height: 80px;
+    max-width: 80px;
+    border-radius: 10px;
 }
 
 .stream_manage .cover{
@@ -41,15 +46,11 @@
 
 .stream_manage td{
     line-height: 20px;
-    height: 60px;
+    height: 80px;
 }
 
 .manage_title{
     margin-left: 30px;
-}
-
-.manage_words{
-    margin-left: 20px;
 }
 
 .manage_button{
@@ -58,6 +59,7 @@
 }
 
 #subscribe_container{
-    margin-top: 30px; 
+    margin-top: 30px;
+    padding-top: 30px;
     border-top: thin solid #767676;
 }

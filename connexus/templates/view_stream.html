@@ -8,7 +8,6 @@ Connexus-view stream
 <link rel="stylesheet" href="/assets/StyleSheets/view_stream.css" />
 <link rel="stylesheet" href="/assets/Tools/font-awesome/css/font-awesome.min.css" />
 <link rel="stylesheet" href="/assets/Tools/lightGallery/css/lightgallery.min.css" />
-<link rel="stylesheet" href="/assets/Tools/jquery-ui/jquery-ui.min.css" />
 <link rel="stylesheet" href="/assets/Tools/toastr/toastr.min.css" />
 {% endblock %}
 
@@ -32,7 +31,6 @@ Connexus-view stream
 <script src="/assets/javascripts/markerclusterer.min.js" defer></script>
 <script src="/assets/javascripts/oms.min.js" defer></script>
 <script src="/assets/javascripts/jquery.popupoverlay.js" defer></script>
-<script src="/assets/Tools/jquery-ui/jquery-ui.min.js" defer></script>
 <script src="/assets/Tools/toastr/toastr.min.js" defer></script>
 <script src="/assets/javascripts/view_stream.js" defer></script>
 {% raw %}
@@ -101,25 +99,25 @@ Connexus-view stream
 				{% else %}
 				Oops! This stream does not have any pictures!<br>
 				Click <a href="{{trending_streams_addr}}">here</a> to find other trending streams,<br>
-				or click <a href="{{search_stream_addr}}">here</a> to search for other interesting streams!
+				or use <a href="#search">search box</a> to search for other interesting streams!
 				{% endif %}
 			</p>
 		</div>
 		{% endif %}
 	</div>
-	<div id="button_div"><button class="button" id="geo_view_button">Geo view</button></div>
+	<div id="button_div"><button class="btn btn-default" id="geo_view_button">Geo view</button></div>
 </div>
-<div id="upload_div">
-	{% if is_owner %}
+{% if is_owner %}
+<div id="upload_div" class="well">
 	<p class="title" id="upload_words">Add Images</p>
-	<button class="button" id="bt_choose_files">Select Images</button>
-	<button class="button" id="bt_upload_all">Upload All</button>
-	<button class="button" id="bt_cancel_all">Cancel All</button>
+	<button class="button btn btn-primary" id="bt_choose_files">Select Images</button>
+	<button class="button btn btn-success" id="bt_upload_all">Upload All</button>
+	<button class="button btn btn-danger" id="bt_cancel_all">Cancel All</button>
 	<table id="preview_table"></table>
-	{% else %}
-		<button id="subscribe" class="button">{{"Subscribe" if not subscribed else "Unsubscribe"}}</button>
-	{% endif %}
 </div>
+{% else %}
+	<button id="subscribe" class="btn {{'btn-primary' if not subscribed else 'btn-danger'}}">{{"Subscribe" if not subscribed else "Unsubscribe"}}</button>
+{% endif %}
 <div id="geo_view">
 	<div id="map"></div>
 	<div id="timeline_container">

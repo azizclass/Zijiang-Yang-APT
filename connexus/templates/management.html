@@ -16,7 +16,7 @@
     <p class="title manage_title">Streams I own<br></p>
 	{% if streams.fetch()|len > 0 %}
 	<form method="post">
-   	    <table class="stream_manage">
+   	    <table class="stream_manage table table-striped">
    	        <tr>
 				<td class="words cover">Cover</td>
    		        <td class="words name">Name</td>
@@ -34,19 +34,21 @@
 				</tr>		    
 			{% endfor %}
    	    </table>
-		<input class="button manage_button" type="submit" name="delete" value="Delete Checked" />
+		<input class="btn btn-danger manage_button" type="submit" name="delete" value="Delete Checked" />
 	</form>
 	{% else %}
-	<p class="words manage_words">Oops! You do not have any streams!<br>
-		Click <a href="{{create_stream_addr}}">here</a> to create your first stream and start your trip in Connexus!
-	</p>
+	<div class="jumbotron">
+		<p class="words">Oops! You do not have any streams!<br>
+			Click <a href="{{create_stream_addr}}">here</a> to create your first stream and start your trip in Connexus!
+		</p>
+	</div>
 	{% endif %}
 </div>
 <div id="subscribe_container">
 	<p class="title manage_title">Streams I subscribe to<br></p>
 	{% if subscribed.fetch()|len > 0 %}
 	<form method="post">
-   	    <table class="stream_manage">
+   	    <table class="stream_manage table table-striped">
    	        <tr>
 				<td class="words cover">Cover</td>
    		        <td class="words name">Name</td>
@@ -66,12 +68,14 @@
 				</tr>		    
 			{% endfor %}
    	    </table>
-		<input class="button manage_button" type="submit" name="unsubscribe" value="Unsubscribe Checked Streams" />
+		<input class="btn btn-danger manage_button" type="submit" name="unsubscribe" value="Unsubscribe Checked" />
 	</form>
 	{% else %}
-	<p class="words manage_words">Oops! You have not subscribed any streams!<br>
-	   Click <a href="{{trending_streams_addr}}">here</a> to find most trending streams, or click <a href="{{search_stream_addr}}">here</a> to search for streams that most atrract you.
-	</p>
+	<diV class="jumbotron">
+		<p class="words">Oops! You have not subscribed any streams!<br>
+			Click <a href="{{trending_streams_addr}}">here</a> to find most trending streams, or use <a href="#search">search box</a> to search for streams that most atrract you.
+		</p>
+	</div>
 	{% endif %}
 </div>
 {% endblock %}

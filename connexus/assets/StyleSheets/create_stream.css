@@ -2,6 +2,10 @@
     margin-left: 30px;
 }
 
+.substitle{
+    font-size: 20px;
+}
+
 form{
     margin-top:10px;
 }
@@ -17,4 +21,13 @@ fieldset{
 
 #right{
     margin-top: 30px; 
+}
+
+#form-create textarea{
+    width: 400px;
+    height: 100px;
+}
+
+#form-create input[type="text"]{
+    width: 300px;
 }

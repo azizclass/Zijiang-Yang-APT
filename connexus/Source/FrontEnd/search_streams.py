@@ -1,5 +1,6 @@
 from Source.Services.search import search_streams
 from Source.Services.search import search_suggestion
+from Source.FrontEnd.error import jumpToErrorPage
 
 import urls
 import webapp2
@@ -28,7 +29,10 @@ class SearchStreamsPage(webapp2.RequestHandler):
             template_dict['offset'] = offset
             template_dict['num_results_per_page'] = num_results_per_page
             template_dict['num_pages_displayed'] = num_pages_displayed
-        self.response.write(urls.getTemplate(template_name).render(template_dict))
+            self.response.write(urls.getTemplate(template_name).render(template_dict))
+        else:
+            self.error(400)
+            jumpToErrorPage(self, 'No search key found!')
 
     def post(self):
         search_key = self.request.get('search_key').encode('utf-8')

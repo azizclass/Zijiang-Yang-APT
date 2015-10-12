@@ -13,22 +13,20 @@
 
 {% block content %}
 <p class="title" id="create_title">Create Your Stream<br></p>
-<form method="post">
-    <fieldset>
-    	<div id="left">
-           	<input name="name" spellcheck="true" required placeholder="Name" size="30" maxlength="50" />
-        	<br><p class="title">Name your stream</p>
-        	<br><textarea name="email" rows="5" cols="40" spellcheck="false" placeholder="Invite your friends by email"></textarea>
-        	<br><br><textarea name="extra_message" rows="5" cols="40" spellcheck="true" placeholder="Optional message for invite"></textarea>
-        	<br><p class="title">Add subscribers</p>
-    		<input class="button" name="submit" type="submit" value="Create Stream" />
-		</div>
-    	<div id="right">
-        	<textarea name="tag" spellcheck="true" rows="5" cols="50" spellcheck="true" placeholder="Tags for your stream"></textarea>
-        	<br><p class="title">Tag your stream</p>
-        	<br><input name="cover_image_url" type="text" spellcheck="false" placeholder="URL of cover image" size="50" />
-        	<br><p class="title">URL to cover image <br>(Can be empty)</p>
-	    </div>
-    </fieldset>
+<form method="post" id="form-create">
+	<div id="left">
+		<input class="form-control text-input" type="text" name="name" spellcheck="true" placeholder="Name" maxlength="50" required />
+		<br><p class="title substitle">Name your stream</p>
+		<br><textarea class="form-control text-input" name="email" spellcheck="false" placeholder="Invite your friends by email"></textarea>
+		<br><br><textarea class="form-control text-input" name="extra_message" spellcheck="true" placeholder="Optional message for invite"></textarea>
+		<br><p class="title substitle">Add subscribers</p>
+		<input class="btn btn-primary" name="submit" type="submit" value="Create Stream" />
+	</div>
+	<div id="right">
+		<textarea name="tag" class="form-control" spellcheck="true" spellcheck="true" placeholder="Tags for your stream"></textarea>
+		<br><p class="title substitle">Tag your stream</p>
+		<br><input name="cover_image_url" class="form-control" type="text" spellcheck="false" placeholder="URL of cover image"/>
+		<br><p class="title substitle">URL to cover image <br>(Can be empty)</p>
+	</div>
 </form>
 {% endblock %}

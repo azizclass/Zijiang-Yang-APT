@@ -63,7 +63,7 @@
 			el.css({width: _.max[0], height: li.first().outerHeight(), overflow: 'hidden'});
 
 			//  Set the relative widths
-			ul.css({position: 'relative', left: 0, width: (len * 100)/ o.numPerSlider + '%'});
+			ul.css({position: 'relative', left: 0, width: ((len * 100)/ o.numPerSlider + 30) + '%'});
 			if(o.fluid) {
 				li.css({'float': 'left', width: (100 / len) + '%'});
 			} else {

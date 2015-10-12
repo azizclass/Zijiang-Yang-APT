@@ -1,5 +1,5 @@
 .left{
-    width: 70%; 
+    width: 80%;
     float:left;
 }
 
@@ -7,9 +7,6 @@
     margin-left: 30px;
 }
 
-#trending_table td{
-    padding: 20px;
-}
 
 .right{
     float:left;

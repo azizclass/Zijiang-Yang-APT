@@ -15,14 +15,11 @@
     <div class="left"> 
         {% if trendingStreams|len > 0 %}
             <p class="title" id="trending_title">Top {{trendingStreams|len}} Trending Streams</p>
-    		{% set i = 0 %}
-    		<table id="trending_table">
+    		<div class="container-fluid">
+				<div class="row">
                 {% for stream, views in trendingStreams %}
-            		{% if i == 0 %}
-            		   <tr>
-            		{% endif %}
-					<td valign="middle" align="center">
-                		<div class="stream">
+					<div class="col-xs-6 col-md-3">
+                		<div class="stream thumbnail">
                             <a href="{{view_stream_addr+'/?'+({'id':stream.key.id()|str}|urlencode)}}">
                             	<img class="stream_cover" src="{{stream.coverImageUrl}}">
                 				<p class="stream_name">{{stream.name}}</p>
@@ -31,16 +28,14 @@
                 			    <br>Total {{stream.viewCount}} views
                 			    <br><b>{{views}}</b> views<br>in past hour</p>
                 		</div>
-					</td>
-					{% set i = i+1 %}
-				    {% if i == 3 %}
-					   </tr>
-					   {% set i=0 %}
-					{% endif %}
+					</div>
                 {% endfor %}
-    		</table>
+				</div>
+    		</div>
         {% else %}
-            <p class="words">There is no trending stream data now!</p>
+		<div class="jumbotron">
+			<p class="words">There is no trending stream data now!</p>
+		</div>
         {% endif %}
 	</div>
 	<div class="right">
@@ -53,7 +48,7 @@
     		  Every 1 hour<br/>
     		  <input type="radio" name="update_frequency" value="every_day" {{'checked' if email_setting=='every_day' else ''}}/>
     		  Every day<br/>
-    		  <input class="button trending_button" type="submit" name="update_rate" value="Update rate"/>
+    		  <input class="btn btn-primary trending_button" type="submit" name="update_rate" value="Update rate"/>
     	</form>
 	</div>
 {% endblock %}

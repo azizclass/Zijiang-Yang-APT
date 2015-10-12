@@ -7,15 +7,15 @@ var template = '<tr class="file_preview">\
         <div class="file_info" data-dz-size></div>\
     </td>\
     <td class="progree_td">\
-        <div class="progress_bar_container">\
-            <img class="progress_bar" data-dz-uploadprogress src="/assets/images/progressbar.gif">\
+        <div class="progress">\
+            <div class="progress-bar" data-dz-uploadprogress role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>\
         </div>\
     </td>\
     <td class="bt_td bt_upload_td">\
-        <button class="button upload_bt">Upload</button>\
+        <button class="btn btn-success upload_bt">Upload</button>\
         <img class="uploading_sign" src="/assets/images/loading.gif" hidden>\
-        </td>\
-    <td class="bt_td"><button class="button remove_bt" data-dz-remove>Remove</button></td>\
+    </td>\
+    <td class="bt_td"><button class="btn btn-danger remove_bt" data-dz-remove>Remove</button></td>\
 </tr>';
 
 var check= '<i class="fa fa-check fa-3x" style="color: rgba(88, 191, 29, 0.65);"></i>';
@@ -62,8 +62,8 @@ $(function() {
                 if(file.waitingForUpload) return;
                 file.waitingForUpload = true;
                 this.uploadQueue.enqueue(file);
-                file.previewElement.querySelector('.upload_bt').setAttribute(['hidden'], [true]);
-                file.previewElement.querySelector('.remove_bt').setAttribute(['hidden'], [true]);
+                file.previewElement.querySelector('.upload_bt').classList.add('hidden');
+                file.previewElement.querySelector('.remove_bt').classList.add('hidden');
                 file.previewElement.querySelector('.uploading_sign').removeAttribute(['hidden']);
                 if(!this.busy){
                     this.busy = true;
@@ -99,7 +99,7 @@ $(function() {
 
             this.on('error', function(file, errorMessage){
                 file.previewElement.querySelector('.bt_upload_td').appendChild(Dropzone.createElement(fail));
-                file.previewElement.querySelector('.progress_bar').setAttribute(['hidden'], [true]);
+                file.previewElement.querySelector('.progress-bar').classList.add('progress-bar-danger');
             });
 
             this.on('complete', function (file) {
@@ -126,8 +126,8 @@ $(function() {
             var file = myDropzone.uploadQueue.dequeue();
             file.waitingForUpload = false;
             file.previewElement.querySelector('.uploading_sign').setAttribute(['hidden'], [true]);
-            file.previewElement.querySelector('.upload_bt').removeAttribute(['hidden']);
-            file.previewElement.querySelector('.remove_bt').removeAttribute(['hidden']);
+            file.previewElement.querySelector('.upload_bt').classList.remove('hidden');
+            file.previewElement.querySelector('.remove_bt').classList.remove('hidden');
         }
     });
 });
