@@ -46,6 +46,5 @@ class TrendingStreamsPage(webapp2.RequestHandler):
         else:
             logging.error('Unable to fetch update frequency!')
             self.error(404)
-            jumpToErrorPage(self)
             return
-        self.redirect(urls.URL_TRENDING_STREAMS_PAGE, permanent=True)
+        self.response.write('success')

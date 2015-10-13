@@ -6,9 +6,12 @@
 
 {% block css %}
 <link rel="stylesheet" href="/assets/StyleSheets/trending_streams.css" />
+<link rel="stylesheet" href="/assets/Tools/toastr/toastr.min.css" />
 {% endblock %}
 
 {% block scripts %}
+<script src="/assets/Tools/toastr/toastr.min.js" defer></script>
+<script src="/assets/javascripts/trending_stream.js" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -41,6 +44,7 @@
         {% endif %}
 	</div>
 	<div class="right">
+		<p class="text-info digest_hint">Choose your email digest frequency</p>
     	<form method="post">
     		  <input type="radio" name="update_frequency" value="no_reports" {{'checked' if email_setting=='no_reports' else ''}}/>
     		  No reports<br/>
@@ -49,8 +53,8 @@
     		  <input type="radio" name="update_frequency" value="every_1_hour" {{'checked' if email_setting=='every_1_hour' else ''}}"/>
     		  Every 1 hour<br/>
     		  <input type="radio" name="update_frequency" value="every_day" {{'checked' if email_setting=='every_day' else ''}}/>
-    		  Every day<br/>
-    		  <input class="btn btn-primary trending_button" type="submit" name="update_rate" value="Update rate"/>
+    		  Every day
     	</form>
+		<button class="btn btn-primary trending_button">Update rate</button>
 	</div>
 {% endblock %}

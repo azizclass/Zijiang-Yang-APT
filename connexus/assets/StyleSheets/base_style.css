@@ -3,6 +3,12 @@ body{
     width: 1028px;
 }
 
+nav{
+    margin-top: 20px;
+    font-family: "Lucida Console";
+    font-size: 15px;
+}
+
 header{
     margin-left: 20px;
     font-family: Arial Black;

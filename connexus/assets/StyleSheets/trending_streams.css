@@ -10,8 +10,13 @@
 
 .right{
     float:left;
-    margin-left: 50px;
+    margin-left: 5%;
     margin-top: 20px;
+    width: 15%;
+}
+
+.digest_hint{
+    font-family: "Lucida Console";
 }
 
 input[type="radio"]{
