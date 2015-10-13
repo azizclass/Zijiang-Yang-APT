@@ -97,6 +97,19 @@ indexes:
 - kind: Stream
   ancestor: yes
   properties:
+  - name: n
+    direction: desc
+  - name: viewCount
+    direction: desc
+  - name: pic_num
+    direction: desc
+  - name: name
+  - name: t
+    direction: desc
+
+- kind: Stream
+  ancestor: yes
+  properties:
   - name: pic_num
 
 - kind: Stream

@@ -27,9 +27,13 @@
 						<div class="image_field well">
 							<img src="{{streams[i].coverImageUrl}}" />
 						</div>
-						<p class="stream_name">{{streams[i].name}}</p>
-						<p class="extra_words text-info">{{streams[i].user}}
-						<br>Total {{streams[i].viewCount}} views</p>
+						<p>
+							<span class="stream_name">{{streams[i].name}}</span>
+							<br><span class="owner">by <span class="italic">{{streams[i].user}}</span></span>
+						</p>
+						<p class="text-info">
+							Total {{streams[i].pic_num}} pictures - {{streams[i].viewCount}} views
+						</p>
 					</a>
 				</div>
 			</div>

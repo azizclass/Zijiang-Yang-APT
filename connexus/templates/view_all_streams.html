@@ -23,7 +23,13 @@
 						<div class="image_field well">
 							<img src="{{stream.coverImageUrl}}">
 						</div>
-						<p class="stream_name">{{stream.name}}</p>
+						<p>
+							<span class="stream_name">{{stream.name}}</span>
+							<br><span class="owner">by <span class="italic">{{stream.user}}</span></span>
+						</p>
+						<p class="text-info">
+							Total {{stream.pic_num}} pictures - {{stream.viewCount}} views
+						</p>
 					</a>
 				</div>
 			</div>
