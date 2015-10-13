@@ -33,6 +33,7 @@ $(function() {
         autoProcessQueue: false,
         parallelUploads: 1,
         filesizeBase: 1024,
+        acceptedFiles: 'image/*',
         init: function() {
 
             this.busy = false;

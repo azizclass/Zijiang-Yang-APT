@@ -9,13 +9,15 @@
 
 #stream_info_cover{
     max-width:200px; 
-    max-height:200px; 
+    max-height:200px;
+    border-radius: 20px;
     float:left;
 }
 
 #stream_info_table{
     float: left; 
-    margin-left: 150px
+    margin-left: 100px;
+    width: 670px
 }
 
 #stream_info_table td{
@@ -71,6 +73,7 @@
 
 #upload_div{
     margin:20px;
+    padding: 20px;
 }
 
 #upload_div .button{

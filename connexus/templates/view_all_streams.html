@@ -20,7 +20,9 @@
 			<div class="col-xs-6 col-md-3">
 				<div class="stream thumbnail">
 					<a href="{{view_stream_addr+'/?'+({'id':stream.key.id()|str}|urlencode)}}">
-						<img class="stream_cover" src="{{stream.coverImageUrl}}">
+						<div class="image_field well">
+							<img src="{{stream.coverImageUrl}}">
+						</div>
 						<p class="stream_name">{{stream.name}}</p>
 					</a>
 				</div>

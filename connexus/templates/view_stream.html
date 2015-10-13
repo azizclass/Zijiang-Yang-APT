@@ -55,28 +55,30 @@ Connexus-view stream
 <h2 class="title" id="view_stream_title">{{stream.name}}</h2>
 <div id="stream_info_container">
 	<img id="stream_info_cover" src="{{stream.coverImageUrl}}" />
-	<table id="stream_info_table" class="words">
-		<tr>
-			<td class="c1"><b>Owner:</b></td>
-			<td class="c2">{{stream.user}}</td>
-		</tr>
-		<tr>
-			<td class="c1"><b>Number of Pictures:</b></td>
-			<td class="c2" id="pic_num">{{stream.pic_num}}</td>
-		</tr>
-		<tr>
-			<td class="c1"><b>Number of Subscribers:</b></td>
-			<td class="c2">{{stream.subscribers|len}}</td>
-		</tr>
-		<tr>
-			<td class="c1"><b>Views:</b></td>
-			<td class="c2">{{stream.viewCount}}</td>
-		</tr>
-		<tr id="tag_row">
-			<td class="c1" valign="top"><b>Tags:</b></td>
-			<td class="c2" id="tag_content" valign="top">{{stream.tag if stream.tag and stream.tag|len > 0 else "N/A"}}</td>
-		</tr>
-	</table>
+	<div id="stream_info_table">
+		<table  class="words table table-striped">
+			<tr>
+				<td class="c1"><b>Owner:</b></td>
+				<td class="c2">{{stream.user}}</td>
+			</tr>
+			<tr>
+				<td class="c1"><b>Number of Pictures:</b></td>
+				<td class="c2" id="pic_num">{{stream.pic_num}}</td>
+			</tr>
+			<tr>
+				<td class="c1"><b>Number of Subscribers:</b></td>
+				<td class="c2">{{stream.subscribers|len}}</td>
+			</tr>
+			<tr>
+				<td class="c1"><b>Views:</b></td>
+				<td class="c2">{{stream.viewCount}}</td>
+			</tr>
+			<tr id="tag_row">
+				<td class="c1" valign="top"><b>Tags:</b></td>
+				<td class="c2" id="tag_content" valign="top">{{stream.tag if stream.tag and stream.tag|len > 0 else "N/A"}}</td>
+			</tr>
+		</table>
+	</div>
 </div>
 <div id="images_div">
 	<div id="slider_container">
@@ -110,6 +112,7 @@ Connexus-view stream
 {% if is_owner %}
 <div id="upload_div" class="well">
 	<p class="title" id="upload_words">Add Images</p>
+	<p class="text-info words">Choose or drag pictures to upload</p>
 	<button class="button btn btn-primary" id="bt_choose_files">Select Images</button>
 	<button class="button btn btn-success" id="bt_upload_all">Upload All</button>
 	<button class="button btn btn-danger" id="bt_cancel_all">Cancel All</button>
@@ -118,7 +121,7 @@ Connexus-view stream
 {% else %}
 	<button id="subscribe" class="btn {{'btn-primary' if not subscribed else 'btn-danger'}}">{{"Subscribe" if not subscribed else "Unsubscribe"}}</button>
 {% endif %}
-<div id="geo_view">
+<div id="geo_view" hidden>
 	<div id="map"></div>
 	<div id="timeline_container">
 		<div id="start"><span class="timeline_words">Oct 8, 2015</span></div>

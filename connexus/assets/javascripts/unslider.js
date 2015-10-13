@@ -216,7 +216,7 @@
 			_.ul.prepend($html_li);
 			_.li = _.ul.find(_.o.item);
 			var len = _.li.length;
-			_.ul.css({'width': (len * 100)/ _.o.numPerSlider + '%'});
+			_.ul.css({'width': ((len * 100)/ _.o.numPerSlider + 30) + '%'});
 			if(_.o.fluid) {
 				$html_li.css({'float': 'left', 'width': (100 / len) + '%'});
 			} else {

@@ -24,11 +24,13 @@
 			<div class="col-xs-6 col-md-3">
 				<div class="stream thumbnail">
 					<a href="{{view_stream_addr+'/?'+({'id':streams[i].key.id()}|urlencode)}}">
-						<img src="{{streams[i].coverImageUrl}}" />
+						<div class="image_field well">
+							<img src="{{streams[i].coverImageUrl}}" />
+						</div>
 						<p class="stream_name">{{streams[i].name}}</p>
-					</a>
-					<p class="words extra_words">{{streams[i].user}}
+						<p class="extra_words text-info">{{streams[i].user}}
 						<br>Total {{streams[i].viewCount}} views</p>
+					</a>
 				</div>
 			</div>
 			{% endfor %}

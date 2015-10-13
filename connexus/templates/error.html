@@ -6,14 +6,15 @@
 
 {% block css %}
 <link rel="stylesheet" href="/assets/StyleSheets/error.css" />
+<link rel="stylesheet" href="/assets/Tools/font-awesome/css/font-awesome.min.css" />
 {% endblock %}
 
 {% block scripts %}
 {% endblock %}
 
 {% block content %}
-<div id="error_container">
-   <img id="error_icon" src="/assets/images/error.jpg" />
-   <p class="title" id="error_message">{{error}}</p>
+<div id="error_container" class="jumbotron">
+   <i class="fa fa-times fa-5x" style="color: red"></i>
+   <p class="title" id="error_message">Error: {{error}}</p>
 </div>
 {% endblock %}
