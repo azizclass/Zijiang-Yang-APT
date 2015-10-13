@@ -115,7 +115,19 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
             self.error(400)
             blobstore.delete(upload.key())
             return
-        image = Image(parent=stream.key, img=upload.key(), latitude=random()*170-85, longitude=random()*360-180)
+        lat = self.request.get('latitude')
+        if not lat:
+            logging.error("Unable to get latitude!")
+            self.error(400)
+            blobstore.delete(upload.key())
+            return
+        lgi = self.request.get('longitude')
+        if not lgi:
+            logging.error('Unable to get longitude!')
+            logging.error(400)
+            blobstore.delete(upload.key())
+            return
+        image = Image(parent=stream.key, img=upload.key(), latitude=float(lat), longitude=float(lgi))
         image.put()
         stream.pic_num = stream.pic_num + 1
         stream.last_newpic_time = image.create_time;

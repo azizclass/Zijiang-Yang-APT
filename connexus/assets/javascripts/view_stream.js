@@ -18,7 +18,7 @@ $(function(){
 
     $('#map').gmap({
         zoom: 2,
-        minZoom: 2,
+        minZoom: 1,
         streetViewControl: false
     }).bind('init', function(evt, map) {
         map.oms = new OverlappingMarkerSpiderfier(map,{
