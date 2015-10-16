@@ -56,7 +56,7 @@ def updateStat(stat):
             break;
 
 
-# Get the top 3 most trending streams, (stream_id, views_in_last_hour), breaking ties using picture number
+# Get most trending streams, (stream_id, views_in_last_hour), breaking ties using picture number
 def getTrendingStreams():
     trending = memcache.get('TrendingStat')
     if trending:
@@ -72,6 +72,20 @@ def updateTrendingStreams(trending):
         memcache.add('TrendingStat', trending)
     memcache.replace('TrendingStat', trending)
 
+
+# Get specific number of trending streams, ranked by popularity
+def getTopStreams(max_num):
+    trending = getTrendingStreams()
+    n = 0
+    trendingStreams = []
+    for stat in trending:
+        stream = Stream.get_by_id(stat[0], getStreamKey())
+        if stream:
+            trendingStreams.append((stream, stat[1]))
+            n = n+1
+            if n == max_num:
+                break
+    return trendingStreams
 
 # Increase the view number by 1 for a stream
 def increaseViewNum(stream):

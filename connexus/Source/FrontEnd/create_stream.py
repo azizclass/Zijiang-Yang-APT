@@ -1,14 +1,15 @@
 from google.appengine.api import users
 from Source.Services.storage import Stream
+from Source.Services.storage import createStream
 from Source.Services.storage import getStreamKey
 from Source.Services.search import addStreamToSearchService
 from Source.Services.emails import sendSubscribeInvitationEmail
+from Source.Services.emails import is_valid_email
 from error import jumpToErrorPage
 
 import urls
 import webapp2
 import re
-
 
 template_name = 'create_stream.html'
 
@@ -27,16 +28,13 @@ class CreateStreamPage(webapp2.RequestHandler):
         tag = self.request.get("tag")
         cover_image_url = self.request.get("cover_image_url")
         for email in emails:
-            if len(re.findall(r'^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$', email)) != 1: # take from http://www.regular-expressions.info/
+            if not is_valid_email(email): # take from http://www.regular-expressions.info/
                 jumpToErrorPage(self, 'Stream is not created! "'+email+'" is not a valid email!')
                 return
         if len(Stream.query( Stream.user==user.email(), Stream.name==name, ancestor=getStreamKey()).fetch()) > 0:
             jumpToErrorPage(self, 'Stream is not created! Name "'+name+'" already exists. Please use another name.')
             return
-        stream = Stream(parent=getStreamKey(), user=user.email(), name=name, tag=tag)
-        if cover_image_url:
-            stream.coverImageUrl = cover_image_url
-        stream.put()
+        stream = createStream(user.email(), name, tag, cover_image_url)
         addStreamToSearchService(stream)
         sendSubscribeInvitationEmail(emails, extra_message, stream)
         self.redirect(urls.URL_MANAGEMENT_PAGE, permanent=True)

@@ -17,7 +17,6 @@ class MainPage(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     (urls.URL_MANAGEMENT_PAGE+"(?:/(?:\?.*)?)?", management.ManagementPage),
-    (urls.URL_DELETE_HANDLER+"(?:/(?:\?.*)?)?", management.deleteHandler),
     (urls.URL_CREATE_STREAM_PAGE+"(?:/(?:\?.*)?)?", create_stream.CreateStreamPage),
     (urls.URL_VIEW_STREAM_PAGE+"(?:/(?:\?.*)?)?", view_stream.ViewStreamPage),
     (urls.URL_VIEW_ALL_STREAMS_PAGE+"(?:/(?:\?.*)?)?", view_all_streams.ViewAllStreamsPage),

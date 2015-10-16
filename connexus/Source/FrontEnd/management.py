@@ -1,11 +1,9 @@
 from google.appengine.api import users
-from google.appengine.ext.blobstore import blobstore
-from google.appengine.api import taskqueue
-from google.appengine.ext import ndb
 
 from Source.Services.storage import Stream
-from Source.Services.storage import Image
 from Source.Services.storage import getStreamKey
+from Source.Services.storage import deleteStream
+from Source.Services.storage import unsubscribeStream
 from Source.Services.search import removeStreamFromSearchService
 
 import urls
@@ -34,23 +32,16 @@ class ManagementPage(webapp2.RequestHandler):
                 stream = Stream.get_by_id(int(sid), getStreamKey())
                 if stream:
                     removeStreamFromSearchService(stream)
-                    stream.key.delete()
-                    taskqueue.add(url=urls.URL_DELETE_HANDLER, params={'id': sid})
+                    deleteStream(stream)
             self.redirect(urls.URL_MANAGEMENT_PAGE, permanent=True)
             return
         if self.request.get('unsubscribe'):
             for sid in self.request.get_all("unsub_checkbox"):
                 stream = Stream.get_by_id(int(sid), getStreamKey())
                 if stream:
-                    stream.subscribers.remove(user.email())
-                    stream.put()
+                    unsubscribeStream(stream, user.email())
         self.redirect(urls.URL_MANAGEMENT_PAGE, permanent=True)
 
 
-class deleteHandler(webapp2.RequestHandler):
-    def post(self):
-        key = ndb.Key('Stream_Ancestor', 'Ancestor', 'Stream', int(self.request.get('id')))
-        for image in Image.query(ancestor=key):
-            blobstore.delete(image.img)
-            image.key.delete()
+
 

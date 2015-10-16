@@ -71,9 +71,12 @@ footer{
     color: inherit;
 }
 
-.stream p{
+.stream .oneline{
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 100%;
+    white-space: nowrap;
+    display: block;
 }
 
 

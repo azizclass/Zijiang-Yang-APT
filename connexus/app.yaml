@@ -1,8 +1,8 @@
-application: connexus
+application: connexus-1078
 version: 1
 runtime: python27
 api_version: 1
-threadsafe: yes
+threadsafe: true
 
 handlers:
 - url: /assets
@@ -13,8 +13,11 @@ handlers:
   login: admin
 
 - url: /tasks/delete
-  script: main.app
+  script: Source.Services.storage.app
   login: admin
+
+- url: /_ah/spi/.*
+  script: Source.BackEnd.backend.APPLICATION
 
 - url: .*
   script: main.app
@@ -23,7 +26,13 @@ handlers:
 
 libraries:
 - name: webapp2
-  version: "2.5.2"
+  version: 2.5.2
 
 - name: jinja2
-  version: "2.6"
+  version: 2.6
+
+- name: pycrypto
+  version: latest
+
+- name: endpoints
+  version: 1.0

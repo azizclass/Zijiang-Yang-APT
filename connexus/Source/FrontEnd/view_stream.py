@@ -8,11 +8,13 @@ from google.appengine.api.images import get_serving_url
 from Source.Services.storage import Stream
 from Source.Services.storage import Image
 from Source.Services.storage import getStreamKey
+from Source.Services.storage import addImage
+from Source.Services.storage import subscribeStream
+from Source.Services.storage import unsubscribeStream
 from Source.Services.summarize_trending_stream import increaseViewNum
 from error import jumpToErrorPage
 from datetime import datetime
 from datetime import timedelta
-from random import random
 
 import json
 import urls
@@ -85,13 +87,11 @@ class ViewStreamPage(webapp2.RequestHandler):
             return
         if self.request.get('subscribe'):
             if user.email() in stream.subscribers:
-                stream.subscribers.remove(user.email())
+                unsubscribeStream(stream, user.email())
                 self.response.write('unsubscribed')
             else:
-                stream.subscribers.append(user.email())
+                subscribeStream(stream, user.email())
                 self.response.write('subscribed')
-            stream.put()
-
 
 
 class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
@@ -127,9 +127,5 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
             logging.error(400)
             blobstore.delete(upload.key())
             return
-        image = Image(parent=stream.key, img=upload.key(), latitude=float(lat), longitude=float(lgi))
-        image.put()
-        stream.pic_num = stream.pic_num + 1
-        stream.last_newpic_time = image.create_time;
-        stream.put()
+        addImage(stream, upload, float(lat), float(lgi))
         self.response.write('success')

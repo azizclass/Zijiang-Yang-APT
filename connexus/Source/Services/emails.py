@@ -3,6 +3,7 @@ from google.appengine.api import users
 from Source.FrontEnd import urls
 
 import urllib
+import re
 
 SENDER = "info@connexus-1078.appspotmail.com"
 
@@ -61,4 +62,7 @@ Connexus""" % (receiver_name, digests, 'http://connexus-1078.appspot.com/'+urls.
 
     mail.send_mail(SENDER, receiver_addr, subject, content)
 
+
+def is_valid_email(email):
+    return len(re.findall(r'^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$', email)) == 1  # take from http://www.regular-expressions.info/
 
