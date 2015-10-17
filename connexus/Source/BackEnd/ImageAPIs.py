@@ -1,6 +1,5 @@
 import endpoints
 from protorpc import messages
-from protorpc import message_types
 from protorpc import remote
 from google.appengine.api.images import get_serving_url
 

@@ -1,3 +1,3 @@
 import endpoints
 
-ConnexusAPI = endpoints.api(name='connexus', version='v1.0')
+ConnexusAPI = endpoints.api(name='connexusAPI', version='v1.0')

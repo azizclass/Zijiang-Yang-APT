@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Connexus</string>
+    <string name="login_btn_log_in">Log In</string>
+    <string name="login_btn_view_streams">View Streams</string>
+    <string name="login_email_hint">Gmail</string>
+    <string name="login_password_hint">Password</string>
+</resources>

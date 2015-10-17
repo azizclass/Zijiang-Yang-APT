@@ -3,3 +3,6 @@
 
 #Ignore jetbrain meta info
 **/.idea
+
+#Ignore bat
+**/*.bat
