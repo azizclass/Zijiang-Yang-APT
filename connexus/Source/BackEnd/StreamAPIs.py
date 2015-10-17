@@ -27,11 +27,6 @@ def getStreamInfo(stream):
     )
 
 
-# Request for streams
-class StreamFetchRequest(messages.Message):
-    user = messages.StringField(1, required=True)
-
-
 # Request for searching
 class SearchRequest(messages.Message):
     key_word = messages.StringField(1, required=True)
@@ -64,11 +59,15 @@ class StreamAPI(remote.Service):
         return RespondStreams(streams=[getStreamInfo(stream) for stream in Stream.query(ancestor=getStreamKey())
                                 .order(-Stream.last_newpic_time, -Stream.pic_num, Stream.name, -Stream.create_time)])
 
-    @endpoints.method(StreamFetchRequest, RespondStreams, http_method='GET', name='getStream')
+    @endpoints.method(message_types.VoidMessage, RespondStreams, http_method='GET', name='getStream')
     def getStream(self, request):
-            return RespondStreams(streams=[getStreamInfo(stream) for stream in Stream.query(Stream.user == request.user,
-                                 ancestor=getStreamKey()).order(-Stream.last_newpic_time, -Stream.pic_num, Stream.name,
-                                 -Stream.create_time)])
+        user = endpoints.get_current_user()
+        if user:
+            return RespondStreams(streams=[getStreamInfo(stream) for stream in Stream.query(Stream.user == user.email(),
+                                  ancestor=getStreamKey()).order(-Stream.last_newpic_time, -Stream.pic_num, Stream.name,
+                                  -Stream.create_time)])
+        else:
+            return RespondStreams(streams=[])
 
     @endpoints.method(SearchRequest, RespondStreams, http_method='GET', name='searchStreams')
     def searchStreams(self, request):
