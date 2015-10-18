@@ -1,4 +1,4 @@
-package com.josh.connexus;
+package com.josh.connexus.viewContents;
 
 import android.content.Context;
 import android.view.ViewGroup;

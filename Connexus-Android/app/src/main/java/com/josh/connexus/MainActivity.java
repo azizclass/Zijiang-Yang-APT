@@ -15,6 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.josh.connexus.elements.Credential;
+import com.josh.connexus.viewContents.ViewContent;
+import com.josh.connexus.viewContents.ViewStreamsContent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +51,11 @@ public class MainActivity extends Activity {
         drawerLayout = (DrawerLayout)findViewById(R.id.main_activity_drawerLayout);
         title = (TextView)findViewById(R.id.main_activity_title);
         content_layout = (RelativeLayout)findViewById(R.id.main_activity_content);
+    }
+
+    @Override
+    public void onWindowFocusChanged (boolean hasFocus){
+        super.onWindowFocusChanged(hasFocus);
         switchContent(cur_view);
     }
 

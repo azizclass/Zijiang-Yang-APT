@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<HorizontalScrollView
+<com.josh.connexus.viewContents.SlidableHorizontalSchrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/streams_slider_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</HorizontalScrollView>
+    <LinearLayout
+        android:id="@+id/stream_container"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+    </LinearLayout>
+
+</com.josh.connexus.viewContents.SlidableHorizontalSchrollView>
