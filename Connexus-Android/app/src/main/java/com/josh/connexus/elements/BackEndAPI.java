@@ -9,6 +9,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Calendar;
 
@@ -20,34 +21,35 @@ public class BackEndAPI {
         return helloWorld.build();
     }
 
-    public static Stream[] getAllStreams() throws IOException{
+    public static List<Stream> getAllStreams() throws IOException{
         List<ConnexusStreamInfo> Info = buildAPI(null).getAllStreams().execute().getStreams();
-        Stream[] ret = new Stream[Info.size()];
-        int i=0;
-        for(ConnexusStreamInfo info : Info)
-            ret[i++] = convertToStream(info);
+        List<Stream> ret = new ArrayList<Stream>();
+        if(Info != null)
+            for(ConnexusStreamInfo info : Info)
+                ret.add(convertToStream(info));
         return ret;
     }
 
-    public static Stream[] getStreams(GoogleAccountCredential credential) throws IOException{
+    public static List<Stream> getStreams(GoogleAccountCredential credential) throws IOException{
         List<ConnexusStreamInfo> Info = buildAPI(credential).getStream().execute().getStreams();
-        Stream[] ret = new Stream[Info.size()];
-        int i = 0;
-        for(ConnexusStreamInfo info : Info)
-            ret[i++] = convertToStream(info);
+        List<Stream> ret = new ArrayList<Stream>();
+        if(Info != null)
+            for(ConnexusStreamInfo info : Info)
+                ret.add(convertToStream(info));
         return ret;
     }
 
-    public static Image[] getImages(long id) throws IOException {
+    public static List<Image> getImages(long id) throws IOException {
         List<String> urls = buildAPI(null).getImages(id).execute().getImageUrls();
-        Image[] ret = new Image[urls.size()];
-        int i = 0;
-        for(String url : urls)
-            ret[i++] = new Image(url);
+        List<Image> ret = new ArrayList<Image>();
+        if(urls != null)
+            for(String url : urls)
+                ret.add(new Image(url));
         return ret;
     }
 
     private static Stream convertToStream(ConnexusStreamInfo info) {
+        if(info == null) return  null;
         Calendar createTime = Calendar.getInstance();
         createTime.setTimeInMillis(info.getCreateTime().getValue());
         Calendar lastNewTime = null;

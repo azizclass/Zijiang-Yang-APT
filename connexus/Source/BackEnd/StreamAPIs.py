@@ -21,7 +21,8 @@ def getStreamInfo(stream):
         pic_num=stream.pic_num,
         tag=stream.tag,
         subscribers=stream.subscribers,
-        coverImageUrl=stream.coverImageUrl,
+        coverImageUrl=stream.coverImageUrl if stream.coverImageUrl != "/assets/images/default_cover.jpg"
+                        else "http://connexus-1078.appspot.com"+stream.coverImageUrl,
         viewCount=stream.viewCount,
         stream_id=stream.key.id()
     )

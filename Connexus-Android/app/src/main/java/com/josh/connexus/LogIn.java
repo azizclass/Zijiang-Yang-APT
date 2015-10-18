@@ -77,19 +77,19 @@ public class LogIn extends Activity {
     public void onViewStreamsClick(View v){
         startActivity(new Intent(LogIn.this, MainActivity.class).putExtra("view", MainActivity.VIEW_ALL_STREAMS));
     }
-}
 
-class LogInHandler extends Handler {
-    private Context context;
+    static class LogInHandler extends Handler {
+        private Context context;
 
-    public LogInHandler(Context context){
-        this.context = context;
-    }
-    @Override
-    public void handleMessage(Message msg){
-        if(Credential.isLoggedIn())
-            context.startActivity(new Intent(context, MainActivity.class).putExtra("view", MainActivity.MANAGEMENT));
-        else
-            Toast.makeText(context, "Log in fails!", Toast.LENGTH_LONG).show();
+        public LogInHandler(Context context){
+            this.context = context;
+        }
+        @Override
+        public void handleMessage(Message msg){
+            if(Credential.isLoggedIn())
+                context.startActivity(new Intent(context, MainActivity.class).putExtra("view", MainActivity.MANAGEMENT));
+            else
+                Toast.makeText(context, "Log in fails!", Toast.LENGTH_LONG).show();
+        }
     }
 }

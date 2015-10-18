@@ -13,35 +13,88 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@color/colorPrimary"
-            android:orientation="horizontal"
             android:gravity="center_vertical">
 
             <ImageView
+                android:id="@+id/main_activity_menu"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/menu"
                 android:clickable="true"
+                android:focusable="true"
                 android:onClick="onMenuIconClick"
-                android:layout_marginStart="15dp"/>
+                android:layout_marginStart="15dp"
+                android:background="@drawable/nav_button_background"/>
 
             <TextView
                 android:id="@+id/main_activity_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
+                android:layout_toEndOf="@id/main_activity_menu"
                 android:textColor="@color/white"
                 android:textSize="20sp"/>
 
-        </LinearLayout>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/refresh"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="15dp"
+                android:onClick="onRefreshClick"
+                android:background="@drawable/nav_button_background"/>
+
+        </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/main_activity_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/main_activity_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/main_activity_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:layout_centerInParent="true"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/error" />
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:width="120dp"
+                    android:text="Oops! Unable to get data!"
+                    android:textAlignment="center"/>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/main_activity_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </RelativeLayout>
+
+        </RelativeLayout>
 
     </LinearLayout>
 

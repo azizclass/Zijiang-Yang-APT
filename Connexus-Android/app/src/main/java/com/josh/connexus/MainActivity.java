@@ -3,6 +3,8 @@ package com.josh.connexus;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
@@ -10,14 +12,19 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.josh.connexus.elements.BackEndAPI;
 import com.josh.connexus.elements.Credential;
+import com.josh.connexus.elements.Stream;
 import com.josh.connexus.viewContents.ViewContent;
 import com.josh.connexus.viewContents.ViewStreamsContent;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,8 +42,14 @@ public class MainActivity extends Activity {
     private TextView title;
     private RelativeLayout content_layout;
     private MenuListAdapter menu_list_adapter;
+    private ProgressBar progressBar;
+    private LinearLayout error_sign;
     private int cur_view;
     private ViewContent content;
+
+    private boolean isLoading = false;
+
+    private BackEndTaskHandler viewStreamsHandler = new BackEndTaskHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +64,15 @@ public class MainActivity extends Activity {
         drawerLayout = (DrawerLayout)findViewById(R.id.main_activity_drawerLayout);
         title = (TextView)findViewById(R.id.main_activity_title);
         content_layout = (RelativeLayout)findViewById(R.id.main_activity_content);
+        progressBar = (ProgressBar) findViewById(R.id.main_activity_progress_bar);
+        error_sign = (LinearLayout) findViewById(R.id.main_activity_error);
     }
 
     @Override
     public void onWindowFocusChanged (boolean hasFocus){
         super.onWindowFocusChanged(hasFocus);
-        switchContent(cur_view);
+        if(content == null)
+            switchContent(cur_view);
     }
 
     private List<Map<String, Object>> getMenuData(){
@@ -88,22 +104,43 @@ public class MainActivity extends Activity {
         title.setText(view_names[view_id]);
         if(content != null)
             content.clear(); //Clear existing content firstly
+        progressBar.setVisibility(View.VISIBLE);
+        error_sign.setVisibility(View.GONE);
+        isLoading = true;
         switch (view_id){
             case MANAGEMENT:
                 break;
             case VIEW_ALL_STREAMS:
-                content = new ViewStreamsContent(this, content_layout, null);
+                new Thread(){
+                    @Override
+                    public void run(){
+                        HashMap<String, Object> data = new HashMap<String, Object>();
+                        data.put("type", VIEW_ALL_STREAMS);
+                        try {
+                            data.put("streams", BackEndAPI.getAllStreams());
+                            data.put("success", true);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            data.put("success", false);
+                        }
+                        Message msg = new Message();
+                        msg.obj = data;
+                        viewStreamsHandler.sendMessage(msg);
+                    }
+                }.start();
                 break;
             case NEARBY_STREAMS:
                 break;
-            default:
-                return;
         }
-        content.show();
     }
 
     public void onMenuIconClick(View v){
         drawerLayout.openDrawer(GravityCompat.START);
+    }
+
+    public void onRefreshClick(View v){
+        if(!isLoading)
+            switchContent(cur_view);
     }
 
     private AdapterView.OnItemClickListener listItemListener = new AdapterView.OnItemClickListener(){
@@ -159,6 +196,35 @@ public class MainActivity extends Activity {
             else
                 convertView.setBackgroundResource(0);
             return convertView;
+        }
+    }
+
+    static class BackEndTaskHandler extends Handler{
+        private  MainActivity activity;
+
+        public BackEndTaskHandler(MainActivity activity){
+            this.activity = activity;
+        }
+        @Override
+        @SuppressWarnings("unchecked")
+        public void handleMessage(Message msg){
+            HashMap<String, Object> data = (HashMap<String, Object>)msg.obj;
+            if(activity.cur_view != (Integer)data.get("type")) return;
+            activity.progressBar.setVisibility(View.GONE);
+            activity.isLoading = false;
+            if((Boolean) data.get("success")) {
+                switch((Integer)data.get("type")) {
+                    case MANAGEMENT:
+                        break;
+                    case VIEW_ALL_STREAMS:
+                        activity.content = new ViewStreamsContent(activity, activity.content_layout, (Iterable<Stream>) data.get("streams"));
+                        break;
+                    case NEARBY_STREAMS:
+                        break;
+                }
+                activity.content.show();
+            }else
+                activity.error_sign.setVisibility(View.VISIBLE);
         }
     }
 }

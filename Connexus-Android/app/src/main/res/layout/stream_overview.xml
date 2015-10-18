@@ -14,14 +14,42 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.75">
+            android:layout_weight="0.75"
+            android:gravity="center">
+
+            <ProgressBar
+                android:id="@+id/stream_overview_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true" />
+
+            <LinearLayout
+                android:id="@+id/stream_overview_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/error" />
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:width="120dp"
+                    android:text="Oops! Unable to load cover image!"
+                    android:textAlignment="center"/>
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/stream_overview_cover"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/test"
-                android:layout_centerInParent="true"/>
+                android:layout_height="wrap_content" />
 
         </RelativeLayout>
 
@@ -31,8 +59,9 @@
             android:layout_height="0dp"
             android:layout_weight="0.25"
             android:orientation="vertical"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp">
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:gravity="center_horizontal">
 
             <TextView
                 android:id="@+id/stream_overview_name"
@@ -41,10 +70,11 @@
                 android:layout_marginTop="10dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:text="This is a test"/>
+                android:maxLines="1"
+                android:ellipsize="end"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal">
@@ -61,7 +91,8 @@
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
                     android:textStyle="italic"
-                    android:text="yangzijiangjosh@gmail.com"/>
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
             </LinearLayout>
 
             <LinearLayout
@@ -80,21 +111,19 @@
                     android:id="@+id/stream_overview_num_pic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:text="7"/>
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
-                    android:text="pictures - "/>
+                    android:text=" pictures - "/>
 
                 <TextView
                     android:id="@+id/stream_overview_num_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:text="15"/>
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
