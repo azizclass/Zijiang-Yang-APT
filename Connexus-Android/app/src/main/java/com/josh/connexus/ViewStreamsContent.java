@@ -1,6 +1,7 @@
 package com.josh.connexus;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.josh.connexus.elements.Stream;
@@ -14,7 +15,8 @@ public class ViewStreamsContent extends ViewContent {
     }
 
     public void show(){
-
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+        inflater.inflate(R.layout.stream_overview, parentLayout, true);
     }
 
     public void clear(){

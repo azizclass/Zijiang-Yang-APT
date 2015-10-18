@@ -85,12 +85,14 @@ public class MainActivity extends Activity {
             case MANAGEMENT:
                 break;
             case VIEW_ALL_STREAMS:
+                content = new ViewStreamsContent(this, content_layout, null);
                 break;
             case NEARBY_STREAMS:
                 break;
             default:
                 return;
         }
+        content.show();
     }
 
     public void onMenuIconClick(View v){

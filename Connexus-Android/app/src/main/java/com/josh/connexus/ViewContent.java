@@ -4,8 +4,8 @@ import android.content.Context;
 import android.view.ViewGroup;
 
 public abstract class ViewContent {
-    private  Context context;
-    private ViewGroup parentLayout;
+    protected   Context context;
+    protected ViewGroup parentLayout;
 
     public ViewContent(Context context, ViewGroup parentLayout){
         this.context = context;
