@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
+import com.josh.connexus.elements.Credential;
 
 
 public class LogIn extends Activity {
@@ -23,6 +24,10 @@ public class LogIn extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(Credential.isLoggedIn()) {
+            startActivity(new Intent(this, MainActivity.class).putExtra("view", MainActivity.MANAGEMENT));
+            return;
+        }
         setContentView(R.layout.activity_log_in);
         logInHandler = new LogInHandler(this);
     }
@@ -31,6 +36,7 @@ public class LogIn extends Activity {
     protected void onStop(){
         super.onStop();
         isLoggingIn = false;
+        finish();
     }
 
     @Override
@@ -62,14 +68,14 @@ public class LogIn extends Activity {
 
     public void onLogInClick(View v){
         if(isLoggingIn) return;
-        Intent accountSelector = AccountPicker.newChooseAccountIntent(null, null,
+        Intent accountSelector = AccountPicker.zza(null, null,
                 new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, false,
-                "Select the account to log in.", null, null, null);
+                "Select the account to log in.", null, null, null, false, 1, 0);
         startActivityForResult(accountSelector, ACTIVITY_RESULT_FROM_ACCOUNT_SELECTION);
     }
 
     public void onViewStreamsClick(View v){
-
+        startActivity(new Intent(LogIn.this, MainActivity.class).putExtra("view", MainActivity.VIEW_ALL_STREAMS));
     }
 }
 
@@ -82,7 +88,7 @@ class LogInHandler extends Handler {
     @Override
     public void handleMessage(Message msg){
         if(Credential.isLoggedIn())
-            Toast.makeText(context, "Log in success!", Toast.LENGTH_LONG).show();
+            context.startActivity(new Intent(context, MainActivity.class).putExtra("view", MainActivity.MANAGEMENT));
         else
             Toast.makeText(context, "Log in fails!", Toast.LENGTH_LONG).show();
     }

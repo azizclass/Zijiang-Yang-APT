@@ -1,4 +1,4 @@
-package com.josh.connexus;
+package com.josh.connexus.elements;
 
 import android.content.Context;
 import android.util.Log;

@@ -1,4 +1,4 @@
-package com.josh.connexus;
+package com.josh.connexus.elements;
 
 import android.support.annotation.Nullable;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -7,8 +7,6 @@ import com.appspot.connexus_1078.connexusAPI.ConnexusAPI;
 import com.appspot.connexus_1078.connexusAPI.model.ConnexusStreamInfo;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.josh.connexus.elements.Image;
-import com.josh.connexus.elements.Stream;
 
 import java.io.IOException;
 import java.util.List;
