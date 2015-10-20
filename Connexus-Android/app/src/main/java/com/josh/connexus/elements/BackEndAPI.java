@@ -39,6 +39,15 @@ public class BackEndAPI {
         return ret;
     }
 
+    public static List<Stream> searchStreams(String keyWord) throws IOException{
+        List<ConnexusStreamInfo> Info = buildAPI(null).searchStreams(keyWord).execute().getStreams();
+        List<Stream> ret = new ArrayList<Stream>();
+        if(Info != null)
+            for(ConnexusStreamInfo info : Info)
+                ret.add(convertToStream(info));
+        return ret;
+    }
+
     public static List<Image> getImages(long id) throws IOException {
         List<String> urls = buildAPI(null).getImages(id).execute().getImageUrls();
         List<Image> ret = new ArrayList<Image>();

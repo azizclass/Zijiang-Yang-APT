@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_activity_drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.josh.connexus.MainActivity">
+    tools:context="com.josh.connexus.SearchResult">
 
-    <!-- The main content view -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,39 +17,29 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:id="@+id/main_activity_menu"
+                android:id="@+id/search_result_back"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/menu"
+                android:src="@drawable/back"
                 android:clickable="true"
                 android:focusable="true"
-                android:onClick="onMenuIconClick"
+                android:onClick="onBackClick"
                 android:layout_marginStart="15dp"
                 android:background="@drawable/nav_button_background"/>
 
             <TextView
-                android:id="@+id/main_activity_title"
+                android:id="@+id/search_result_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_toEndOf="@id/main_activity_menu"
+                android:layout_toEndOf="@id/search_result_back"
                 android:textColor="@color/white"
                 android:textSize="20sp"/>
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="15dp"
-                android:layout_toStartOf="@+id/main_activity_refresh_button"
-                android:src="@drawable/search"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="@drawable/nav_button_background"
-                android:onClick="onSearchIconClick"/>
 
 
             <ImageView
-                android:id="@+id/main_activity_refresh_button"
+                android:id="@+id/search_result_refresh_button"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/refresh"
@@ -70,7 +57,7 @@
             android:layout_height="match_parent">
 
             <ProgressBar
-                android:id="@+id/main_activity_progress_bar"
+                android:id="@+id/search_result_progress_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:indeterminate="true"
@@ -78,7 +65,7 @@
                 android:visibility="gone"/>
 
             <LinearLayout
-                android:id="@+id/main_activity_error"
+                android:id="@+id/search_result_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -102,7 +89,7 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/main_activity_content"
+                android:id="@+id/search_result_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
             </RelativeLayout>
@@ -111,52 +98,4 @@
 
     </LinearLayout>
 
-
-    <!-- The navigation drawer -->
-    <LinearLayout
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/white"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:background="@drawable/primary_color_gradient">
-
-            <TextView
-                android:id="@+id/drawer_titile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textSize="30sp"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:layout_centerVertical="true"/>
-
-            <TextView
-                android:id="@+id/drawer_user"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:layout_below="@id/drawer_titile"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/white"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:text="Welcome! Please log in."/>
-
-        </RelativeLayout>
-
-
-        <ListView
-            android:id="@+id/drawer_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:choiceMode="singleChoice"/>
-
-    </LinearLayout>
-</android.support.v4.widget.DrawerLayout>
+</RelativeLayout>

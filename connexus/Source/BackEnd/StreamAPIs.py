@@ -6,6 +6,7 @@ from protorpc import remote
 from Source.Services.storage import Stream
 from Source.Services.storage import getStreamKey
 from Source.Services.search import search_streams
+from Source.Services.search import search_suggestion
 from API import ConnexusAPI
 
 package = 'Connexus'
@@ -51,6 +52,10 @@ class StreamInfo(messages.Message):
 class RespondStreams(messages.Message):
     streams = messages.MessageField(StreamInfo, 1, repeated=True)
 
+# Response to search suggestions
+class RespondSearchSuggestions(messages.Message):
+    suggestions = messages.StringField(1, repeated=True)
+
 
 @ConnexusAPI.api_class()
 class StreamAPI(remote.Service):
@@ -73,3 +78,7 @@ class StreamAPI(remote.Service):
     @endpoints.method(SearchRequest, RespondStreams, http_method='GET', name='searchStreams')
     def searchStreams(self, request):
         return RespondStreams(streams=[getStreamInfo(stream) for stream in search_streams(request.key_word)])
+
+    @endpoints.method(SearchRequest, RespondSearchSuggestions, http_method='GET', name='getSearchSuggestion')
+    def getSearchSuggestion(self, request):
+        return RespondSearchSuggestions([suggestion for suggestion in search_suggestion(request.key_word)])

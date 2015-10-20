@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,66 +16,151 @@ import com.josh.connexus.elements.BitmapFetcher;
 import com.josh.connexus.elements.Stream;
 
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
-public class ViewStreamsContent extends ViewContent{
-    private Iterable<Stream> streams;
+public class ViewStreamsContent extends ViewContent implements SliderAdapter{
+    private static String TAG = "ViewStreamsContent";
+    private String tagOfView;
+    private List<Stream> streams;
     private ImageHandler imageHandler;
     private boolean active;
-    private List<ImageView> imageViews = new LinkedList<ImageView>();
+    private boolean[] isImageLoading;
+    private boolean[] isImageActive;
+    private Set<ImageView> imageViews = new HashSet<ImageView>();
+    private DynamicSlider slider;
 
-    public ViewStreamsContent(Context context, ViewGroup parentLayout, Iterable<Stream> streams){
+    public ViewStreamsContent(Context context, ViewGroup parentLayout, List<Stream> streams, String tag){
         super(context, parentLayout);
+        this.tagOfView = tag;
         this.streams = streams;
         imageHandler = new ImageHandler(this);
         active = false;
-    }
-
-
-    public void show(){
-        if(active) return;
-        active = true;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        inflater.inflate(R.layout.view_streams, parentLayout, true);
-        ViewGroup container = (ViewGroup)parentLayout.findViewById(R.id.stream_container);
-        int width_box = parentLayout.getWidth();
-        int height_box = parentLayout.getHeight();
-        int width_stream = Math.min(width_box, height_box * 3/4);
-        int height_stream = Math.min(height_box, width_box * 4/3);
-        ((SlidableHorizontalSchrollView)parentLayout.findViewById(R.id.streams_slider_view)).setSlideWidth(width_box);
-        if(streams == null) return;
-        for(Stream stream : streams) {
-            ViewGroup stream_box = (ViewGroup)inflater.inflate(R.layout.stream_overview, container, false);
-            ViewGroup.LayoutParams params =  stream_box.getLayoutParams();
-            params.width = width_box;
-            stream_box.setLayoutParams(params);
-            View stream_view = stream_box.findViewById(R.id.stream);
-            params = stream_view.getLayoutParams();
-            params.width = width_stream;
-            params.height = height_stream;
-            stream_view.setLayoutParams(params);
-            ((TextView) stream_view.findViewById(R.id.stream_overview_name)).setText(stream.name);
-            ((TextView) stream_view.findViewById(R.id.stream_overview_owner)).setText(stream.user);
-            ((TextView)stream_view.findViewById(R.id.stream_overview_num_pic)).setText(stream.picNum+"");
-            ((TextView)stream_view.findViewById(R.id.stream_overview_num_view)).setText(stream.views + "");
-            new FetchImageThread(stream_box, stream.coverImageURL).start();
-            container.addView(stream_box);
+        if(streams!=null) {
+            isImageActive = new boolean[streams.size()];
+            isImageLoading = new boolean[streams.size()];
+        }
+        else {
+            isImageActive = new boolean[0];
+            isImageLoading = new boolean[0];
+        }
+        for(int i=0; i<isImageActive.length; i++) {
+            isImageActive[i] = false;
+            isImageLoading[i] = false;
         }
     }
 
-    public boolean isActive(){
-        return active;
+    @Override
+    public void show(){
+        if(active) return;
+        active = true;
+        final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.view_streams, parentLayout, true);
+        if(streams == null) return;
+        slider = (DynamicSlider)parentLayout.findViewById(R.id.streams_slider_view);
+        ((TextView)parentLayout.findViewById(R.id.view_streams_total_number)).setText(streams.size() + "");
+        ((TextView)parentLayout.findViewById(R.id.view_streams_index)).setText(streams.size() == 0 ? "0" : "1");
+        ((TextView)parentLayout.findViewById(R.id.view_streams_tag)).setText(tagOfView);
+        View left_arrwo = parentLayout.findViewById(R.id.main_activity_left_arrow);
+        View right_arrow = parentLayout.findViewById(R.id.main_activity_right_arrow);
+        left_arrwo.setOnClickListener(left_arrow_listener);
+        right_arrow.setOnClickListener(right_arrow_listener);
+        left_arrwo.setVisibility(View.GONE);
+        if(streams.size()<=1)
+            right_arrow.setVisibility(View.GONE);
+        slider.post(new Runnable() {
+            @Override
+            public void run() {
+                int width_box = slider.getWidth();
+                int height_box = slider.getHeight();
+                Log.i(TAG, "wideth_box=" + width_box + ", height_box=" + height_box);
+                int width_stream = Math.min(width_box, height_box * 3 / 4);
+                int height_stream = Math.min(height_box, width_box * 4 / 3);
+                ViewGroup container = (ViewGroup) parentLayout.findViewById(R.id.stream_container);
+                for (Stream stream : streams) {
+                    ViewGroup stream_box = (ViewGroup) inflater.inflate(R.layout.stream_overview, container, false);
+                    ViewGroup.LayoutParams params = stream_box.getLayoutParams();
+                    params.width = width_box;
+                    stream_box.setLayoutParams(params);
+                    ((TextView) stream_box.findViewById(R.id.stream_overview_name)).setText(stream.name);
+                    ((TextView) stream_box.findViewById(R.id.stream_overview_owner)).setText(stream.user);
+                    ((TextView) stream_box.findViewById(R.id.stream_overview_num_pic)).setText(stream.picNum + "");
+                    ((TextView) stream_box.findViewById(R.id.stream_overview_num_view)).setText(stream.views + "");
+                    container.addView(stream_box);
+                }
+                slider.setSlideWidth(width_box);
+                slider.configure(2, ViewStreamsContent.this);
+                slider.setOnSlideChangeListener(listener);
+            }
+        });
     }
 
+    private OnSlideChangeListener listener = new OnSlideChangeListener(){
+        @Override
+        public void onSlideChange(int index, boolean isLeftSwiping){
+            ((TextView)parentLayout.findViewById(R.id.view_streams_index)).setText(index+1+"");
+            View leftArrow = parentLayout.findViewById(R.id.main_activity_left_arrow);
+            View rightArrow = parentLayout.findViewById(R.id.main_activity_right_arrow);
+            if(index == 0)
+                leftArrow.setVisibility(View.GONE);
+            else
+                leftArrow.setVisibility(View.VISIBLE);
+            if(index == streams.size()-1)
+                rightArrow.setVisibility(View.GONE);
+            else
+                rightArrow.setVisibility(View.VISIBLE);
+        }
+    };
+
+    private View.OnClickListener left_arrow_listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            slider.slideTo(0);
+        }
+    };
+
+    private View.OnClickListener right_arrow_listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            slider.slideTo(streams.size()-1);
+        }
+    };
+
+
+    @Override
     public void clear(){
         if(!active) return;
         active = false;
         for(ImageView imageView : imageViews)
             imageView.setImageDrawable(null);
-        imageViews = new LinkedList<ImageView>();
+        imageViews = new HashSet<ImageView>();
         parentLayout.removeAllViews();
+    }
+
+    @Override
+    public void loadResource(int position, View view){
+        isImageActive[position] = true;
+        if(isImageLoading[position]) return;
+        isImageLoading[position] = true;
+        view.findViewById(R.id.stream_overview_progress_bar).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.stream_overview_error).setVisibility(View.GONE);
+        view.findViewById(R.id.stream_overview_cover).setVisibility(View.GONE);
+        new FetchImageThread((ViewGroup)view, position).start();
+    }
+
+    @Override
+    public void releaseResource(int position, View view){
+        isImageActive[position] = false;
+        ImageView imageView = (ImageView) view.findViewById(R.id.stream_overview_cover);
+        imageViews.remove(imageView);
+        imageView.setImageDrawable(null);
+    }
+
+
+    public boolean isActive(){
+        return active;
     }
 
     static class ImageHandler extends Handler{
@@ -90,11 +176,14 @@ public class ViewStreamsContent extends ViewContent{
         public void handleMessage(Message msg){
             if(!content.isActive()) return;
             HashMap<String, Object> data = (HashMap<String,Object>) msg.obj;
+            int index = (Integer) data.get("index");
+            content.isImageLoading[index] = false;
             ViewGroup stream_box = (ViewGroup) data.get("stream_box");
-            View progress_bar = stream_box.findViewById(R.id.stream_overview_progress_bar);
-            ((ViewGroup)progress_bar.getParent()).removeView(progress_bar);
+            stream_box.findViewById(R.id.stream_overview_progress_bar).setVisibility(View.GONE);
+            if(!content.isImageActive[index]) return;
             if((Boolean)data.get("success")) {
                 ImageView imageView = (ImageView) stream_box.findViewById(R.id.stream_overview_cover);
+                imageView.setVisibility(View.VISIBLE);
                 Bitmap bitmap = (Bitmap) data.get("bitmap");
                 imageView.setImageBitmap(bitmap);
                 content.imageViews.add(imageView);
@@ -105,22 +194,22 @@ public class ViewStreamsContent extends ViewContent{
 
     class FetchImageThread extends Thread{
 
-        private String url;
+        private int index;
         private ViewGroup stream_box;
 
-        public FetchImageThread(ViewGroup stream_box, String url){
-            this.url = url;
+        public FetchImageThread(ViewGroup stream_box, int index){
+            this.index = index;
             this.stream_box = stream_box;
         }
 
         @Override
         public void run(){
-            if(url == null) return;
             Message msg = new Message();
             HashMap<String, Object> data = new HashMap<String, Object>();
             data.put("stream_box", stream_box);
+            data.put("index", index);
             msg.obj = data;
-            Bitmap bitmap = BitmapFetcher.fetchBitmap(url);
+            Bitmap bitmap = BitmapFetcher.fetchBitmap(streams.get(index).coverImageURL);
             if(bitmap != null){
                 data.put("bitmap", bitmap);
                 data.put("success", true);

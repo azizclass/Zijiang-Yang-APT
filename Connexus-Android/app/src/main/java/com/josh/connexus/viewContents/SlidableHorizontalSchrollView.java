@@ -8,15 +8,23 @@ import android.widget.HorizontalScrollView;
 
 public class SlidableHorizontalSchrollView extends HorizontalScrollView {
 
-    private int slideWidth = Integer.MAX_VALUE;
+    private final static String TAG = "SlidableSchrollView";
+
     private int x;
+    private int slideWidth = Integer.MAX_VALUE;
+    private OnSlideChangeListener listener;
+    private int cur_slide = 0;
 
     public SlidableHorizontalSchrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
+    public void setOnSlideChangeListener(OnSlideChangeListener listener){
+        this.listener = listener;
+    }
+
     public void setSlideWidth(int slideWidth){
-        this.slideWidth = slideWidth;
+        this.slideWidth = Math.max(1, slideWidth);
     }
 
     @Override
@@ -31,19 +39,35 @@ public class SlidableHorizontalSchrollView extends HorizontalScrollView {
         if(ev.getAction() == MotionEvent.ACTION_UP) {
             int delta = getScrollX() - x;
             if(delta == 0) return super.onTouchEvent(ev);
-            double cur_slide = (double) getScrollX() / slideWidth;
-            int next_slide = (int)(delta > 0 ? Math.ceil(cur_slide) : Math.floor(cur_slide));
-            int target = next_slide* slideWidth;
-            onSlideChange(next_slide, delta<0);
-            ObjectAnimator animator=ObjectAnimator.ofInt(this, "scrollX", target );
-            animator.setDuration(200*Math.abs(target-getScrollX())*2/slideWidth);
-            animator.start();
+            int next_slide = delta > 0 ? cur_slide+1 : cur_slide-1;
+            slideTo(next_slide);
         }
         return super.onTouchEvent(ev);
     }
 
-    protected void onSlideChange(int slideIndex, boolean left){
+    public void slideTo(int index){
+        index = Math.max(0, Math.min(index, getMaxSlide()));
+        onSlideChange(index, index < cur_slide);
+        int target = index * slideWidth;
+        ObjectAnimator animator=ObjectAnimator.ofInt(this, "scrollX",  target);
+        animator.setDuration(Math.min(200, 200 * Math.abs(target - getScrollX()) * 2 / slideWidth));
+        animator.start();
+        cur_slide = index;
+    }
 
+    public int getCurentSlideIndex(){
+        if(getChildCount() < 1) return -1;
+        return cur_slide;
+    }
+
+    public int getMaxSlide(){
+        if(getChildCount() < 1) return -1;
+        return getChildAt(0).getWidth()/slideWidth-1;
+    }
+
+    protected void onSlideChange(int slideIndex, boolean left){
+        if(listener!=null)
+            listener.onSlideChange(slideIndex, left);
     }
 
 }

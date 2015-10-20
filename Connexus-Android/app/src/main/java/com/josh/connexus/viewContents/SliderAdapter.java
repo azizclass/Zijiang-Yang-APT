@@ -1,10 +1,10 @@
 package com.josh.connexus.viewContents;
 
 import android.view.View;
-import android.view.ViewGroup;
 
 public interface SliderAdapter {
-    public abstract View getView(int position, ViewGroup parent);
+    public abstract void loadResource(int position, View view);
 
-    public abstract void onRemoveView(View view);
+    public abstract void releaseResource(int position, View view);
+
 }

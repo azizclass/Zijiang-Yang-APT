@@ -48,6 +48,7 @@ public class MainActivity extends Activity {
     private ViewContent content;
 
     private boolean isLoading = false;
+    private boolean isActive = true;
 
     private BackEndTaskHandler viewStreamsHandler = new BackEndTaskHandler(this);
 
@@ -56,7 +57,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         cur_view = getIntent().getIntExtra("view", VIEW_ALL_STREAMS);
-        ((TextView)findViewById(R.id.drawer_user)).setText(Credential.isLoggedIn()?Credential.getCredential().getSelectedAccountName():"");
+        if(Credential.isLoggedIn())
+            ((TextView)findViewById(R.id.drawer_user)).setText(Credential.getCredential().getSelectedAccountName());
         ListView drawerList = (ListView) findViewById(R.id.drawer_list);
         menu_list_adapter = new MenuListAdapter(getMenuData());
         drawerList.setAdapter(menu_list_adapter);
@@ -69,10 +71,22 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        isActive = true;
+    }
+
+    @Override
     public void onWindowFocusChanged (boolean hasFocus){
         super.onWindowFocusChanged(hasFocus);
         if(content == null)
             switchContent(cur_view);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        isActive = false;
     }
 
     private List<Map<String, Object>> getMenuData(){
@@ -141,6 +155,10 @@ public class MainActivity extends Activity {
     public void onRefreshClick(View v){
         if(!isLoading)
             switchContent(cur_view);
+    }
+
+    public void onSearchIconClick(View v){
+        new SearchView(MainActivity.this).show();
     }
 
     private AdapterView.OnItemClickListener listItemListener = new AdapterView.OnItemClickListener(){
@@ -212,12 +230,13 @@ public class MainActivity extends Activity {
             if(activity.cur_view != (Integer)data.get("type")) return;
             activity.progressBar.setVisibility(View.GONE);
             activity.isLoading = false;
+            if(!activity.isActive) return;
             if((Boolean) data.get("success")) {
                 switch((Integer)data.get("type")) {
                     case MANAGEMENT:
                         break;
                     case VIEW_ALL_STREAMS:
-                        activity.content = new ViewStreamsContent(activity, activity.content_layout, (Iterable<Stream>) data.get("streams"));
+                        activity.content = new ViewStreamsContent(activity, activity.content_layout, (List<Stream>) data.get("streams"), "streams");
                         break;
                     case NEARBY_STREAMS:
                         break;

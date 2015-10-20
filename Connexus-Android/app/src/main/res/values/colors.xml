@@ -7,4 +7,11 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="menu_selected">#e9e7e7</color>
+    <color name="C_0">#3aaae6</color>
+    <color name="o_1">#ff672b</color>
+    <color name="n_2">#e5f1bd39</color>
+    <color name="n_3">@color/C_0</color>
+    <color name="e_4">#29b347</color>
+    <color name="x_5">@color/o_1</color>
+    <color name="search_bar_border">#e52773d8</color>
 </resources>
