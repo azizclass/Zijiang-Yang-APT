@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -13,36 +12,34 @@ import android.widget.TextView;
 
 import com.josh.connexus.elements.BackEndAPI;
 import com.josh.connexus.elements.Stream;
-import com.josh.connexus.viewContents.ViewStreamsContent;
+import com.josh.connexus.viewContents.ViewOneStreamContent;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
-public class SearchResult extends Activity {
+public class ViewStream extends Activity {
 
-    private String search_key;
+    private Stream stream;
     private RelativeLayout content_layout;
-    private ViewStreamsContent content;
+    private ViewOneStreamContent content;
     private ProgressBar progressBar;
     private LinearLayout error_sign;
-    private LinearLayout warning_sign;
     private boolean isLoading;
     private boolean isActive;
 
-    private SearchHandler handler = new SearchHandler(this);
+    private StreamDataHandler handler = new StreamDataHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_result);
-        search_key = getIntent().getStringExtra("key");
-        ((TextView)findViewById(R.id.search_result_title)).setText("Search for \""+search_key+"\"");
-        content_layout = (RelativeLayout) findViewById(R.id.search_result_content);
-        progressBar = (ProgressBar) findViewById(R.id.search_result_progress_bar);
-        error_sign = (LinearLayout) findViewById(R.id.search_result_error);
-        warning_sign = (LinearLayout) findViewById(R.id.search_result_warning);
+        setContentView(R.layout.activity_view_stream);
+        stream = (Stream)getIntent().getSerializableExtra("stream");
+        ((TextView)findViewById(R.id.view_stream_title)).setText(stream.name);
+        content_layout = (RelativeLayout) findViewById(R.id.view_stream_content);
+        progressBar = (ProgressBar) findViewById(R.id.view_stream_progress_bar);
+        error_sign = (LinearLayout) findViewById(R.id.view_stream_error);
     }
+
 
     @Override
     public void onStart(){
@@ -54,7 +51,7 @@ public class SearchResult extends Activity {
     public void onWindowFocusChanged (boolean hasFocus){
         super.onWindowFocusChanged(hasFocus);
         if(content == null)
-            search();
+            loadStream();
     }
 
     @Override
@@ -63,19 +60,18 @@ public class SearchResult extends Activity {
         isActive = false;
     }
 
-    private void search(){
+    private void loadStream(){
         if(content != null)
             content.clear();
         progressBar.setVisibility(View.VISIBLE);
         error_sign.setVisibility(View.GONE);
-        warning_sign.setVisibility(View.GONE);
         isLoading = true;
         new LoadingThread().start();
     }
 
     public void onRefreshClick(View v){
         if(!isLoading)
-            search();
+            loadStream();
     }
 
     public void onBackClick(View v){
@@ -87,7 +83,7 @@ public class SearchResult extends Activity {
         public void run(){
             HashMap<String, Object> data = new HashMap<String, Object>();
             try{
-                data.put("streams", BackEndAPI.searchStreams(search_key));
+                data.put("stream", BackEndAPI.getStream(stream.id));
                 data.put("success", true);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -99,11 +95,11 @@ public class SearchResult extends Activity {
         }
     }
 
-    static class SearchHandler extends Handler {
+    static class StreamDataHandler extends Handler {
 
-        private SearchResult activity;
+        private ViewStream activity;
 
-        public SearchHandler(SearchResult activity){
+        public StreamDataHandler(ViewStream activity){
             this.activity = activity;
         }
 
@@ -115,17 +111,11 @@ public class SearchResult extends Activity {
             activity.isLoading = false;
             if(!activity.isActive) return;
             if((Boolean) data.get("success")) {
-                List<Stream> streams = (List<Stream>) data.get("streams");
-                if(streams == null || streams.size() == 0){
-                    activity.warning_sign.setVisibility(View.VISIBLE);
-                    ((TextView)activity.warning_sign.findViewById(R.id.search_result_warning_text)).setText(
-                            "Oops! There is no result for \""+activity.search_key+"\"!");
-                }else {
-                    activity.content = new ViewStreamsContent(activity, activity.content_layout, streams, "results found");
-                    activity.content.show();
-                }
+                activity.content = new ViewOneStreamContent(activity, activity.content_layout, activity.stream);
+                activity.content.show();
             }else
                 activity.error_sign.setVisibility(View.VISIBLE);
         }
     }
+
 }

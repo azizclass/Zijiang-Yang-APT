@@ -2,10 +2,10 @@ package com.josh.connexus.elements;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Image {
-    private static HashMap<String, Bitmap> imageCache = new HashMap<String, Bitmap>();
+public class Image implements Serializable{
 
     public final String url;
 

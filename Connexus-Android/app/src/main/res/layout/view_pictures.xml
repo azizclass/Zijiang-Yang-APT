@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp">
 
         <TextView
-            android:id="@+id/view_streams_index"
+            android:id="@+id/view_pictures_index"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp" />
@@ -27,7 +26,7 @@
             android:text="/"/>
 
         <TextView
-            android:id="@+id/view_streams_total_number"
+            android:id="@+id/view_pictures_total_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp" />
@@ -36,13 +35,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text=" "/>
+            android:text=" pictures"/>
 
-        <TextView
-            android:id="@+id/view_streams_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
     </LinearLayout>
 
     <RelativeLayout
@@ -51,14 +45,14 @@
 
 
         <com.josh.connexus.viewContents.DynamicSlider
-            android:id="@+id/streams_slider_view"
+            android:id="@+id/pictures_slider_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"
             android:fillViewport="false">
 
             <LinearLayout
-                android:id="@+id/stream_container"
+                android:id="@+id/picture_container"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -68,7 +62,7 @@
         </com.josh.connexus.viewContents.DynamicSlider>
 
         <RelativeLayout
-            android:id="@+id/view_streams_left_arrow"
+            android:id="@+id/view_picture_left_arrow"
             android:layout_width="wrap_content"
             android:layout_height="100dp"
             android:layout_alignParentStart="true"
@@ -85,7 +79,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/view_streams_right_arrow"
+            android:id="@+id/view_picture_right_arrow"
             android:layout_width="wrap_content"
             android:layout_height="100dp"
             android:layout_alignParentEnd="true"
@@ -102,4 +96,5 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
 </LinearLayout>

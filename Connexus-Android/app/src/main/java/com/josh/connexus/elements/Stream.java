@@ -1,9 +1,10 @@
 package com.josh.connexus.elements;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Calendar;
 
-public class Stream {
+public class Stream implements Serializable {
     public final long id;
     public final String user;
     public final String name;

@@ -1,6 +1,7 @@
 package com.josh.connexus.viewContents;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
@@ -8,10 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.josh.connexus.R;
+import com.josh.connexus.ViewStream;
 import com.josh.connexus.elements.BitmapFetcher;
 import com.josh.connexus.elements.Stream;
 
@@ -31,6 +34,9 @@ public class ViewStreamsContent extends ViewContent implements SliderAdapter{
     private boolean[] isImageActive;
     private Set<ImageView> imageViews = new HashSet<ImageView>();
     private DynamicSlider slider;
+    private View left_arrwo;
+    private View right_arrow;
+
 
     public ViewStreamsContent(Context context, ViewGroup parentLayout, List<Stream> streams, String tag){
         super(context, parentLayout);
@@ -56,15 +62,15 @@ public class ViewStreamsContent extends ViewContent implements SliderAdapter{
     public void show(){
         if(active) return;
         active = true;
+        if(streams == null) return;
         final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.view_streams, parentLayout, true);
-        if(streams == null) return;
         slider = (DynamicSlider)parentLayout.findViewById(R.id.streams_slider_view);
         ((TextView)parentLayout.findViewById(R.id.view_streams_total_number)).setText(streams.size() + "");
         ((TextView)parentLayout.findViewById(R.id.view_streams_index)).setText(streams.size() == 0 ? "0" : "1");
         ((TextView)parentLayout.findViewById(R.id.view_streams_tag)).setText(tagOfView);
-        View left_arrwo = parentLayout.findViewById(R.id.main_activity_left_arrow);
-        View right_arrow = parentLayout.findViewById(R.id.main_activity_right_arrow);
+        left_arrwo = parentLayout.findViewById(R.id.view_streams_left_arrow);
+        right_arrow = parentLayout.findViewById(R.id.view_streams_right_arrow);
         left_arrwo.setOnClickListener(left_arrow_listener);
         right_arrow.setOnClickListener(right_arrow_listener);
         left_arrwo.setVisibility(View.GONE);
@@ -88,6 +94,7 @@ public class ViewStreamsContent extends ViewContent implements SliderAdapter{
                     ((TextView) stream_box.findViewById(R.id.stream_overview_owner)).setText(stream.user);
                     ((TextView) stream_box.findViewById(R.id.stream_overview_num_pic)).setText(stream.picNum + "");
                     ((TextView) stream_box.findViewById(R.id.stream_overview_num_view)).setText(stream.views + "");
+                    stream_box.findViewById(R.id.stream_overview_image_area).setOnClickListener(view_stream_listener);
                     container.addView(stream_box);
                 }
                 slider.setSlideWidth(width_box);
@@ -101,16 +108,14 @@ public class ViewStreamsContent extends ViewContent implements SliderAdapter{
         @Override
         public void onSlideChange(int index, boolean isLeftSwiping){
             ((TextView)parentLayout.findViewById(R.id.view_streams_index)).setText(index+1+"");
-            View leftArrow = parentLayout.findViewById(R.id.main_activity_left_arrow);
-            View rightArrow = parentLayout.findViewById(R.id.main_activity_right_arrow);
             if(index == 0)
-                leftArrow.setVisibility(View.GONE);
+                left_arrwo.setVisibility(View.GONE);
             else
-                leftArrow.setVisibility(View.VISIBLE);
+                left_arrwo.setVisibility(View.VISIBLE);
             if(index == streams.size()-1)
-                rightArrow.setVisibility(View.GONE);
+                right_arrow.setVisibility(View.GONE);
             else
-                rightArrow.setVisibility(View.VISIBLE);
+                right_arrow.setVisibility(View.VISIBLE);
         }
     };
 
@@ -125,6 +130,15 @@ public class ViewStreamsContent extends ViewContent implements SliderAdapter{
         @Override
         public void onClick(View v) {
             slider.slideTo(streams.size()-1);
+        }
+    };
+
+    private View.OnClickListener view_stream_listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(context, ViewStream.class);
+            intent.putExtra("stream", streams.get(slider.getCurentSlideIndex()));
+            context.startActivity(intent);
         }
     };
 

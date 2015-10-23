@@ -44,6 +44,7 @@ public class MainActivity extends Activity {
     private MenuListAdapter menu_list_adapter;
     private ProgressBar progressBar;
     private LinearLayout error_sign;
+    private LinearLayout warning_sign;
     private int cur_view;
     private ViewContent content;
 
@@ -68,6 +69,7 @@ public class MainActivity extends Activity {
         content_layout = (RelativeLayout)findViewById(R.id.main_activity_content);
         progressBar = (ProgressBar) findViewById(R.id.main_activity_progress_bar);
         error_sign = (LinearLayout) findViewById(R.id.main_activity_error);
+        warning_sign = (LinearLayout) findViewById(R.id.main_activity_warning);
     }
 
     @Override
@@ -120,6 +122,7 @@ public class MainActivity extends Activity {
             content.clear(); //Clear existing content firstly
         progressBar.setVisibility(View.VISIBLE);
         error_sign.setVisibility(View.GONE);
+        warning_sign.setVisibility(View.GONE);
         isLoading = true;
         switch (view_id){
             case MANAGEMENT:
@@ -236,12 +239,19 @@ public class MainActivity extends Activity {
                     case MANAGEMENT:
                         break;
                     case VIEW_ALL_STREAMS:
-                        activity.content = new ViewStreamsContent(activity, activity.content_layout, (List<Stream>) data.get("streams"), "streams");
+                        List<Stream> streams = (List<Stream>) data.get("streams");
+                        if(streams == null || streams.size() == 0){
+                            activity.warning_sign.setVisibility(View.VISIBLE);
+                            ((TextView)activity.warning_sign.findViewById(R.id.main_activity_warning_text)).setText(
+                            "Oops! There is no stream!");
+                        }else {
+                            activity.content = new ViewStreamsContent(activity, activity.content_layout, streams, "streams");
+                            activity.content.show();
+                        }
                         break;
                     case NEARBY_STREAMS:
                         break;
                 }
-                activity.content.show();
             }else
                 activity.error_sign.setVisibility(View.VISIBLE);
         }

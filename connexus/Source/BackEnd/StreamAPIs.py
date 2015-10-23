@@ -34,6 +34,10 @@ class SearchRequest(messages.Message):
     key_word = messages.StringField(1, required=True)
 
 
+class StreamRequest(messages.Message):
+    stream_id = messages.IntegerField(1, required=True)
+
+
 # Stream infor class
 class StreamInfo(messages.Message):
     user = messages.StringField(1, required=True)
@@ -65,8 +69,8 @@ class StreamAPI(remote.Service):
         return RespondStreams(streams=[getStreamInfo(stream) for stream in Stream.query(ancestor=getStreamKey())
                                 .order(-Stream.last_newpic_time, -Stream.pic_num, Stream.name, -Stream.create_time)])
 
-    @endpoints.method(message_types.VoidMessage, RespondStreams, http_method='GET', name='getStream')
-    def getStream(self, request):
+    @endpoints.method(message_types.VoidMessage, RespondStreams, http_method='GET', name='getOwnedStreams')
+    def getOwnedStreams(self, request):
         user = endpoints.get_current_user()
         if user:
             return RespondStreams(streams=[getStreamInfo(stream) for stream in Stream.query(Stream.user == user.email(),
@@ -81,4 +85,8 @@ class StreamAPI(remote.Service):
 
     @endpoints.method(SearchRequest, RespondSearchSuggestions, http_method='GET', name='getSearchSuggestion')
     def getSearchSuggestion(self, request):
-        return RespondSearchSuggestions([suggestion for suggestion in search_suggestion(request.key_word)])
+        return RespondSearchSuggestions(suggestions=[suggestion for suggestion in search_suggestion(request.key_word, 20)])
+
+    @endpoints.method(StreamRequest, StreamInfo, http_method='GET', name='getStream')
+    def getStream(self, request):
+        return getStreamInfo(Stream.get_by_id(request.stream_id, getStreamKey()))

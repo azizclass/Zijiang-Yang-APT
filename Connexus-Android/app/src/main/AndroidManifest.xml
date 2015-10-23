@@ -24,6 +24,8 @@
         </activity>
         <activity android:name=".SearchResult" >
         </activity>
+        <activity android:name=".ViewStream" >
+        </activity>
     </application>
 
 </manifest>

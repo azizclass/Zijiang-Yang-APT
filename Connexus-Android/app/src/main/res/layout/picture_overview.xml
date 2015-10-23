@@ -1,49 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/stream_box"
+    android:id="@+id/picture_box"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/stream_overview_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"/>
-
-    </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/stream_overview_image_area"
+        android:id="@+id/picture_overview_image_area"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.7"
+        android:layout_weight="0.8"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:gravity="center"
         android:clickable="true">
 
         <ProgressBar
-            android:id="@+id/stream_overview_progress_bar"
+            android:id="@+id/picture_overview_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
             android:visibility="gone"/>
 
         <LinearLayout
-            android:id="@+id/stream_overview_error"
+            android:id="@+id/picture_overview_error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -60,13 +42,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:width="120dp"
-                android:text="Oops! Unable to load cover image!"
+                android:text="Oops! Unable to load picture!"
                 android:textAlignment="center"/>
 
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/stream_overview_cover"
+            android:id="@+id/picture_overview_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"/>
@@ -95,10 +77,10 @@
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:layout_marginStart="15dp"
-                android:text="by "/>
+                android:text="Create time: "/>
 
             <TextView
-                android:id="@+id/stream_overview_owner"
+                android:id="@+id/picture_overview_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
@@ -118,31 +100,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
-                android:text="Total "/>
+                android:text="Location: "/>
 
             <TextView
-                android:id="@+id/stream_overview_num_pic"
+                android:id="@+id/picture_overview_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text=" pictures - "/>
-
-            <TextView
-                android:id="@+id/stream_overview_num_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:text=" views"/>
 
         </LinearLayout>
 

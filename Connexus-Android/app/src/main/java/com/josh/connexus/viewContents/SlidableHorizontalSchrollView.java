@@ -33,6 +33,15 @@ public class SlidableHorizontalSchrollView extends HorizontalScrollView {
     }
 
     @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev){
+        if(ev.getAction() == MotionEvent.ACTION_DOWN){
+            onTouchEvent(ev);
+            return false;
+        }
+        return super.onInterceptTouchEvent(ev);
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if(ev.getAction() == MotionEvent.ACTION_DOWN)
             x = getScrollX();

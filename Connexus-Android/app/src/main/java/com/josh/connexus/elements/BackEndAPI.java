@@ -30,8 +30,8 @@ public class BackEndAPI {
         return ret;
     }
 
-    public static List<Stream> getStreams(GoogleAccountCredential credential) throws IOException{
-        List<ConnexusStreamInfo> Info = buildAPI(credential).getStream().execute().getStreams();
+    public static List<Stream> getOwnedStreams(GoogleAccountCredential credential) throws IOException{
+        List<ConnexusStreamInfo> Info = buildAPI(credential).getOwnedStreams().execute().getStreams();
         List<Stream> ret = new ArrayList<Stream>();
         if(Info != null)
             for(ConnexusStreamInfo info : Info)
@@ -46,6 +46,17 @@ public class BackEndAPI {
             for(ConnexusStreamInfo info : Info)
                 ret.add(convertToStream(info));
         return ret;
+    }
+
+    public static List<String> getSearchSuggestion(String keyWord) throws IOException{
+        List<String> suggestions = buildAPI(null).getSearchSuggestion(keyWord).execute().getSuggestions();
+        if(suggestions == null)
+            return new ArrayList<String>();
+        return suggestions;
+    }
+
+    public static Stream getStream(long streamId) throws IOException{
+        return convertToStream(buildAPI(null).getStream(streamId).execute());
     }
 
     public static List<Image> getImages(long id) throws IOException {
