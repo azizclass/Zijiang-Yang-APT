@@ -3,10 +3,14 @@ package com.josh.connexus;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +32,7 @@ import com.josh.connexus.elements.Stream;
 import com.josh.connexus.viewContents.ViewContent;
 import com.josh.connexus.viewContents.ViewPicturesContent;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +42,7 @@ import java.util.Map;
 public class ViewStream extends Activity {
 
     private static final int SELECT_PICTURE = 0;
+    static final int TAKE_PHOTO = 1;
 
     private static final int VIEW_PICTURES = 0;
     private static final int VIEW_INFO = 1;
@@ -163,6 +169,9 @@ public class ViewStream extends Activity {
                         dialog.findViewById(R.id.select_source_camera).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                if (takePictureIntent.resolveActivity(getPackageManager()) != null)
+                                    startActivityForResult(takePictureIntent, TAKE_PHOTO);
                                 dialog.dismiss();
                             }
                         });
@@ -185,16 +194,49 @@ public class ViewStream extends Activity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == SELECT_PICTURE) {
-                Uri selectedImageUri = data.getData();
+        if (resultCode == RESULT_OK ) {
+            if (requestCode == SELECT_PICTURE ) {
                 Intent intent = new Intent(this, UploadPreview.class);
-                intent.putExtra("uri", selectedImageUri);
+                intent.putExtra("path", getGalleryPicturePath(data.getData()));
+                intent.putExtra("streamId", streamId);
+                startActivity(intent);
+            }else if(requestCode == TAKE_PHOTO){
+                Intent intent = new Intent(this, UploadPreview.class);
+                intent.putExtra("path", getCameraPicturePath(data.getData()));
                 intent.putExtra("streamId", streamId);
                 startActivity(intent);
             }
         }
     }
+
+    public String getCameraPicturePath(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+
+    private String getGalleryPicturePath(Uri uri) {
+        // Will return "image:x*"
+        String wholeID = DocumentsContract.getDocumentId(uri);
+        // Split at colon, use second item in the array
+        String id = wholeID.split(":")[1];
+        String[] column = { MediaStore.Images.Media.DATA };
+        // where id is equal to
+        String sel = MediaStore.Images.Media._ID + "=?";
+        Cursor cursor = getContentResolver().
+                query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                        column, sel, new String[]{ id }, null);
+        String filePath = "";
+        int columnIndex = cursor.getColumnIndex(column[0]);
+        if (cursor.moveToFirst()) {
+            filePath = cursor.getString(columnIndex);
+        }
+        cursor.close();
+        return filePath;
+    }
+
+
 
 
 

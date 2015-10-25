@@ -26,6 +26,8 @@ public class Image{
 
     public String getLocation(Context context) throws IOException {
         if(location != null) return location;
+        if(latitude < -90.0 || latitude > 90.0 || longitude < -180.0 || longitude > 180.0)
+            return location = "Unavailable";
         Geocoder geocoder =  new Geocoder(context, Locale.getDefault());
         List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
         if(addresses.isEmpty()){

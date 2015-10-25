@@ -88,6 +88,7 @@ class StringResponse(messages.Message):
     value = messages.StringField(1)
 
 
+
 @ConnexusAPI.api_class()
 class StreamAPI(remote.Service):
 
@@ -162,3 +163,11 @@ class StreamAPI(remote.Service):
             return StringResponse()
         return StringResponse(value=blobstore.create_upload_url(BackendFileuploadHandler.url +
                                     '/?'+urllib.urlencode({'id':stream.key.id()})))
+
+    @endpoints.method(StreamRequest, RespondStreams, http_method='GET', name='getSubscribedStreams')
+    def getSubscribedStreams(self, request):
+        user = endpoints.get_current_user()
+        if not user:
+            return RespondStreams(streams=[])
+        return RespondStreams(streams=[getStreamInfo(stream) for stream in Stream.query(Stream.subscribers == user.email(), ancestor=getStreamKey()).
+                              order(-Stream.last_newpic_time, -Stream.pic_num, Stream.name, -Stream.create_time)])
