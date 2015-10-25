@@ -1,6 +1,8 @@
 package com.josh.connexus.elements;
 
 import android.support.annotation.Nullable;
+
+import com.appspot.connexus_1078.connexusAPI.model.ConnexusImageInfo;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
 import com.appspot.connexus_1078.connexusAPI.ConnexusAPI;
@@ -56,32 +58,32 @@ public class BackEndAPI {
     }
 
     public static Stream getStream(long streamId) throws IOException{
-        return convertToStream(buildAPI(null).getStream(streamId).execute());
+        return convertToStream(buildAPI(null).getStream(streamId).execute().getStream());
     }
 
     public static List<Image> getImages(long id) throws IOException {
-        List<String> urls = buildAPI(null).getImages(id).execute().getImageUrls();
+        List<ConnexusImageInfo> images = buildAPI(null).getImages(id).execute().getImages();
         List<Image> ret = new ArrayList<Image>();
-        if(urls != null)
-            for(String url : urls)
-                ret.add(new Image(url));
+        if(images != null)
+            for(ConnexusImageInfo info : images) {
+                Calendar createTime = Calendar.getInstance();
+                createTime.setTimeInMillis(info.getCreateTime());
+                ret.add(new Image(info.getUrl(), createTime, info.getLatitude(), info.getLongitude()));
+            }
         return ret;
     }
 
     private static Stream convertToStream(ConnexusStreamInfo info) {
         if(info == null) return  null;
         Calendar createTime = Calendar.getInstance();
-        createTime.setTimeInMillis(info.getCreateTime().getValue());
+        createTime.setTimeInMillis(info.getCreateTime());
         Calendar lastNewTime = null;
         if (info.getLastNewpicTime() != null){
             lastNewTime = Calendar.getInstance();
-            lastNewTime.setTimeInMillis(info.getLastNewpicTime().getValue());
+            lastNewTime.setTimeInMillis(info.getLastNewpicTime());
         }
-        String[] subscribers = null;
-        if(info.getSubscribers() != null)
-            subscribers = info.getSubscribers().toArray(new String[info.getSubscribers().size()]);
         return new Stream(info.getStreamId(), info.getUser(), info.getName(), createTime,
-                lastNewTime, info.getTag(), info.getPicNum(), subscribers, info.getCoverImageUrl(),
+                lastNewTime, info.getTag(), info.getPicNum(), info.getSubscribers(), info.getCoverImageUrl(),
                 info.getViewCount());
     }
 

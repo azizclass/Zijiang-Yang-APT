@@ -75,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:indeterminate="true"
                 android:layout_centerInParent="true"
+                android:indeterminateDrawable="@drawable/progressbar"
                 android:visibility="gone"/>
 
             <LinearLayout

@@ -42,19 +42,13 @@ public class SearchResult extends Activity {
         progressBar = (ProgressBar) findViewById(R.id.search_result_progress_bar);
         error_sign = (LinearLayout) findViewById(R.id.search_result_error);
         warning_sign = (LinearLayout) findViewById(R.id.search_result_warning);
+        search();
     }
 
     @Override
     public void onStart(){
         super.onStart();
         isActive = true;
-    }
-
-    @Override
-    public void onWindowFocusChanged (boolean hasFocus){
-        super.onWindowFocusChanged(hasFocus);
-        if(content == null)
-            search();
     }
 
     @Override

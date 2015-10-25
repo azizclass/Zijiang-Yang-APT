@@ -31,7 +31,7 @@
                 android:id="@+id/search_result_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/search_result_back"
                 android:layout_toStartOf="@+id/search_result_refresh_button"
                 android:textColor="@color/white"
@@ -65,6 +65,7 @@
                 android:layout_height="wrap_content"
                 android:indeterminate="true"
                 android:layout_centerInParent="true"
+                android:indeterminateDrawable="@drawable/progressbar"
                 android:visibility="gone"/>
 
             <LinearLayout

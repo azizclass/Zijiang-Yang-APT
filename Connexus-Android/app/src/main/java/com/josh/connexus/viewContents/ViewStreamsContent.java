@@ -34,7 +34,7 @@ public class ViewStreamsContent extends ViewContent implements SliderAdapter{
     private boolean[] isImageActive;
     private Set<ImageView> imageViews = new HashSet<ImageView>();
     private DynamicSlider slider;
-    private View left_arrwo;
+    private View left_arrow;
     private View right_arrow;
 
 
@@ -69,21 +69,17 @@ public class ViewStreamsContent extends ViewContent implements SliderAdapter{
         ((TextView)parentLayout.findViewById(R.id.view_streams_total_number)).setText(streams.size() + "");
         ((TextView)parentLayout.findViewById(R.id.view_streams_index)).setText(streams.size() == 0 ? "0" : "1");
         ((TextView)parentLayout.findViewById(R.id.view_streams_tag)).setText(tagOfView);
-        left_arrwo = parentLayout.findViewById(R.id.view_streams_left_arrow);
+        left_arrow = parentLayout.findViewById(R.id.view_streams_left_arrow);
         right_arrow = parentLayout.findViewById(R.id.view_streams_right_arrow);
-        left_arrwo.setOnClickListener(left_arrow_listener);
+        left_arrow.setOnClickListener(left_arrow_listener);
         right_arrow.setOnClickListener(right_arrow_listener);
-        left_arrwo.setVisibility(View.GONE);
+        left_arrow.setVisibility(View.GONE);
         if(streams.size()<=1)
             right_arrow.setVisibility(View.GONE);
         slider.post(new Runnable() {
             @Override
             public void run() {
                 int width_box = slider.getWidth();
-                int height_box = slider.getHeight();
-                Log.i(TAG, "wideth_box=" + width_box + ", height_box=" + height_box);
-                int width_stream = Math.min(width_box, height_box * 3 / 4);
-                int height_stream = Math.min(height_box, width_box * 4 / 3);
                 ViewGroup container = (ViewGroup) parentLayout.findViewById(R.id.stream_container);
                 for (Stream stream : streams) {
                     ViewGroup stream_box = (ViewGroup) inflater.inflate(R.layout.stream_overview, container, false);
@@ -109,9 +105,9 @@ public class ViewStreamsContent extends ViewContent implements SliderAdapter{
         public void onSlideChange(int index, boolean isLeftSwiping){
             ((TextView)parentLayout.findViewById(R.id.view_streams_index)).setText(index+1+"");
             if(index == 0)
-                left_arrwo.setVisibility(View.GONE);
+                left_arrow.setVisibility(View.GONE);
             else
-                left_arrwo.setVisibility(View.VISIBLE);
+                left_arrow.setVisibility(View.VISIBLE);
             if(index == streams.size()-1)
                 right_arrow.setVisibility(View.GONE);
             else

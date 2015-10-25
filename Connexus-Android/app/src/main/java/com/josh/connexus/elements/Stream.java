@@ -1,8 +1,10 @@
 package com.josh.connexus.elements;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class Stream implements Serializable {
     public final long id;
@@ -12,13 +14,13 @@ public class Stream implements Serializable {
     public final Calendar  lastNewpicTime;
     public final String tags;
     public final long picNum;
-    public final String[] subscribers;
+    public final List<String> subscribers;
     public final String coverImageURL;
     public final long views;
-    public Image[] images;
+    public List<Image> images;
 
     public Stream(long id, String user, String name, Calendar  createTime, Calendar  lastNewpicTime,
-                  String tags, long picNum, String[] subscribers, String coverImageURL, long views){
+                  String tags, long picNum, List<String> subscribers, String coverImageURL, long views){
         this.id = id;
         this.user = user;
         this.name = name;
@@ -32,7 +34,8 @@ public class Stream implements Serializable {
         this.images = null;
     }
 
-    public Image[] fetchImages(){
+    public List<Image> fetchImages()  throws IOException {
+        images = BackEndAPI.getImages(id);
         return images;
     }
 
@@ -44,10 +47,10 @@ public class Stream implements Serializable {
                 "last new picture: "+(lastNewpicTime != null? lastNewpicTime.getTime():"N/A")+"\n"+
                 "tags: "+tags+"\n"+
                 "picture number: "+picNum+"\n"+
-                "subscribers: "+ (subscribers==null?"N/A":Arrays.toString(subscribers))+"\n"+
+                "subscribers: "+ (subscribers==null?"N/A":subscribers.toString())+"\n"+
                 "cover image: "+coverImageURL+"\n"+
                 "views: "+views+"\n"+
-                "images: "+(images==null?"N/A":Arrays.toString(images));
+                "images: "+(images==null?"N/A": images);
 
     }
 

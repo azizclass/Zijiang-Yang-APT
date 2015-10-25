@@ -26,6 +26,8 @@
         </activity>
         <activity android:name=".ViewStream" >
         </activity>
+        <activity android:name=".UploadPreview" >
+        </activity>
     </application>
 
 </manifest>

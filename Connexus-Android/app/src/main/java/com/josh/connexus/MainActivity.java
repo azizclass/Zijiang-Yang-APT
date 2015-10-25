@@ -70,19 +70,13 @@ public class MainActivity extends Activity {
         progressBar = (ProgressBar) findViewById(R.id.main_activity_progress_bar);
         error_sign = (LinearLayout) findViewById(R.id.main_activity_error);
         warning_sign = (LinearLayout) findViewById(R.id.main_activity_warning);
+        switchContent(cur_view);
     }
 
     @Override
     public void onStart(){
         super.onStart();
         isActive = true;
-    }
-
-    @Override
-    public void onWindowFocusChanged (boolean hasFocus){
-        super.onWindowFocusChanged(hasFocus);
-        if(content == null)
-            switchContent(cur_view);
     }
 
     @Override

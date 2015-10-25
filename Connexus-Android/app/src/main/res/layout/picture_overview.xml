@@ -22,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
+            android:indeterminateDrawable="@drawable/progressbar"
             android:visibility="gone"/>
 
         <LinearLayout
@@ -106,7 +107,9 @@
                 android:id="@+id/picture_overview_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"/>
+                android:textSize="15sp"
+                android:maxLines="2"
+                android:ellipsize="end"/>
 
         </LinearLayout>
 

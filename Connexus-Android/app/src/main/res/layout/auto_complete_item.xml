@@ -5,4 +5,4 @@
     android:padding="10dp"
     android:textColor="@color/black"
     android:textSize="18sp"
-    android:background="@drawable/search_autocomplete_color"/>
+    android:background="@drawable/list_item_color"/>

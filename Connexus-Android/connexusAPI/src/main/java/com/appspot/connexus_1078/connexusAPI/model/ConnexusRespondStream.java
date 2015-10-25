@@ -19,7 +19,7 @@
 package com.appspot.connexus_1078.connexusAPI.model;
 
 /**
- * Model definition for ConnexusRespondSearchSuggestions.
+ * Model definition for ConnexusRespondStream.
  *
  * <p> This is the Java data model class that specifies how to parse/serialize into the JSON that is
  * transmitted over HTTP when working with the connexusAPI. For a detailed explanation see:
@@ -29,37 +29,37 @@ package com.appspot.connexus_1078.connexusAPI.model;
  * @author Google, Inc.
  */
 @SuppressWarnings("javadoc")
-public final class ConnexusRespondSearchSuggestions extends com.google.api.client.json.GenericJson {
+public final class ConnexusRespondStream extends com.google.api.client.json.GenericJson {
 
   /**
    * The value may be {@code null}.
    */
   @com.google.api.client.util.Key
-  private java.util.List<java.lang.String> suggestions;
+  private ConnexusStreamInfo stream;
 
   /**
    * @return value or {@code null} for none
    */
-  public java.util.List<java.lang.String> getSuggestions() {
-    return suggestions;
+  public ConnexusStreamInfo getStream() {
+    return stream;
   }
 
   /**
-   * @param suggestions suggestions or {@code null} for none
+   * @param stream stream or {@code null} for none
    */
-  public ConnexusRespondSearchSuggestions setSuggestions(java.util.List<java.lang.String> suggestions) {
-    this.suggestions = suggestions;
+  public ConnexusRespondStream setStream(ConnexusStreamInfo stream) {
+    this.stream = stream;
     return this;
   }
 
   @Override
-  public ConnexusRespondSearchSuggestions set(String fieldName, Object value) {
-    return (ConnexusRespondSearchSuggestions) super.set(fieldName, value);
+  public ConnexusRespondStream set(String fieldName, Object value) {
+    return (ConnexusRespondStream) super.set(fieldName, value);
   }
 
   @Override
-  public ConnexusRespondSearchSuggestions clone() {
-    return (ConnexusRespondSearchSuggestions) super.clone();
+  public ConnexusRespondStream clone() {
+    return (ConnexusRespondStream) super.clone();
   }
 
 }
