@@ -63,7 +63,6 @@ public class SearchResult extends Activity {
         progressBar.setVisibility(View.VISIBLE);
         error_sign.setVisibility(View.GONE);
         warning_sign.setVisibility(View.GONE);
-        isLoading = true;
         new LoadingThread().start();
     }
 
@@ -79,6 +78,7 @@ public class SearchResult extends Activity {
     private class LoadingThread extends Thread{
         @Override
         public void run(){
+            isLoading = true;
             HashMap<String, Object> data = new HashMap<String, Object>();
             try{
                 data.put("streams", BackEndAPI.searchStreams(search_key));

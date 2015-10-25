@@ -97,10 +97,12 @@ class ViewStreamPage(webapp2.RequestHandler):
 class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         if not self.get_uploads('img') or len(self.get_uploads('img')) < 1 :
+            logging.error("Unable to get img")
             self.error(400)
             return
         upload = self.get_uploads('img')[0]
         if not upload.key():
+            logging.error("Unable to get img")
             self.error(500)
             return
         sid = self.request.get('id')

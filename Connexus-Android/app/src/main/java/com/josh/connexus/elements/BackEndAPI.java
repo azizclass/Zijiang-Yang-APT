@@ -3,6 +3,7 @@ package com.josh.connexus.elements;
 import android.support.annotation.Nullable;
 
 import com.appspot.connexus_1078.connexusAPI.model.ConnexusImageInfo;
+import com.appspot.connexus_1078.connexusAPI.model.ConnexusStreamRequest;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
 import com.appspot.connexus_1078.connexusAPI.ConnexusAPI;
@@ -71,6 +72,25 @@ public class BackEndAPI {
                 ret.add(new Image(info.getUrl(), createTime, info.getLatitude(), info.getLongitude()));
             }
         return ret;
+    }
+
+    public static boolean subscribeStream(long streamId, GoogleAccountCredential credential) throws IOException{
+        if(credential == null) return false;
+        ConnexusStreamRequest request = new ConnexusStreamRequest();
+        request.setStreamId(streamId);
+        return buildAPI(credential).subscribe(request).execute().getValue();
+    }
+
+    public static boolean unsubscribeStream(long streamId, GoogleAccountCredential credential) throws IOException{
+        if(credential == null) return false;
+        ConnexusStreamRequest request = new ConnexusStreamRequest();
+        request.setStreamId(streamId);
+        return buildAPI(credential).unsubscribe(request).execute().getValue();
+    }
+
+    public static String getUploadURL(long streamId, GoogleAccountCredential credential) throws IOException{
+        if(credential == null) return null;
+        return buildAPI(credential).getUploadURL(streamId).execute().getValue();
     }
 
     private static Stream convertToStream(ConnexusStreamInfo info) {

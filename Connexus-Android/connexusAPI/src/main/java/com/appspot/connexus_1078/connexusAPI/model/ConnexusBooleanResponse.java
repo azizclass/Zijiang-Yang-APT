@@ -19,7 +19,7 @@
 package com.appspot.connexus_1078.connexusAPI.model;
 
 /**
- * Model definition for ConnexusRespondStream.
+ * Model definition for ConnexusBooleanResponse.
  *
  * <p> This is the Java data model class that specifies how to parse/serialize into the JSON that is
  * transmitted over HTTP when working with the connexusAPI. For a detailed explanation see:
@@ -29,37 +29,37 @@ package com.appspot.connexus_1078.connexusAPI.model;
  * @author Google, Inc.
  */
 @SuppressWarnings("javadoc")
-public final class ConnexusRespondStream extends com.google.api.client.json.GenericJson {
+public final class ConnexusBooleanResponse extends com.google.api.client.json.GenericJson {
 
   /**
    * The value may be {@code null}.
    */
   @com.google.api.client.util.Key
-  private ConnexusStreamInfo stream;
+  private java.lang.Boolean value;
 
   /**
    * @return value or {@code null} for none
    */
-  public ConnexusStreamInfo getStream() {
-    return stream;
+  public java.lang.Boolean getValue() {
+    return value;
   }
 
   /**
-   * @param stream stream or {@code null} for none
+   * @param value value or {@code null} for none
    */
-  public ConnexusRespondStream setStream(ConnexusStreamInfo stream) {
-    this.stream = stream;
+  public ConnexusBooleanResponse setValue(java.lang.Boolean value) {
+    this.value = value;
     return this;
   }
 
   @Override
-  public ConnexusRespondStream set(String fieldName, Object value) {
-    return (ConnexusRespondStream) super.set(fieldName, value);
+  public ConnexusBooleanResponse set(String fieldName, Object value) {
+    return (ConnexusBooleanResponse) super.set(fieldName, value);
   }
 
   @Override
-  public ConnexusRespondStream clone() {
-    return (ConnexusRespondStream) super.clone();
+  public ConnexusBooleanResponse clone() {
+    return (ConnexusBooleanResponse) super.clone();
   }
 
 }

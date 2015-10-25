@@ -1,18 +1,15 @@
 package com.josh.connexus.elements;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class Image implements Serializable{
+public class Image{
 
     public final String url;
     public final Calendar createTime;

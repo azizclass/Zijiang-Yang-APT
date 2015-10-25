@@ -44,7 +44,8 @@
             android:clickable="true"
             android:focusable="true"
             android:onClick="onOptionsClick"
-            android:background="@drawable/nav_button_background"/>
+            android:background="@drawable/nav_button_background"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/view_stream_refresh_button"

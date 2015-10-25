@@ -1,12 +1,11 @@
 package com.josh.connexus.elements;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class Stream implements Serializable {
+public class Stream {
     public final long id;
     public final String user;
     public final String name;
@@ -28,7 +27,7 @@ public class Stream implements Serializable {
         this.lastNewpicTime = lastNewpicTime;
         this.tags = tags;
         this.picNum = picNum;
-        this.subscribers = subscribers;
+        this.subscribers = subscribers == null? new ArrayList<String>(): subscribers;
         this.coverImageURL = coverImageURL;
         this.views = views;
         this.images = null;

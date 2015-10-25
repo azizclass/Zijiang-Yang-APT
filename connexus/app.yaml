@@ -19,6 +19,9 @@ handlers:
 - url: /_ah/spi/.*
   script: Source.BackEnd.backend.APPLICATION
 
+- url: /backend/uploader.*
+  script: Source.BackEnd.BackendFileuploadHandler.app
+
 - url: .*
   script: main.app
   login: required

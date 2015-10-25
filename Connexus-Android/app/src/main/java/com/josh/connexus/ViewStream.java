@@ -42,23 +42,28 @@ public class ViewStream extends Activity {
     private static final int VIEW_INFO = 1;
 
     private Stream stream;
+    private long streamId;
+
     private RelativeLayout content_layout;
     private ViewContent content;
     private ProgressBar progressBar;
     private LinearLayout error_sign;
     private LinearLayout warning_sign;
+    private ImageView option_btn;
 
-    private boolean isLoading;
-    private boolean isActive;
+    private boolean isLoading = false;
+    private boolean isActive = false;
+    private boolean isSubscribing = false;
     private int cur_view;
 
     private StreamDataHandler handler = new StreamDataHandler(this);
+    private SubscriptionHandler subscriptionHandler = new SubscriptionHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_stream);
-        stream = (Stream)getIntent().getSerializableExtra("stream");
+        streamId = getIntent().getLongExtra("streamId", -1);
         Spinner menu = (Spinner)findViewById(R.id.view_stream_menu);
         menu.setAdapter(new MenuListAdapter(getMenuData()));
         menu.setOnItemSelectedListener(menuSelectedListener);
@@ -66,6 +71,7 @@ public class ViewStream extends Activity {
         progressBar = (ProgressBar) findViewById(R.id.view_stream_progress_bar);
         error_sign = (LinearLayout) findViewById(R.id.view_stream_error);
         warning_sign = (LinearLayout) findViewById(R.id.view_stream_warning);
+        option_btn = (ImageView) findViewById(R.id.view_stream_options);
         cur_view = VIEW_PICTURES;
         menu.setSelection(cur_view);
         switchContent(cur_view);
@@ -100,21 +106,6 @@ public class ViewStream extends Activity {
         return data;
     }
 
-    private List<String> getOptionData(){
-        ArrayList<String> ret = new ArrayList<String>();
-        if(!Credential.isLoggedIn()) return ret;
-        String email = Credential.getCredential().getSelectedAccountName();
-        if(email.equals(stream.user)){
-            ret.add("Upload Picture");
-        }else{
-            if(stream.subscribers != null && stream.subscribers.contains(email))
-                ret.add("Subscribe");
-            else
-                ret.add("Unsubscribe");
-        }
-        return ret;
-    }
-
     private void switchContent(int view_id){
         if(view_id < VIEW_PICTURES || view_id > VIEW_INFO) return;
         if(content != null)
@@ -122,7 +113,6 @@ public class ViewStream extends Activity {
         progressBar.setVisibility(View.VISIBLE);
         error_sign.setVisibility(View.GONE);
         warning_sign.setVisibility(View.GONE);
-        isLoading = true;
         new LoadingThread(view_id).start();
     }
 
@@ -136,6 +126,7 @@ public class ViewStream extends Activity {
     }
 
     public void onOptionsClick(View v){
+        if(stream == null) return;
         PopupMenu window = new PopupMenu(this, v);
         Menu menu = window.getMenu();
         final int UPLOAD = 0;
@@ -146,7 +137,7 @@ public class ViewStream extends Activity {
             if (stream.user.equals(email)) {
                 menu.add(0, UPLOAD, 0, "Upload Picture");
             } else{
-                if (stream.subscribers != null && stream.subscribers.contains(email))
+                if (stream.subscribers.contains(email))
                     menu.add(0, UNSUBSCRIBE, 0, "Unsubscribe");
                 else
                     menu.add(0, SUBSCRIBE, 0, "Subscribe");
@@ -178,8 +169,12 @@ public class ViewStream extends Activity {
                         dialog.show();
                         break;
                     case UNSUBSCRIBE:
+                        Toast.makeText(ViewStream.this, "Unsubscribing...", Toast.LENGTH_SHORT).show();
+                        new SubscribeThread(false).start();
                         break;
                     case SUBSCRIBE:
+                        Toast.makeText(ViewStream.this, "Subscribing...", Toast.LENGTH_SHORT).show();
+                        new SubscribeThread(true).start();
                         break;
                 }
                 return true;
@@ -193,7 +188,10 @@ public class ViewStream extends Activity {
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
-                Toast.makeText(this, selectedImageUri.toString() , Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, UploadPreview.class);
+                intent.putExtra("uri", selectedImageUri);
+                intent.putExtra("streamId", streamId);
+                startActivity(intent);
             }
         }
     }
@@ -222,13 +220,13 @@ public class ViewStream extends Activity {
 
         @Override
         public void run(){
+            isLoading = true;
             HashMap<String, Object> data = new HashMap<String, Object>();
             data.put("type", type);
             try{
-                Stream theStream = BackEndAPI.getStream(stream.id);
-                if(theStream != null)
-                    theStream.fetchImages();
-                data.put("stream", theStream);
+                stream = BackEndAPI.getStream(streamId);
+                if(stream != null)
+                    stream.fetchImages();
                 data.put("success", true);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -256,13 +254,15 @@ public class ViewStream extends Activity {
             activity.isLoading = false;
             if(!activity.isActive) return;
             if((Boolean) data.get("success")) {
-                Stream stream = (Stream) data.get("stream");
+                Stream stream = activity.stream;
                 if(stream == null) {
                     activity.warning_sign.setVisibility(View.VISIBLE);
                     ((TextView)activity.warning_sign.findViewById(R.id.view_stream_warning_text)).setText(
                             "This stream does not exist! It seems that it is deleted!");
                     return;
                 }
+                if(Credential.isLoggedIn())
+                    activity.option_btn.setVisibility(View.VISIBLE);
                 switch ((Integer)data.get("type")){
                     case ViewStream.VIEW_PICTURES:
                         if(stream.picNum == 0){
@@ -282,6 +282,58 @@ public class ViewStream extends Activity {
 
             }else
                 activity.error_sign.setVisibility(View.VISIBLE);
+        }
+    }
+
+    class SubscribeThread extends Thread{
+
+        private final boolean isSubscribeOperation;
+
+        public SubscribeThread(boolean isSubscribeOperation){
+            this.isSubscribeOperation = isSubscribeOperation;
+        }
+
+        @Override
+        public void run(){
+            isSubscribing = true;
+            HashMap<String, Object> data = new HashMap<String, Object>();
+            data.put("isSubscribeOperation", isSubscribeOperation);
+            try{
+                if(isSubscribeOperation)
+                    data.put("success", BackEndAPI.subscribeStream(streamId, Credential.getCredential()));
+                else
+                    data.put("success", BackEndAPI.unsubscribeStream(streamId, Credential.getCredential()));
+            }catch (IOException e){
+                e.printStackTrace();
+                data.put("success", false);
+            }
+            Message msg = new Message();
+            msg.obj = data;
+            subscriptionHandler.sendMessage(msg);
+        }
+    }
+
+    static class SubscriptionHandler extends Handler{
+        private ViewStream activity;
+
+        public SubscriptionHandler(ViewStream activity){
+            this.activity = activity;
+        }
+        @Override
+        @SuppressWarnings("unchecked")
+        public void handleMessage(Message msg){
+            activity.isSubscribing = false;
+            if(!activity.isActive) return;
+            HashMap<String, Object> data = (HashMap<String, Object>)msg.obj;
+            boolean isSubscribeOperation = (Boolean)data.get("isSubscribeOperation");
+            if((Boolean) data.get("success")){
+                Toast.makeText(activity, (isSubscribeOperation?"Subscription ":"Unsubscription ")+"succeeds!", Toast.LENGTH_LONG).show();
+                if(isSubscribeOperation)
+                    activity.stream.subscribers.add(Credential.getCredential().getSelectedAccountName());
+                else
+                    activity.stream.subscribers.remove(Credential.getCredential().getSelectedAccountName());
+            }else
+                Toast.makeText(activity, (isSubscribeOperation?"Subscription ":"Unsubscription ")+"fails!", Toast.LENGTH_LONG).show();
         }
     }
 

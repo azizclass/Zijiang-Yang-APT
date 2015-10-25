@@ -1,15 +1,24 @@
 import endpoints
+
+from google.appengine.ext import blobstore
+
 from protorpc import messages
 from protorpc import message_types
 from protorpc import remote
 
 from Source.Services.storage import Stream
 from Source.Services.storage import getStreamKey
+from Source.Services.storage import subscribeStream
+from Source.Services.storage import unsubscribeStream
 from Source.Services.search import search_streams
 from Source.Services.search import search_suggestion
+
+import BackendFileuploadHandler
+
 from API import ConnexusAPI
 
 import datetime
+import urllib
 
 package = 'Connexus'
 
@@ -58,17 +67,25 @@ class StreamInfo(messages.Message):
     stream_id = messages.IntegerField(10)
 
 
-# Response to stream requests
+# Response with multiple streams
 class RespondStreams(messages.Message):
     streams = messages.MessageField(StreamInfo, 1, repeated=True)
 
-# Response to get stream request
+# Response with one stream
 class RespondStream(messages.Message):
     stream = messages.MessageField(StreamInfo, 1)
 
 # Response to search suggestions
 class RespondSearchSuggestions(messages.Message):
     suggestions = messages.StringField(1, repeated=True)
+
+# Boolean response
+class BooleanResponse(messages.Message):
+    value = messages.BooleanField(1, required=True)
+
+# String response
+class StringResponse(messages.Message):
+    value = messages.StringField(1)
 
 
 @ConnexusAPI.api_class()
@@ -105,3 +122,43 @@ class StreamAPI(remote.Service):
         else:
             return RespondStream()
 
+    @endpoints.method(StreamRequest, BooleanResponse, http_method='POST', name='subscribe')
+    def subscribe(self, request):
+        user = endpoints.get_current_user()
+        if not user:
+            return BooleanResponse(value=False)
+        stream = Stream.get_by_id(request.stream_id, getStreamKey())
+        if not stream:
+            return BooleanResponse(value=False)
+        if stream.user == user.email():
+            return BooleanResponse(value=False)
+        if not (user.email() in stream.subscribers):
+            subscribeStream(stream, user.email())
+        return BooleanResponse(value=True)
+
+    @endpoints.method(StreamRequest, BooleanResponse, http_method='POST', name='unsubscribe')
+    def unsubscribe(self, request):
+        user = endpoints.get_current_user()
+        if not user:
+            return BooleanResponse(value=False)
+        stream = Stream.get_by_id(request.stream_id, getStreamKey())
+        if not stream:
+            return BooleanResponse(value=False)
+        if stream.user == user.email():
+            return BooleanResponse(value=False)
+        if user.email() in stream.subscribers:
+            unsubscribeStream(stream, user.email())
+        return BooleanResponse(value=True)
+
+    @endpoints.method(StreamRequest, StringResponse, http_method='GET', name='getUploadURL')
+    def getUploadURL(self, request):
+        user = endpoints.get_current_user()
+        if not user:
+            return StringResponse()
+        stream = Stream.get_by_id(request.stream_id, getStreamKey())
+        if not stream:
+            return StringResponse()
+        if stream.user != user.email():
+            return StringResponse()
+        return StringResponse(value=blobstore.create_upload_url(BackendFileuploadHandler.url +
+                                    '/?'+urllib.urlencode({'id':stream.key.id()})))

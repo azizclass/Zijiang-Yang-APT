@@ -133,7 +133,7 @@ public class ViewStreamsContent extends ViewContent implements SliderAdapter{
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(context, ViewStream.class);
-            intent.putExtra("stream", streams.get(slider.getCurentSlideIndex()));
+            intent.putExtra("streamId", streams.get(slider.getCurentSlideIndex()).id);
             context.startActivity(intent);
         }
     };
