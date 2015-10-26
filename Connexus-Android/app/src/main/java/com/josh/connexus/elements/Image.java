@@ -16,12 +16,18 @@ public class Image{
     public final double latitude;
     public final double longitude;
     private String location;
+    public final long parentId;
+    public final String owner;
+    public final String streamName;
 
-    public Image(String url, Calendar createTime, double latitude, double longitude){
+    public Image(String url, Calendar createTime, double latitude, double longitude, long parentId, String owner, String streamName){
         this.url = url;
         this.createTime = createTime;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.parentId = parentId;
+        this.owner = owner;
+        this.streamName = streamName;
     }
 
     public String getLocation(Context context) throws IOException {
@@ -31,7 +37,7 @@ public class Image{
         Geocoder geocoder =  new Geocoder(context, Locale.getDefault());
         List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
         if(addresses.isEmpty()){
-            return location = "Unavailable";
+            return location = "Unknown";
         }
         Address address = addresses.get(0);
         String locality = address.getLocality();
@@ -51,7 +57,7 @@ public class Image{
             location += country;
         }
         if(location.length() == 0)
-            location = "Unavailable";
+            location = "Unknown";
         return location;
     }
 

@@ -178,7 +178,7 @@ public class ViewPicturesContent extends ViewContent implements SliderAdapter {
             if((Boolean) data.get("location_success"))
                 ((TextView)picture_box.findViewById(R.id.picture_overview_location)).setText((String)data.get("location"));
             else
-                ((TextView)picture_box.findViewById(R.id.picture_overview_location)).setText("Unavailable");
+                ((TextView)picture_box.findViewById(R.id.picture_overview_location)).setText("Unknown");
         }
     }
 

@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.josh.connexus.elements.BackEndAPI;
 import com.josh.connexus.elements.Credential;
 import com.josh.connexus.elements.Stream;
+import com.josh.connexus.viewContents.StreamDetailContent;
 import com.josh.connexus.viewContents.ViewContent;
 import com.josh.connexus.viewContents.ViewPicturesContent;
 
@@ -79,8 +80,8 @@ public class ViewStream extends Activity {
         warning_sign = (LinearLayout) findViewById(R.id.view_stream_warning);
         option_btn = (ImageView) findViewById(R.id.view_stream_options);
         cur_view = VIEW_PICTURES;
-        menu.setSelection(cur_view);
         switchContent(cur_view);
+        menu.setSelection(cur_view);
     }
 
 
@@ -178,10 +179,12 @@ public class ViewStream extends Activity {
                         dialog.show();
                         break;
                     case UNSUBSCRIBE:
+                        if(isSubscribing) break;
                         Toast.makeText(ViewStream.this, "Unsubscribing...", Toast.LENGTH_SHORT).show();
                         new SubscribeThread(false).start();
                         break;
                     case SUBSCRIBE:
+                        if(isSubscribing) break;
                         Toast.makeText(ViewStream.this, "Subscribing...", Toast.LENGTH_SHORT).show();
                         new SubscribeThread(true).start();
                         break;
@@ -199,11 +202,13 @@ public class ViewStream extends Activity {
                 Intent intent = new Intent(this, UploadPreview.class);
                 intent.putExtra("path", getGalleryPicturePath(data.getData()));
                 intent.putExtra("streamId", streamId);
+                intent.putExtra("streamName", stream.name);
                 startActivity(intent);
             }else if(requestCode == TAKE_PHOTO){
                 Intent intent = new Intent(this, UploadPreview.class);
                 intent.putExtra("path", getCameraPicturePath(data.getData()));
                 intent.putExtra("streamId", streamId);
+                intent.putExtra("streamName", stream.name);
                 startActivity(intent);
             }
         }
@@ -243,7 +248,9 @@ public class ViewStream extends Activity {
     private AdapterView.OnItemSelectedListener menuSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+            if(cur_view == (int)id) return;
+            cur_view = (int)id;
+            switchContent(cur_view);
         }
 
         @Override
@@ -266,7 +273,7 @@ public class ViewStream extends Activity {
             HashMap<String, Object> data = new HashMap<String, Object>();
             data.put("type", type);
             try{
-                stream = BackEndAPI.getStream(streamId);
+                stream = BackEndAPI.getStream(streamId, Credential.getCredential());
                 if(stream != null)
                     stream.fetchImages();
                 data.put("success", true);
@@ -292,6 +299,7 @@ public class ViewStream extends Activity {
         @SuppressWarnings("unchecked")
         public void handleMessage(Message msg){
             HashMap<String, Object> data = (HashMap<String, Object>)msg.obj;
+            if(activity.cur_view != (Integer)data.get("type")) return;
             activity.progressBar.setVisibility(View.GONE);
             activity.isLoading = false;
             if(!activity.isActive) return;
@@ -317,6 +325,8 @@ public class ViewStream extends Activity {
                         }
                         break;
                     case ViewStream.VIEW_INFO:
+                        activity.content = new StreamDetailContent(activity, activity.content_layout, stream);
+                        activity.content.show();
                         break;
                     default:
                         break;

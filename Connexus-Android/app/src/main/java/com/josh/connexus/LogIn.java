@@ -25,7 +25,7 @@ public class LogIn extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(Credential.isLoggedIn()) {
-            startActivity(new Intent(this, MainActivity.class).putExtra("view", MainActivity.MANAGEMENT));
+            startActivity(new Intent(this, MainActivity.class).putExtra("view", MainActivity.VIEW_OWNED_STREAMS));
             return;
         }
         setContentView(R.layout.activity_log_in);
@@ -87,7 +87,7 @@ public class LogIn extends Activity {
         @Override
         public void handleMessage(Message msg){
             if(Credential.isLoggedIn())
-                context.startActivity(new Intent(context, MainActivity.class).putExtra("view", MainActivity.MANAGEMENT));
+                context.startActivity(new Intent(context, MainActivity.class).putExtra("view", MainActivity.VIEW_OWNED_STREAMS));
             else
                 Toast.makeText(context, "Log in fails!", Toast.LENGTH_LONG).show();
         }

@@ -2,18 +2,13 @@ package com.josh.connexus;
 
 import android.app.Service;
 import android.content.Intent;
-import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -36,15 +31,12 @@ import org.apache.http.protocol.HttpContext;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class UploadingService extends Service {
 
-    private final LinkedList<Task> undoTasks = new LinkedList<Task>();
-    private int runningTasks = 0;
-    private boolean isGettingLocation = false;
-    private final Object GPSlock = new Object();
-    private final Object runningTaskLock = new Object();
+    private final ConcurrentLinkedQueue<Task> undoTasks = new ConcurrentLinkedQueue<Task>();
+    private final ConcurrentLinkedQueue<Task> runningTasks = new ConcurrentLinkedQueue<Task>();
     private MyHandler handler = new MyHandler(this);
 
     public UploadingService() {
@@ -54,23 +46,54 @@ public class UploadingService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
         Toast.makeText(UploadingService.this, "Start uploading...", Toast.LENGTH_SHORT).show();
-        synchronized (GPSlock) {
-            undoTasks.add(new Task(intent.getStringExtra("path"), intent.getLongExtra("streamId", -1)));
-            if (!isGettingLocation) {
-                LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
-                try {
-                    manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 100.0f, mLocationListener);
-                    isGettingLocation = true;
-                } catch (SecurityException e) {
-                    e.printStackTrace();
-                    for (Task task : undoTasks) {
-                        synchronized (runningTaskLock) {
-                            runningTasks++;
-                        }
+        undoTasks.add(new Task(intent.getStringExtra("path"), intent.getLongExtra("streamId", -1)));
+        final LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        try {
+            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 100.0f, new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    while(!undoTasks.isEmpty()) {
+                        Task task = undoTasks.poll();
+                        runningTasks.add(task);
+                        new UploadThread(task.path, task.id, location.getLatitude(), location.getLongitude()).start();
+                    }
+                    try {
+                        manager.removeUpdates(this);
+                    } catch (SecurityException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+                    while(!undoTasks.isEmpty()) {
+                        Task task = undoTasks.poll();
+                        runningTasks.add(task);
                         new UploadThread(task.path, task.id, Double.MAX_VALUE, Double.MAX_VALUE).start();
                     }
-                    undoTasks.clear();
+                    try {
+                        manager.removeUpdates(this);
+                    } catch (SecurityException e) {
+                        e.printStackTrace();
+                    }
                 }
+            });
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            while(!undoTasks.isEmpty()) {
+                Task task = undoTasks.poll();
+                runningTasks.add(task);
+                new UploadThread(task.path, task.id, Double.MAX_VALUE, Double.MAX_VALUE).start();
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -80,62 +103,6 @@ public class UploadingService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
-
-    private final LocationListener mLocationListener = new LocationListener() {
-
-        @Override
-        public void onLocationChanged(Location location) {
-            LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
-            synchronized (GPSlock) {
-                    for (Task task : undoTasks) {
-                        synchronized (runningTaskLock) {
-                            runningTasks++;
-                        }
-                        new UploadThread(task.path, task.id, location.getLatitude(), location.getLongitude()).start();
-                    }
-                    undoTasks.clear();
-                try {
-                    manager.removeUpdates(this);
-                } catch (SecurityException e) {
-                    e.printStackTrace();
-                }
-                isGettingLocation = false;
-            }
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-            if(status != LocationProvider.AVAILABLE){
-                synchronized (undoTasks){
-                    for (Task task : undoTasks) {
-                        synchronized (runningTaskLock) {
-                            runningTasks++;
-                        }
-                        new UploadThread(task.path, task.id, Double.MAX_VALUE, Double.MAX_VALUE).start();
-                    }
-                    undoTasks.clear();
-                }
-            }
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-            synchronized (undoTasks){
-                for (Task task : undoTasks) {
-                    synchronized (runningTaskLock) {
-                        runningTasks++;
-                    }
-                    new UploadThread(task.path, task.id, Double.MAX_VALUE, Double.MAX_VALUE).start();
-                }
-                undoTasks.clear();
-            }
-        }
-    };
 
 
     class UploadThread extends Thread{
@@ -181,34 +148,32 @@ public class UploadingService extends Service {
                 e.printStackTrace();
                 msg.obj = false;
             }
+            runningTasks.poll();
             handler.sendMessage(msg);
-            synchronized (GPSlock){
-                synchronized (runningTaskLock){
-                    runningTasks --;
-                    if(undoTasks.isEmpty() && runningTasks==0)
-                        stopSelf();
-                }
-            }
         }
     }
+
+    static class MyHandler extends Handler{
+
+        private final UploadingService service;
+
+        public MyHandler(UploadingService service){
+            this.service = service;
+        }
+
+        @Override
+        public void handleMessage(Message msg){
+            if((Boolean) msg.obj)
+                Toast.makeText(service, "File is successfully uploaded.", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(service, "There is an error when uploading file.", Toast.LENGTH_SHORT).show();
+            if(service.undoTasks.isEmpty() && service.runningTasks.isEmpty())
+                service.stopSelf();
+        }
+    };
 }
 
-class MyHandler extends Handler{
 
-    private final UploadingService service;
-
-    public MyHandler(UploadingService service){
-        this.service = service;
-    }
-
-    @Override
-    public void handleMessage(Message msg){
-        if((Boolean) msg.obj)
-            Toast.makeText(service, "File is successfully uploaded.", Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(service, "There is an error when uploading file.", Toast.LENGTH_SHORT).show();
-    }
-};
 
 class Task{
     public final String path;

@@ -117,11 +117,16 @@ class StreamAPI(remote.Service):
 
     @endpoints.method(StreamRequest, RespondStream, http_method='GET', name='getStream')
     def getStream(self, request):
-        stream = getStreamInfo(Stream.get_by_id(request.stream_id, getStreamKey()))
-        if stream:
-            return RespondStream(stream=stream)
-        else:
+        user = endpoints.get_current_user()
+        stream = Stream.get_by_id(request.stream_id, getStreamKey())
+        if not stream:
             return RespondStream()
+        if not (user and user.email()==stream.user):
+            stream.viewCount = stream.viewCount + 1
+            stream.put()
+        return RespondStream(stream=getStreamInfo(stream))
+
+
 
     @endpoints.method(StreamRequest, BooleanResponse, http_method='POST', name='subscribe')
     def subscribe(self, request):
@@ -164,7 +169,7 @@ class StreamAPI(remote.Service):
         return StringResponse(value=blobstore.create_upload_url(BackendFileuploadHandler.url +
                                     '/?'+urllib.urlencode({'id':stream.key.id()})))
 
-    @endpoints.method(StreamRequest, RespondStreams, http_method='GET', name='getSubscribedStreams')
+    @endpoints.method(message_types.VoidMessage, RespondStreams, http_method='GET', name='getSubscribedStreams')
     def getSubscribedStreams(self, request):
         user = endpoints.get_current_user()
         if not user:

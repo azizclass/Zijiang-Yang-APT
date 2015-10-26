@@ -34,13 +34,27 @@ public class BackEndAPI {
     }
 
     public static List<Stream> getOwnedStreams(GoogleAccountCredential credential) throws IOException{
-        List<ConnexusStreamInfo> Info = buildAPI(credential).getOwnedStreams().execute().getStreams();
         List<Stream> ret = new ArrayList<Stream>();
+        if(credential == null)
+            return ret;
+        List<ConnexusStreamInfo> Info = buildAPI(credential).getOwnedStreams().execute().getStreams();
         if(Info != null)
             for(ConnexusStreamInfo info : Info)
                 ret.add(convertToStream(info));
         return ret;
     }
+
+    public static List<Stream> getSubscribedStreams(GoogleAccountCredential credential) throws IOException{
+        List<Stream> ret = new ArrayList<Stream>();
+        if(credential == null)
+            return ret;
+        List<ConnexusStreamInfo> Info = buildAPI(credential).getSubscribedStreams().execute().getStreams();
+        if(Info != null)
+            for(ConnexusStreamInfo info : Info)
+                ret.add(convertToStream(info));
+        return ret;
+    }
+
 
     public static List<Stream> searchStreams(String keyWord) throws IOException{
         List<ConnexusStreamInfo> Info = buildAPI(null).searchStreams(keyWord).execute().getStreams();
@@ -58,8 +72,8 @@ public class BackEndAPI {
         return suggestions;
     }
 
-    public static Stream getStream(long streamId) throws IOException{
-        return convertToStream(buildAPI(null).getStream(streamId).execute().getStream());
+    public static Stream getStream(long streamId, GoogleAccountCredential credential) throws IOException{
+        return convertToStream(buildAPI(credential).getStream(streamId).execute().getStream());
     }
 
     public static List<Image> getImages(long id) throws IOException {
@@ -69,7 +83,19 @@ public class BackEndAPI {
             for(ConnexusImageInfo info : images) {
                 Calendar createTime = Calendar.getInstance();
                 createTime.setTimeInMillis(info.getCreateTime());
-                ret.add(new Image(info.getUrl(), createTime, info.getLatitude(), info.getLongitude()));
+                ret.add(new Image(info.getUrl(), createTime, info.getLatitude(), info.getLongitude(), info.getParentId(), info.getOwner(), info.getStreamName()));
+            }
+        return ret;
+    }
+
+    public static List<Image> getNearbyImages(double latitude, double longitude) throws IOException {
+        List<ConnexusImageInfo> images = buildAPI(null).getNearbyImages(latitude, longitude).execute().getImages();
+        List<Image> ret = new ArrayList<Image>();
+        if(images != null)
+            for(ConnexusImageInfo info : images) {
+                Calendar createTime = Calendar.getInstance();
+                createTime.setTimeInMillis(info.getCreateTime());
+                ret.add(new Image(info.getUrl(), createTime, info.getLatitude(), info.getLongitude(), info.getParentId(), info.getOwner(), info.getStreamName()));
             }
         return ret;
     }

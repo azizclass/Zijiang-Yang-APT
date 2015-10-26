@@ -38,6 +38,32 @@ public class Stream {
         return images;
     }
 
+    public String getCreateTime(){
+        String yy = createTime.get(Calendar.YEAR) + "";
+        String mm = createTime.get(Calendar.MONTH) + "";
+        if(mm.length() == 1) mm = "0" + mm;
+        String dd = createTime.get(Calendar.DAY_OF_MONTH) + "";
+        if(dd.length() == 1) dd = "0" + dd;
+        String hh = createTime.get(Calendar.HOUR_OF_DAY)+"";
+        if(hh.length() == 1) hh = "0" + hh;
+        String min = createTime.get(Calendar.MINUTE)+"";
+        if(min.length() == 1) min = "0" + min;
+        return yy+"-"+mm+"-"+dd+" "+hh+":"+min;
+    }
+
+    public String getLastNewPicTime(){
+        String yy = lastNewpicTime.get(Calendar.YEAR) + "";
+        String mm = lastNewpicTime.get(Calendar.MONTH) + "";
+        if(mm.length() == 1) mm = "0" + mm;
+        String dd = lastNewpicTime.get(Calendar.DAY_OF_MONTH) + "";
+        if(dd.length() == 1) dd = "0" + dd;
+        String hh = lastNewpicTime.get(Calendar.HOUR_OF_DAY)+"";
+        if(hh.length() == 1) hh = "0" + hh;
+        String min = lastNewpicTime.get(Calendar.MINUTE)+"";
+        if(min.length() == 1) min = "0" + min;
+        return yy+"-"+mm+"-"+dd+" "+hh+":"+min;
+    }
+
     @Override
     public String toString(){
         return name+"("+id+"):\n"+
@@ -46,7 +72,7 @@ public class Stream {
                 "last new picture: "+(lastNewpicTime != null? lastNewpicTime.getTime():"N/A")+"\n"+
                 "tags: "+tags+"\n"+
                 "picture number: "+picNum+"\n"+
-                "subscribers: "+ (subscribers==null?"N/A":subscribers.toString())+"\n"+
+                "subscribers: "+ subscribers.toString()+"\n"+
                 "cover image: "+coverImageURL+"\n"+
                 "views: "+views+"\n"+
                 "images: "+(images==null?"N/A": images);

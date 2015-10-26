@@ -51,12 +51,9 @@ class ViewStreamPage(webapp2.RequestHandler):
                 return
             startDate = datetime.now() - timedelta(365-int(timeline[0]))
             endDate = datetime.now() - timedelta(365-int(timeline[1]))
-            images = []
-            for image in Image.query(Image.create_time >= startDate, Image.create_time <= endDate, ancestor=stream.key):
-                if image.latitude>=-90.0 and image.latitude<=90.0 and image.longitude>=-180.0 and image.longitude<=180.0:
-                    images.append(image)
-            self.response.write(json.dumps([{'url': get_serving_url(img.img), 'latitude': img.latitude, 'longitude': img.longitude}
-                                            for img in images]))
+            images = Image.query(Image.create_time >= startDate, Image.create_time <= endDate, ancestor=stream.key)
+            images = filter(lambda x: x.latitude>=-90.0 and x.latitude<=90.0 and x.longitude>=-180.0 and x.longitude<=180.0, images)
+            self.response.write(json.dumps([{'url': get_serving_url(img.img), 'latitude': img.latitude, 'longitude': img.longitude} for img in images]))
             return
         if self.request.get('upload'):
             self.response.write(blobstore.create_upload_url(urls.URL_VIEW_STREAM_PAGE + urls.URL_UPLOAD_HANDLER +
