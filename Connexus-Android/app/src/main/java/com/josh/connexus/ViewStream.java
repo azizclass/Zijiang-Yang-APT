@@ -89,6 +89,8 @@ public class ViewStream extends Activity {
     public void onStart(){
         super.onStart();
         isActive = true;
+        if(content != null && !content.isActive())
+            content.show();
     }
 
     @Override
@@ -115,8 +117,10 @@ public class ViewStream extends Activity {
 
     private void switchContent(int view_id){
         if(view_id < VIEW_PICTURES || view_id > VIEW_INFO) return;
-        if(content != null)
+        if(content != null) {
             content.clear();
+            content = null;
+        }
         progressBar.setVisibility(View.VISIBLE);
         error_sign.setVisibility(View.GONE);
         warning_sign.setVisibility(View.GONE);
@@ -302,7 +306,6 @@ public class ViewStream extends Activity {
             if(activity.cur_view != (Integer)data.get("type")) return;
             activity.progressBar.setVisibility(View.GONE);
             activity.isLoading = false;
-            if(!activity.isActive) return;
             if((Boolean) data.get("success")) {
                 Stream stream = activity.stream;
                 if(stream == null) {
@@ -321,12 +324,14 @@ public class ViewStream extends Activity {
                                     "Oops! This stream is empty!");
                         }else {
                             activity.content = new ViewPicturesContent(activity, activity.content_layout, stream);
-                            activity.content.show();
+                            if(activity.isActive)
+                                activity.content.show();
                         }
                         break;
                     case ViewStream.VIEW_INFO:
                         activity.content = new StreamDetailContent(activity, activity.content_layout, stream);
-                        activity.content.show();
+                        if(activity.isActive)
+                            activity.content.show();
                         break;
                     default:
                         break;

@@ -19,8 +19,9 @@ public class Image{
     public final long parentId;
     public final String owner;
     public final String streamName;
+    public final String tag;
 
-    public Image(String url, Calendar createTime, double latitude, double longitude, long parentId, String owner, String streamName){
+    public Image(String url, Calendar createTime, double latitude, double longitude, long parentId, String owner, String streamName,String tag){
         this.url = url;
         this.createTime = createTime;
         this.latitude = latitude;
@@ -28,6 +29,7 @@ public class Image{
         this.parentId = parentId;
         this.owner = owner;
         this.streamName = streamName;
+        this.tag = tag;
     }
 
     public String getLocation(Context context) throws IOException {
@@ -72,10 +74,5 @@ public class Image{
         String min = createTime.get(Calendar.MINUTE)+"";
         if(min.length() == 1) min = "0" + min;
         return yy+"-"+mm+"-"+dd+" "+hh+":"+min;
-    }
-
-    @Override
-    public String toString(){
-        return "{\n"+url + '\n' + createTime.getTime()+'\n'+latitude+'\n'+longitude+"\n}";
     }
 }

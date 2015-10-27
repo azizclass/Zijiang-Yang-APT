@@ -16,4 +16,6 @@ public abstract class ViewContent {
 
     public abstract void clear();
 
+    public abstract boolean isActive();
+
 }

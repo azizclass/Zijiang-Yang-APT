@@ -33,10 +33,9 @@ public class LogIn extends Activity {
     }
 
     @Override
-    protected void onStop(){
-        super.onStop();
+    protected void onDestroy(){
+        super.onDestroy();
         isLoggingIn = false;
-        finish();
     }
 
     @Override
@@ -76,6 +75,7 @@ public class LogIn extends Activity {
 
     public void onViewStreamsClick(View v){
         startActivity(new Intent(LogIn.this, MainActivity.class).putExtra("view", MainActivity.VIEW_ALL_STREAMS));
+        finish();
     }
 
     static class LogInHandler extends Handler {
@@ -86,8 +86,10 @@ public class LogIn extends Activity {
         }
         @Override
         public void handleMessage(Message msg){
-            if(Credential.isLoggedIn())
+            if(Credential.isLoggedIn()) {
                 context.startActivity(new Intent(context, MainActivity.class).putExtra("view", MainActivity.VIEW_OWNED_STREAMS));
+                ((Activity)context).finish();
+            }
             else
                 Toast.makeText(context, "Log in fails!", Toast.LENGTH_LONG).show();
         }

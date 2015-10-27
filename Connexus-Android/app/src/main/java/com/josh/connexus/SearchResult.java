@@ -49,6 +49,8 @@ public class SearchResult extends Activity {
     public void onStart(){
         super.onStart();
         isActive = true;
+        if(content != null && !content.isActive())
+            content.show();
     }
 
     @Override
@@ -58,8 +60,10 @@ public class SearchResult extends Activity {
     }
 
     private void search(){
-        if(content != null)
+        if(content != null) {
             content.clear();
+            content = null;
+        }
         progressBar.setVisibility(View.VISIBLE);
         error_sign.setVisibility(View.GONE);
         warning_sign.setVisibility(View.GONE);
@@ -107,7 +111,6 @@ public class SearchResult extends Activity {
             HashMap<String, Object> data = (HashMap<String, Object>)msg.obj;
             activity.progressBar.setVisibility(View.GONE);
             activity.isLoading = false;
-            if(!activity.isActive) return;
             if((Boolean) data.get("success")) {
                 List<Stream> streams = (List<Stream>) data.get("streams");
                 if(streams == null || streams.size() == 0){
@@ -116,7 +119,8 @@ public class SearchResult extends Activity {
                             "Oops! There is no result for \""+activity.search_key+"\"!");
                 }else {
                     activity.content = new ViewStreamsContent(activity, activity.content_layout, streams, "results found");
-                    activity.content.show();
+                    if(activity.isActive)
+                        activity.content.show();
                 }
             }else
                 activity.error_sign.setVisibility(View.VISIBLE);

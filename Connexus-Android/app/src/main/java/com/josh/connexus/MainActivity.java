@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.josh.connexus.elements.BackEndAPI;
 import com.josh.connexus.elements.Credential;
 import com.josh.connexus.elements.Image;
+import com.josh.connexus.elements.LocationFetcher;
 import com.josh.connexus.elements.Stream;
 import com.josh.connexus.viewContents.NearbyImagesContent;
 import com.josh.connexus.viewContents.ViewContent;
@@ -85,6 +86,8 @@ public class MainActivity extends Activity {
     public void onStart(){
         super.onStart();
         isActive = true;
+        if(content != null && !content.isActive())
+            content.show();
     }
 
     @Override
@@ -124,8 +127,10 @@ public class MainActivity extends Activity {
     private void switchContent(int view_id){
         if(view_id >NEARBY_IMAGES || view_id < VIEW_OWNED_STREAMS) return;
         title.setText(view_names[view_id]);
-        if(content != null)
+        if(content != null) {
             content.clear(); //Clear existing content firstly
+            content = null;
+        }
         progressBar.setVisibility(View.VISIBLE);
         error_sign.setVisibility(View.GONE);
         warning_sign.setVisibility(View.GONE);
@@ -133,71 +138,34 @@ public class MainActivity extends Activity {
         if(view_id != NEARBY_IMAGES)
             new LoadingThread(view_id).start();
         else {
-            final LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
-            try {
-                manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 100.0f, new LocationListener() {
-                    @Override
-                    public void onLocationChanged(final Location location) {
-                        try {
-                            manager.removeUpdates(this);
-                        } catch (SecurityException e) {
-                            e.printStackTrace();
-                        }
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                HashMap<String, Object> data = new HashMap<String, Object>();
-                                data.put("type", NEARBY_IMAGES);
+            new LocationFetcher(this) {
+                @Override
+                public void onLocationGot(final Location location) {
+                    final Location mLocation = location;
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            HashMap<String, Object> data = new HashMap<String, Object>();
+                            data.put("type", NEARBY_IMAGES);
+                            if (location != null)
                                 try {
-                                    data.put("images", BackEndAPI.getNearbyImages(location.getLatitude(), location.getLongitude()));
-                                    data.put("latitude", location.getLatitude());
-                                    data.put("longitude", location.getLongitude());
+                                    data.put("images", BackEndAPI.getNearbyImages(mLocation.getLatitude(), mLocation.getLongitude()));
+                                    data.put("latitude", mLocation.getLatitude());
+                                    data.put("longitude", mLocation.getLongitude());
                                     data.put("success", true);
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                     data.put("success", false);
                                 }
-                                Message msg = new Message();
-                                msg.obj = data;
-                                viewStreamsHandler.sendMessage(msg);
-                            }
-                        }.start();
-                    }
-
-                    @Override
-                    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                    }
-
-                    @Override
-                    public void onProviderEnabled(String provider) {
-
-                    }
-
-                    @Override
-                    public void onProviderDisabled(String provider) {
-                        try {
-                            manager.removeUpdates(this);
-                        } catch (SecurityException e) {
-                            e.printStackTrace();
+                            else
+                                data.put("success", false);
+                            Message msg = new Message();
+                            msg.obj = data;
+                            viewStreamsHandler.sendMessage(msg);
                         }
-                        HashMap<String, Object> data = new HashMap<String, Object>();
-                        data.put("type", NEARBY_IMAGES);
-                        data.put("success", false);
-                        Message msg = new Message();
-                        msg.obj = data;
-                        viewStreamsHandler.sendMessage(msg);
-                    }
-                });
-            }catch (SecurityException e){
-                e.printStackTrace();
-                HashMap<String, Object> data = new HashMap<String, Object>();
-                data.put("type", NEARBY_IMAGES);
-                data.put("success", false);
-                Message msg = new Message();
-                msg.obj = data;
-                viewStreamsHandler.sendMessage(msg);
-            }
+                    }.start();
+                }
+            }.getLocation(10000);
         }
     }
 
@@ -319,7 +287,6 @@ public class MainActivity extends Activity {
             if(activity.cur_view != (Integer)data.get("type")) return;
             activity.progressBar.setVisibility(View.GONE);
             activity.isLoading = false;
-            if(!activity.isActive) return;
             if((Boolean) data.get("success")) {
                 switch((Integer)data.get("type")) {
                     case VIEW_OWNED_STREAMS:
@@ -330,7 +297,8 @@ public class MainActivity extends Activity {
                                     "Oops! You do not have any streams!");
                         }else {
                             activity.content = new ViewStreamsContent(activity, activity.content_layout, streams, "owned streams");
-                            activity.content.show();
+                            if(activity.isActive)
+                                activity.content.show();
                         }
                         break;
                     case VIEW_SUBSCRIBED_STREAMS:
@@ -341,7 +309,8 @@ public class MainActivity extends Activity {
                                     "Oops! You have not subscribed any streams!");
                         }else {
                             activity.content = new ViewStreamsContent(activity, activity.content_layout, streams, "subscribed streams");
-                            activity.content.show();
+                            if(activity.isActive)
+                                activity.content.show();
                         }
                         break;
                     case VIEW_ALL_STREAMS:
@@ -352,7 +321,8 @@ public class MainActivity extends Activity {
                             "Oops! There is no stream!");
                         }else {
                             activity.content = new ViewStreamsContent(activity, activity.content_layout, streams, "streams");
-                            activity.content.show();
+                            if(activity.isActive)
+                                activity.content.show();
                         }
                         break;
                     case NEARBY_IMAGES:
@@ -363,7 +333,8 @@ public class MainActivity extends Activity {
                                     "Oops! There is no nearby image!");
                         }else {
                             activity.content = new NearbyImagesContent(activity, activity.content_layout, images, (Double)data.get("latitude"), (Double)data.get("longitude"));
-                            activity.content.show();
+                            if(activity.isActive)
+                                activity.content.show();
                         }
                         break;
                 }

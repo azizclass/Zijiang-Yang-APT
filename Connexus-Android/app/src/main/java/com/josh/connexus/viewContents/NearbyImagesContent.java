@@ -96,13 +96,15 @@ public class NearbyImagesContent extends ViewContent implements SliderAdapter  {
     }
 
     private String getDistance(double latitude, double longitude){
-        Location location = new Location("");
-        location.setLatitude(this.latitude);
-        location.setLongitude(this.longitude);
-        Location to = new Location("");
-        to.setLatitude(latitude);
-        to.setLongitude(longitude);
-        float dis = location.distanceTo(to);
+        double degrees_to_radians = Math.PI/180.0;
+        double phi1 = (90.0 - this.latitude)*degrees_to_radians;
+        double phi2 = (90.0 - latitude)*degrees_to_radians;
+        double theta1 = this.longitude*degrees_to_radians;
+        double theta2 = longitude*degrees_to_radians;
+        double cos = (Math.sin(phi1)*Math.sin(phi2)*Math.cos(theta1 - theta2) +
+                Math.cos(phi1)*Math.cos(phi2));
+        double arc = Math.acos( cos );
+        double dis = arc*6378100;
         if(dis < 5000)
             return ((int)dis) + "m";
         else

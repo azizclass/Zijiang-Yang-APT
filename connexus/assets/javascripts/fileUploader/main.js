@@ -83,6 +83,7 @@ $(function() {
             this.on("sending", function(file, xhr, formData) {
                 formData.append("latitude", Math.random()*170-85);
                 formData.append("longitude", Math.random()*360-180);
+                formData.append("tag","");
             });
 
             this.on('success', function(file){

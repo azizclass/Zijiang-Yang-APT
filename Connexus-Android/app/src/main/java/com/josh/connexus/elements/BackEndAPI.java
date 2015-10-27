@@ -83,7 +83,7 @@ public class BackEndAPI {
             for(ConnexusImageInfo info : images) {
                 Calendar createTime = Calendar.getInstance();
                 createTime.setTimeInMillis(info.getCreateTime());
-                ret.add(new Image(info.getUrl(), createTime, info.getLatitude(), info.getLongitude(), info.getParentId(), info.getOwner(), info.getStreamName()));
+                ret.add(new Image(info.getUrl(), createTime, info.getLatitude(), info.getLongitude(), info.getParentId(), info.getOwner(), info.getStreamName(), info.getTag()));
             }
         return ret;
     }
@@ -95,7 +95,7 @@ public class BackEndAPI {
             for(ConnexusImageInfo info : images) {
                 Calendar createTime = Calendar.getInstance();
                 createTime.setTimeInMillis(info.getCreateTime());
-                ret.add(new Image(info.getUrl(), createTime, info.getLatitude(), info.getLongitude(), info.getParentId(), info.getOwner(), info.getStreamName()));
+                ret.add(new Image(info.getUrl(), createTime, info.getLatitude(), info.getLongitude(), info.getParentId(), info.getOwner(), info.getStreamName(), info.getTag()));
             }
         return ret;
     }

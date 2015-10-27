@@ -130,5 +130,5 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
             logging.error(400)
             blobstore.delete(upload.key())
             return
-        addImage(stream, upload, float(lat), float(lgi))
+        addImage(stream, upload, float(lat), float(lgi), self.request.get('tag'))
         self.response.write('success')

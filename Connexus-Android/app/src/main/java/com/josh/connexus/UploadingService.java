@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.josh.connexus.elements.BackEndAPI;
 import com.josh.connexus.elements.Credential;
+import com.josh.connexus.elements.LocationFetcher;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -46,56 +47,20 @@ public class UploadingService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
         Toast.makeText(UploadingService.this, "Start uploading...", Toast.LENGTH_SHORT).show();
-        undoTasks.add(new Task(intent.getStringExtra("path"), intent.getLongExtra("streamId", -1)));
-        final LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        try {
-            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 100.0f, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    while(!undoTasks.isEmpty()) {
-                        Task task = undoTasks.poll();
-                        runningTasks.add(task);
-                        new UploadThread(task.path, task.id, location.getLatitude(), location.getLongitude()).start();
-                    }
-                    try {
-                        manager.removeUpdates(this);
-                    } catch (SecurityException e) {
-                        e.printStackTrace();
-                    }
+        undoTasks.add(new Task(intent.getStringExtra("path"), intent.getLongExtra("streamId", -1), intent.getStringExtra("tag")));
+        new LocationFetcher(this){
+            @Override
+            public void onLocationGot(Location location){
+                while(!undoTasks.isEmpty()) {
+                    Task task = undoTasks.poll();
+                    runningTasks.add(task);
+                    if(location != null)
+                        new UploadThread(task, location.getLatitude(), location.getLongitude()).start();
+                    else
+                        new UploadThread(task, Double.MAX_VALUE, Double.MAX_VALUE).start();
                 }
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String provider) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
-                    while(!undoTasks.isEmpty()) {
-                        Task task = undoTasks.poll();
-                        runningTasks.add(task);
-                        new UploadThread(task.path, task.id, Double.MAX_VALUE, Double.MAX_VALUE).start();
-                    }
-                    try {
-                        manager.removeUpdates(this);
-                    } catch (SecurityException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        } catch (SecurityException e) {
-            e.printStackTrace();
-            while(!undoTasks.isEmpty()) {
-                Task task = undoTasks.poll();
-                runningTasks.add(task);
-                new UploadThread(task.path, task.id, Double.MAX_VALUE, Double.MAX_VALUE).start();
             }
-        }
+        }.getLocation(10000);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -111,21 +76,19 @@ public class UploadingService extends Service {
 
         private final double latitude;
         private final double longitude;
-        private final String path;
-        private final long streamId;
+        private final Task task;
 
-        public UploadThread(String path, long streamId, double latitude, double longitude){
+        public UploadThread(Task task, double latitude, double longitude){
             this.latitude = latitude;
             this.longitude = longitude;
-            this.path = path;
-            this.streamId = streamId;
+            this.task = task;
         }
 
         @Override
         public void run(){
             Message msg = new Message();
             try (CloseableHttpClient httpClient = HttpClientBuilder.create().setRedirectStrategy(new LaxRedirectStrategy()).build()){
-                String url = BackEndAPI.getUploadURL(streamId, Credential.getCredential());
+                String url = BackEndAPI.getUploadURL(task.id, Credential.getCredential());
                 if(url == null)
                     throw new Exception("Unable to fetch the upload url, got null pointer!");
                 Log.i(TAG, "Got uploading url " + url);
@@ -133,9 +96,10 @@ public class UploadingService extends Service {
                 HttpPost httppost = new HttpPost(url);
                 MultipartEntityBuilder builder = MultipartEntityBuilder.create();
                 builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-                builder.addPart("img", new FileBody(new File(path)));
+                builder.addPart("img", new FileBody(new File(task.path)));
                 builder.addPart("latitude", new StringBody(String.valueOf(latitude), ContentType.TEXT_PLAIN));
                 builder.addPart("longitude", new StringBody(String.valueOf(longitude), ContentType.TEXT_PLAIN));
+                builder.addPart("tag", new StringBody(task.tag, ContentType.TEXT_PLAIN));
                 httppost.setEntity(builder.build());
                 HttpResponse response = httpClient.execute(httppost, localContext);
                 Log.i(TAG, response.getStatusLine().toString());
@@ -178,10 +142,12 @@ public class UploadingService extends Service {
 class Task{
     public final String path;
     public final long id;
+    public final String tag;
 
-    public Task(String path, long id){
+    public Task(String path, long id, String tag){
         this.path = path;
         this.id = id;
+        this.tag = tag;
     }
 
 }

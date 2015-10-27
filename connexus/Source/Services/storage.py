@@ -23,6 +23,7 @@ class Image(ndb.Model):
     create_time = ndb.DateTimeProperty(auto_now_add=True)
     latitude = ndb.FloatProperty(required=True)
     longitude = ndb.FloatProperty(required=True)
+    tag = ndb.StringProperty()
 
 
 # An email setting class
@@ -63,8 +64,8 @@ def unsubscribeStream(stream, user):
     stream.put()
 
 
-def addImage(stream, blob, lat, lgi):
-    image = Image(parent=stream.key, img=blob.key(), latitude=lat, longitude=lgi)
+def addImage(stream, blob, lat, lgi, tag):
+    image = Image(parent=stream.key, img=blob.key(), latitude=lat, longitude=lgi, tag=tag)
     image.put()
     stream.pic_num = stream.pic_num + 1
     stream.last_newpic_time = image.create_time
