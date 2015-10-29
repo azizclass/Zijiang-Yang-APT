@@ -26,6 +26,7 @@ public class LogIn extends Activity {
         super.onCreate(savedInstanceState);
         if(Credential.isLoggedIn()) {
             startActivity(new Intent(this, MainActivity.class).putExtra("view", MainActivity.VIEW_OWNED_STREAMS));
+            finish();
             return;
         }
         setContentView(R.layout.activity_log_in);
