@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><testsuite name="nosetests" tests="6" errors="0" failures="1" skip="0"><testcase classname="Test.MyTestCase" name="test_t1" time="0.000"></testcase><testcase classname="Test.MyTestCase" name="test_t2" time="0.000"></testcase><testcase classname="Test.MyTestCase" name="test_t3" time="0.000"></testcase><testcase classname="Test.MyTestCase" name="test_t4" time="0.000"></testcase><testcase classname="Test.MyTestCase" name="test_t5" time="0.000"></testcase><testcase classname="Test.MyTestCase" name="test_t6" time="0.000"><failure type="exceptions.AssertionError" message="0 != -1"><![CDATA[Traceback (most recent call last):
+  File "c:\python27\lib\unittest\case.py", line 329, in run
+    testMethod()
+  File "E:\USA\courses\Advanced_Programming_Tools\Zijiang-Yang-APT\Lab3\Test.py", line 28, in test_t6
+    self.assertEqual(r1, -1)
+  File "c:\python27\lib\unittest\case.py", line 513, in assertEqual
+    assertion_func(first, second, msg=msg)
+  File "c:\python27\lib\unittest\case.py", line 506, in _baseAssertEqual
+    raise self.failureException(msg)
+AssertionError: 0 != -1
+]]></failure></testcase></testsuite>
