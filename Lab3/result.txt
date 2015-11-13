@@ -1,2 +1,0 @@
-************* Module *.py
-*.py:1: [F0001(fatal), ] No module named *.py
