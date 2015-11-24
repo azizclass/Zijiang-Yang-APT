@@ -33,6 +33,8 @@ public class RationalTest extends TestCase {
     // Test for nonequality
     public void testNonEquality() {
         assertFalse(new Rational(2,3).equals(new Rational(1,3)));
+        assertFalse(new Rational(1,2).equals(null));
+        assertFalse(new Rational(2,1).equals(2));
         assertFalse(new Rational(Integer.MIN_VALUE,1).equals(new Rational(Integer.MIN_VALUE,-1)));
         assertFalse(new Rational(2,1).equals(new Rational(2, Integer.MIN_VALUE+1)));
     }
@@ -65,6 +67,15 @@ public class RationalTest extends TestCase {
         }
         assertTrue( sRoot.isLessThan( HALF.plus( Rational.getTolerance() ) ) 
                         && HALF.minus( Rational.getTolerance() ).isLessThan( sRoot ) );
+    }
+    
+    public void testRootError(){
+    	try{
+        	new Rational(-4,4).root();
+        	fail("Should have thrown an Exception!");
+        } catch(IllegalArgumentToSquareRootException e){
+        	assertTrue(true);
+        }
     }
     
     public void testTimes() {
@@ -108,6 +119,25 @@ public class RationalTest extends TestCase {
     	}catch(RuntimeException e){
     		assertTrue(true);
     	}
+    }
+    
+    public void testTolerance(){
+    	Rational r = new Rational(1,2);
+    	r.setTolerance(new Rational(1,5000));
+    	assertEquals(r.getTolerance(), new Rational(1, 5000));
+    }
+    
+    public void testCopy(){
+    	Rational r = new Rational(3,5);
+    	assertEquals(new Rational(r), r);
+    }
+    
+    public void testToString(){
+    	assertEquals(new Rational(6,8).toString(), "3/4");
+    }
+    
+    public void testMain(){
+    	Rational.main(null);
     }
 
     public static void main(String args[]) {
